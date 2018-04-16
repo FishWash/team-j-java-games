@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="89c9600c-5f52-4137-95d1-f035b67ba4c8" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/term-project-team-j/Scripts/GameWorld.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/term-project-team-j/Scripts/TankGame.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/Scripts/GameWorld.java" afterPath="$PROJECT_DIR$/src/Scripts/GamePanel.java" />
-      <change beforePath="$PROJECT_DIR$/src/Scripts/TankGame.java" afterPath="$PROJECT_DIR$/src/Scripts/TankGameApplication.java" />
+      <change beforePath="$PROJECT_DIR$/src/Scripts/GamePanel.java" afterPath="$PROJECT_DIR$/src/Scripts/GameWorld.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,8 +18,8 @@
       <file leaf-file-name="TankGameApplication.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Scripts/TankGameApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="21" column="35" lean-forward="true" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+            <state relative-caret-position="270">
+              <caret line="21" column="35" lean-forward="false" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -30,15 +27,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GamePanel.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Scripts/GamePanel.java">
+      <file leaf-file-name="GameWorld.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Scripts/GameWorld.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+            <state relative-caret-position="285">
+              <caret line="37" column="65" lean-forward="false" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#562#563#0" expanded="true" />
-                <element signature="e#598#599#0" expanded="true" />
+                <element signature="e#578#579#0" expanded="true" />
+                <element signature="e#614#615#0" expanded="true" />
+                <element signature="e#646#647#0" expanded="true" />
+                <element signature="e#707#708#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,11 +74,11 @@
         <option value="$PROJECT_DIR$/src/Scripts/Bullet.java" />
         <option value="$PROJECT_DIR$/src/Scripts/Collider.java" />
         <option value="$PROJECT_DIR$/src/Scripts/Damageable.java" />
-        <option value="$PROJECT_DIR$/src/Scripts/GameWorld.java" />
         <option value="$PROJECT_DIR$/src/Scripts/TankGame.java" />
         <option value="$PROJECT_DIR$/src/Scripts/TiledBackground.java" />
-        <option value="$PROJECT_DIR$/src/Scripts/GamePanel.java" />
         <option value="$PROJECT_DIR$/src/Scripts/TankGameApplication.java" />
+        <option value="$PROJECT_DIR$/src/Scripts/GamePanel.java" />
+        <option value="$PROJECT_DIR$/src/Scripts/GameWorld.java" />
       </list>
     </option>
   </component>
@@ -112,10 +111,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -149,6 +147,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -282,12 +281,13 @@
       <option name="presentableId" value="Default" />
       <updated>1523736442096</updated>
       <workItem from="1523736447647" duration="4650000" />
-      <workItem from="1523741978116" duration="9631000" />
+      <workItem from="1523741978116" duration="10821000" />
+      <workItem from="1523904105577" duration="1046000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14281000" />
+    <option name="totallyTimeSpent" value="16517000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -295,14 +295,13 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -312,12 +311,13 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39940387" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935917" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -335,14 +335,34 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/Scripts/TankGameApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="21" column="35" lean-forward="true" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Scripts/GameWorld.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#578#579#0" expanded="true" />
+            <element signature="e#614#615#0" expanded="true" />
+            <element signature="e#646#647#0" expanded="true" />
+            <element signature="e#707#708#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-9.0.4/lib/src.zip!/java.desktop/java/awt/Window.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="13335">
           <caret line="889" column="5" lean-forward="false" selection-start-line="889" selection-start-column="5" selection-end-line="889" selection-end-column="5" />
-          <folding>
-            <element signature="e#30949#30950#0" expanded="false" />
-            <element signature="e#30981#30982#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -356,14 +376,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Scripts/GamePanel.java">
+    <entry file="file://$PROJECT_DIR$/src/Scripts/GameWorld.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="19" column="3" lean-forward="false" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#562#563#0" expanded="true" />
-            <element signature="e#598#599#0" expanded="true" />
+            <element signature="e#578#579#0" expanded="true" />
+            <element signature="e#614#615#0" expanded="true" />
+            <element signature="e#646#647#0" expanded="true" />
+            <element signature="e#707#708#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -427,7 +449,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
           <caret line="1181" column="33" lean-forward="false" selection-start-line="1181" selection-start-column="19" selection-end-line="1181" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -435,7 +456,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
           <caret line="43" column="32" lean-forward="false" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -443,7 +463,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="3298" column="0" lean-forward="false" selection-start-line="3298" selection-start-column="0" selection-end-line="3298" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -462,10 +481,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
           <caret line="1016" column="28" lean-forward="true" selection-start-line="1016" selection-start-column="28" selection-end-line="1016" selection-end-column="28" />
-          <folding>
-            <element signature="e#35692#35693#0" expanded="false" />
-            <element signature="e#35727#35728#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -500,32 +515,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Scripts/TiledBackground.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="47" lean-forward="true" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Scripts/TiledBackground.java" />
     <entry file="file://$PROJECT_DIR$/src/Scripts/TankGameApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="21" column="35" lean-forward="true" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+        <state relative-caret-position="270">
+          <caret line="21" column="35" lean-forward="false" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Scripts/GamePanel.java">
+    <entry file="file://$PROJECT_DIR$/src/Scripts/GameWorld.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+        <state relative-caret-position="285">
+          <caret line="37" column="65" lean-forward="false" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#562#563#0" expanded="true" />
-            <element signature="e#598#599#0" expanded="true" />
+            <element signature="e#578#579#0" expanded="true" />
+            <element signature="e#614#615#0" expanded="true" />
+            <element signature="e#646#647#0" expanded="true" />
+            <element signature="e#707#708#0" expanded="true" />
           </folding>
         </state>
       </provider>

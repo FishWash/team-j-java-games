@@ -10,10 +10,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GamePanel extends JPanel
+public class GameWorld extends JPanel
 {
-  Dimension dimension;
-  BufferedImage bgTile;
+  private Dimension dimension;
+  private BufferedImage bgTile;
 
   private ArrayList<Terrain> terrains;
   private ArrayList<Tank> tanks;
@@ -21,18 +21,26 @@ public class GamePanel extends JPanel
 
   private HashMap<String, Image> spriteMap;
 
-  public GamePanel(Dimension dimension)
+  public GameWorld(Dimension dimension)
   {
     this.dimension = dimension;
   }
 
   public void initialize()
   {
+    bgTile = loadSprite("/Sprites/background_tile.png");
+  }
+
+  private BufferedImage loadSprite(String filePath)
+  {
+    BufferedImage _bImg = null;
     try {
-      bgTile = ImageIO.read(getClass().getResourceAsStream("/Sprites/background_tile.png"));
+      _bImg = ImageIO.read(getClass().getResourceAsStream(filePath));
     } catch (Exception e) {
-      System.out.println("Sprite not found");
+      System.out.println("Sprite not found at " + filePath);
     }
+
+    return _bImg;
   }
 
   @Override
@@ -42,7 +50,7 @@ public class GamePanel extends JPanel
     paintBackground(graphics);
   }
 
-  void paintBackground(Graphics graphics)
+  private void paintBackground(Graphics graphics)
   {
     if (bgTile != null)
     {
