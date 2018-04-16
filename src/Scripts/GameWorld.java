@@ -48,7 +48,7 @@ public class GameWorld
     try {
       _bImg = ImageIO.read(getClass().getResourceAsStream("/Sprites/" + fileName));
     } catch (Exception e) {
-      System.out.println(fileName + " not found");
+      System.out.println("ERROR: " + fileName + " not found");
     }
 
     return _bImg;
