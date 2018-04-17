@@ -1,5 +1,10 @@
 package Scripts;
 
-public class Wall
+import java.awt.*;
+
+public class Wall extends GameObject implements Collidable
 {
+  public Wall(Point position) {
+    super(position);
+  }
 }
