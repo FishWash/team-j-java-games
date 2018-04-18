@@ -1,14 +1,11 @@
 package Scripts;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.*;
 
 public class GameWorld
 {
@@ -41,6 +38,7 @@ public class GameWorld
     damageables = new ArrayList<>();
 
     backgroundImage = drawBackgroundImage();
+
     instantiate(new Tank(new Point(100, 100)));
   }
 
@@ -100,7 +98,53 @@ public class GameWorld
         _graphics.drawImage(_bgTile, i, j, null);
       }
     }
+    File file = new File("src/EditableMap.txt");
+    System.out.println(file.getAbsolutePath() + " yes");
+    System.out.println(file.canRead());
+
+    try {
+      readMap(file.getAbsolutePath());
+    } catch(Exception e){
+      System.out.println("Error:" + e.getMessage());
+    }
+
+    //addWall(1,new Point(0,0));
+    for(Wall indestructibleWall : walls){
+      indestructibleWall.drawSprite(_graphics);
+    }
 
     return _backgroundImage;
+  }
+
+  private void readMap(String file) throws IOException{
+    String line;
+    BufferedImage wall = loadSprite("wall_indestructible.png");
+    int yPos = 0;
+    int wallDimensions = wall.getWidth();
+    try {
+      FileReader fileReader = new FileReader(file);
+      BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+      while ((line = bufferedReader.readLine()) != null) {
+        for (int xPos = 0; xPos < line.length(); xPos ++) {
+          char wallNum = line.charAt(xPos);
+          addWall(wallNum, new Point(xPos * wallDimensions, yPos * wallDimensions));
+        }
+        yPos ++;
+      }
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+
+  }
+
+  public void addWall(int wallNum, Point position){
+    if(wallNum == '1'){
+      instantiate(new Wall(position));
+    }
+    if(wallNum == '2'){
+      instantiate(new DestructibleWall(position));
+    }
+
   }
 }
