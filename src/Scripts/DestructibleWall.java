@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class DestructibleWall extends GameObject implements Collidable, Damageable
 {
-  public DestructibleWall(Point position) {
+  public DestructibleWall(Vector2D position) {
     super(position);
   }
 

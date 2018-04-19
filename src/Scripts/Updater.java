@@ -19,7 +19,6 @@ public class Updater implements Runnable
     while (true) {
       for (Updatable _u : updatables) {
         _u.update();
-        System.out.println(_u + " is being updated!");
       }
 
       try {

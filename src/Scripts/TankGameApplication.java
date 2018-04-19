@@ -22,7 +22,7 @@ public class TankGameApplication
     GamePanel gamePanel = new GamePanel(windowDimension, gameWorld);
 
     gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
-    //gameFrame.pack();
+    //gameFrame.pack(); //idk what pack is for
     gameFrame.setVisible(true);
 
     Thread thread = new Thread(gamePanel);

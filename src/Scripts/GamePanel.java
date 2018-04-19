@@ -2,6 +2,8 @@ package Scripts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 // GamePanel runs on a thread and updates its display every frame.
@@ -14,6 +16,8 @@ public class GamePanel extends JPanel implements Runnable
   {
     super.setSize(dimension);
     this.gameWorld = gameWorld;
+    this.addKeyListener(gameWorld);
+    this.setFocusable(true);
   }
 
   @Override
