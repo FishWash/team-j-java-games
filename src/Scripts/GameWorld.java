@@ -1,12 +1,8 @@
 package Scripts;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,9 +19,12 @@ public class GameWorld
   // explosions
   private ArrayList<Collidable> collidables;
   private ArrayList<Damageable> damageables;
-  // observers
+  private ArrayList<Updatable> updatables;
 
   private HashMap<String, Image> spriteMap;
+
+  private Updater gameUpdater;
+  private Thread gameUpdaterThread;
 
   public GameWorld(Dimension dimension) {
     Instance = this;
@@ -33,15 +32,21 @@ public class GameWorld
     initialize();
   }
 
+
   public void initialize() {
     walls = new ArrayList<>();
     tanks = new ArrayList<>();
     bullets = new ArrayList<>();
     collidables = new ArrayList<>();
     damageables = new ArrayList<>();
+    updatables = new ArrayList<>();
 
     backgroundImage = drawBackgroundImage();
     instantiate(new Tank(new Point(100, 100)));
+
+    gameUpdater = new Updater(updatables);
+    gameUpdaterThread = new Thread(gameUpdater);
+    gameUpdaterThread.start();
   }
 
   public static BufferedImage loadSprite(String fileName)
@@ -86,6 +91,9 @@ public class GameWorld
     }
     if (gameObject instanceof Damageable) {
       damageables.add((Damageable) gameObject);
+    }
+    if (gameObject instanceof Updatable) {
+      updatables.add((Updatable) gameObject);
     }
   }
 
