@@ -3,6 +3,8 @@ package Scripts;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -10,7 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameWorld
+public class GameWorld implements KeyListener
 {
   public static GameWorld Instance;
 
@@ -25,36 +27,48 @@ public class GameWorld
   private ArrayList<Damageable> damageables;
   // observers
 
-  private HashMap<String, Image> spriteMap;
+  private HashMap<String, BufferedImage> spriteMap;
 
-  public GameWorld(Dimension dimension) {
+  private Tank p1_tank, p2_tank;
+  private KeyInputHandler keyInputHandler;
+
+  public GameWorld(Dimension dimension)
+  {
     Instance = this;
     this.dimension = dimension;
     initialize();
   }
 
-  public void initialize() {
+  public void initialize()
+  {
     walls = new ArrayList<>();
     tanks = new ArrayList<>();
     bullets = new ArrayList<>();
     collidables = new ArrayList<>();
     damageables = new ArrayList<>();
+    spriteMap = new HashMap<>();
 
     backgroundImage = drawBackgroundImage();
-    instantiate(new Tank(new Point(100, 100)));
+    p1_tank = (Tank) instantiate(new Tank(new Point(100, 100)));
+    p2_tank = (Tank) instantiate(new Tank(new Point(300, 100)));
+
+    keyInputHandler = new KeyInputHandler();
+    p1_tank.setTankInput(keyInputHandler.getP1_tankInput());
+    p2_tank.setTankInput(keyInputHandler.getP2_tankInput());
   }
 
-  public static BufferedImage loadSprite(String fileName)
+  public void keyPressed(KeyEvent keyEvent)
   {
-    BufferedImage _bImg = null;
-    try {
-      _bImg = ImageIO.read(Instance.getClass().getResourceAsStream("/Sprites/" + fileName));
-    } catch (Exception e) {
-      System.out.println("ERROR: " + fileName + " not found");
-    }
-
-    return _bImg;
+    keyInputHandler.readKeyPressed(keyEvent);
   }
+
+  public void keyReleased(KeyEvent keyEvent)
+  {
+    keyInputHandler.readKeyReleased(keyEvent);
+  }
+
+  public void keyTyped(KeyEvent keyEvent)
+  {  }
 
   public synchronized BufferedImage getCurrentImage()
   {
@@ -70,7 +84,7 @@ public class GameWorld
     return _currentImage;
   }
 
-  private void instantiate(GameObject gameObject) {
+  private GameObject instantiate(GameObject gameObject) {
     if (gameObject instanceof Wall) {
       walls.add((Wall) gameObject);
     }
@@ -87,6 +101,8 @@ public class GameWorld
     if (gameObject instanceof Damageable) {
       damageables.add((Damageable) gameObject);
     }
+
+    return gameObject;
   }
 
   private BufferedImage drawBackgroundImage()
@@ -102,5 +118,21 @@ public class GameWorld
     }
 
     return _backgroundImage;
+  }
+
+  public static BufferedImage loadSprite(String fileName)
+  {
+    BufferedImage _bImg = Instance.spriteMap.get(fileName);
+
+    if (_bImg == null) {
+      try {
+        _bImg = ImageIO.read(Instance.getClass().getResourceAsStream("/Sprites/" + fileName));
+        Instance.spriteMap.put(fileName, _bImg);
+      } catch (Exception e) {
+        System.out.println("ERROR: " + fileName + " not found");
+      }
+    }
+
+    return _bImg;
   }
 }

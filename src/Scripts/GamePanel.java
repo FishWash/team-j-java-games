@@ -2,6 +2,8 @@ package Scripts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel {
@@ -10,6 +12,8 @@ public class GamePanel extends JPanel {
   public GamePanel(Dimension dimension, GameWorld gameWorld) {
     super.setSize(dimension);
     this.gameWorld = gameWorld;
+    this.addKeyListener(gameWorld);
+    this.setFocusable(true);
   }
 
   @Override

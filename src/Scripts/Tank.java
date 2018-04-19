@@ -4,7 +4,8 @@ import java.awt.*;
 
 public class Tank extends GameObject implements Damageable
 {
-  int health;
+  private int health;
+  private TankInput tankInput;
 
   public Tank(Point position) {
     super(position);
@@ -16,6 +17,10 @@ public class Tank extends GameObject implements Damageable
     health -= damage;
     if (health <= 0)
       die();
+  }
+
+  public void setTankInput(TankInput tankInput) {
+    this.tankInput = tankInput;
   }
 
   private void die() {
