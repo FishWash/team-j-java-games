@@ -17,6 +17,7 @@ public class GameWorld implements KeyListener
   private BufferedImage backgroundImage; //image of GameWorld with background tiles and walls
 
   private ArrayList<Wall> walls;
+  private ArrayList<DestructibleWall> destructibleWalls;
   private ArrayList<Tank> tanks;
   private ArrayList<Bullet> bullets;
   // explosions
@@ -40,6 +41,7 @@ public class GameWorld implements KeyListener
   public void initialize()
   {
     walls = new ArrayList<>();
+    destructibleWalls = new ArrayList<>();
     tanks = new ArrayList<>();
     bullets = new ArrayList<>();
     collidables = new ArrayList<>();
@@ -102,7 +104,11 @@ public class GameWorld implements KeyListener
     _currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
 
     // draw other stuff. tanks, bullets, destructible walls, etc
-    for(Tank _tank : tanks) {
+    for (DestructibleWall _dWall : destructibleWalls) {
+      _dWall.drawSprite(_currentImageGraphics);
+    }
+
+    for (Tank _tank : tanks) {
       _tank.drawSprite(_currentImageGraphics);
     }
 
@@ -127,6 +133,9 @@ public class GameWorld implements KeyListener
   {
     if (gameObject instanceof Wall) {
       Instance.walls.add((Wall) gameObject);
+    }
+    else if (gameObject instanceof DestructibleWall) {
+      Instance.destructibleWalls.add((DestructibleWall) gameObject);
     }
     else if (gameObject instanceof Bullet) {
       Instance.bullets.add((Bullet) gameObject);
@@ -167,36 +176,37 @@ public class GameWorld implements KeyListener
     return _bImg;
   }
 
-  // Called in
   private void readMap(String file) throws IOException
   {
-    String line;
-    BufferedImage wall = loadSprite("wall_indestructible.png");
-    int yPos = 0;
-    int wallDimensions = wall.getWidth();
     try {
       FileReader fileReader = new FileReader(file);
       BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-      while ((line = bufferedReader.readLine()) != null) {
-        for (int xPos = 0; xPos < line.length(); xPos ++) {
-          char wallNum = line.charAt(xPos);
-          addWall(wallNum, new Vector2(xPos * wallDimensions, yPos * wallDimensions));
+      String _line;
+      BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
+      int _gameWorldWidth = Instance.dimension.width;
+      int _gameWorldHeight = Instance.dimension.height;
+      int _xPos, _yPos = 0;
+
+      while ((_line = bufferedReader.readLine()) != null && _yPos < _gameWorldHeight) {
+        _xPos = 0;
+        for (int i=0; i<_line.length() && _xPos<_gameWorldWidth; i++) {
+          char wallChar = _line.charAt(i);
+          switch (wallChar) {
+            case '1':
+              instantiate( new Wall(new Vector2(_xPos, _yPos)) );
+              break;
+            case '2':
+              instantiate( new DestructibleWall(new Vector2(_xPos, _yPos)) );
+              break;
+          }
+          _xPos += _tileSprite.getWidth();
         }
-        yPos ++;
+
+        _yPos += _tileSprite.getHeight();
       }
     } catch(Exception e){
       System.out.println(e.getMessage());
-    }
-
-  }
-
-  private void addWall(int wallNum, Vector2 position){
-    if(wallNum == '1'){
-      instantiate( new Wall(position) );
-    }
-    if(wallNum == '2'){
-      instantiate( new DestructibleWall(position) );
     }
   }
 }
