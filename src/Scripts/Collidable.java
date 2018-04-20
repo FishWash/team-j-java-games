@@ -1,5 +1,6 @@
 package Scripts;
 
-public interface Collidable {
-  
+public interface Collidable
+{
+  boolean isCollidingWith(BoxCollider otherColl);
 }

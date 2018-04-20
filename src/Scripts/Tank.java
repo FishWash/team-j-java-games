@@ -3,45 +3,25 @@ package Scripts;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Tank extends GameObject implements Updatable, Damageable
+public class Tank extends CollidableGameObject implements Updatable, Damageable
 {
   private int health = 100;
   private double moveSpeed = 2;
   private Vector2 moveVector = new Vector2(0, 0);
   private double rotation = 0; //rotation in angles. (0-360)
   private double turnSpeed = 2;
+  private int shootDelay = 30;
 
   private MultiSprite multiSprite;
-
   private TankInput tankInput;
+  private Timer shootTimer;
 
   public Tank(Vector2 position) {
     super(position);
     sprite = GameWorld.loadSprite("Tank_grey_basic.png");
     multiSprite = new MultiSprite(GameWorld.loadSprite("Tank_blue_base_strip60.png"), 60);
-  }
-
-  public void update() {
-    rotation = (rotation+360 - tankInput.getTurnInput()*turnSpeed) % 360;
-    moveVector.x = tankInput.getMoveInput()*moveSpeed * Math.cos(Math.toRadians(rotation));
-    moveVector.y = -tankInput.getMoveInput()*moveSpeed * Math.sin(Math.toRadians(rotation));
-
-    position.addVector(moveVector);
-  }
-
-  public Vector2 getTankCenterPosition(){
-    Vector2 centerPosition = new Vector2(position.x + (sprite.getWidth() / 2), position.y + (sprite.getWidth() / 2));
-    return centerPosition;
-  }
-
-  public void takeDamage(int damage) {
-    health -= damage;
-    if (health <= 0)
-      die();
-  }
-
-  public void setTankInput(TankInput tankInput) {
-    this.tankInput = tankInput;
+    collider.setSize(new Vector2(sprite.getWidth(), sprite.getHeight()));
+    shootTimer = new Timer();
   }
 
   @Override
@@ -59,6 +39,43 @@ public class Tank extends GameObject implements Updatable, Damageable
     int index = (int) (rotation / (360 / multiSprite.getNumSubsprites()));
     BufferedImage _sprite = multiSprite.getSubsprite(index);
     graphics.drawImage(_sprite, (int)position.x, (int)position.y, null);
+  }
+
+  public void update() {
+    turn();
+    move();
+    shoot();
+  }
+
+  private void turn() {
+    rotation = (rotation+360 - tankInput.getTurnInput()*turnSpeed) % 360;
+  }
+
+  private void move() {
+    moveVector.x = tankInput.getMoveInput()*moveSpeed * Math.cos(Math.toRadians(rotation));
+    moveVector.y = -tankInput.getMoveInput()*moveSpeed * Math.sin(Math.toRadians(rotation));
+
+    GameWorld.checkCollisions(collider);
+
+    position = position.addVector(moveVector);
+  }
+
+  private void shoot() {
+    if (tankInput.getShootInput() == 1 && shootTimer.isDone()) {
+      Bullet _bullet = (Bullet) GameWorld.instantiate(new Bullet(position));
+      _bullet.setRotation(rotation);
+      shootTimer.set(shootDelay);
+    }
+  }
+
+  public void takeDamage(int damage) {
+    health -= damage;
+    if (health <= 0)
+      die();
+  }
+
+  public void setTankInput(TankInput tankInput) {
+    this.tankInput = tankInput;
   }
 
   private void die() {
