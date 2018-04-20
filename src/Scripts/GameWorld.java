@@ -5,25 +5,26 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameWorld implements KeyListener
 {
   public static GameWorld Instance;
+  public int framesSinceStart;
 
   private Dimension dimension;
   private BufferedImage backgroundImage; //image of GameWorld with background tiles and walls
 
-  private ArrayList<Wall> walls;
-  private ArrayList<DestructibleWall> destructibleWalls;
-  private ArrayList<Tank> tanks;
-  private ArrayList<Bullet> bullets;
+  private CopyOnWriteArrayList<Wall> walls;
+  private CopyOnWriteArrayList<DestructibleWall> destructibleWalls;
+  private CopyOnWriteArrayList<Tank> tanks;
+  private CopyOnWriteArrayList<Bullet> bullets;
   // explosions
-  private ArrayList<Collidable> collidables;
-  private ArrayList<Damageable> damageables;
-  private ArrayList<Updatable> updatables;
+  private CopyOnWriteArrayList<Collidable> collidables;
+  private CopyOnWriteArrayList<Damageable> damageables;
+  private CopyOnWriteArrayList<Updatable> updatables;
 
   private HashMap<String, BufferedImage> spriteCache;
 
@@ -40,14 +41,16 @@ public class GameWorld implements KeyListener
 
   public void initialize()
   {
-    walls = new ArrayList<>();
-    destructibleWalls = new ArrayList<>();
-    tanks = new ArrayList<>();
-    bullets = new ArrayList<>();
-    collidables = new ArrayList<>();
-    damageables = new ArrayList<>();
-    updatables = new ArrayList<>();
+    walls = new CopyOnWriteArrayList<>();
+    destructibleWalls = new CopyOnWriteArrayList<>();
+    tanks = new CopyOnWriteArrayList<>();
+    bullets = new CopyOnWriteArrayList<>();
+    collidables = new CopyOnWriteArrayList<>();
+    damageables = new CopyOnWriteArrayList<>();
+    updatables = new CopyOnWriteArrayList<>();
     spriteCache = new HashMap<>();
+
+    placeOuterWalls();
     backgroundImage = drawBackgroundImage();
 
     // Tank Initialization
@@ -73,7 +76,7 @@ public class GameWorld implements KeyListener
         _graphics.drawImage(_bgTile, i, j, null);
       }
     }
-    File file = new File("src/EditableMap.txt");
+    File file = new File("src/CollisionTestMap.txt");
 
     try {
       readMap(file.getAbsolutePath());
@@ -95,6 +98,7 @@ public class GameWorld implements KeyListener
     for (Updatable _u : updatables) {
       _u.update();
     }
+    framesSinceStart++;
   }
 
   public synchronized BufferedImage getCurrentImage()
@@ -110,6 +114,10 @@ public class GameWorld implements KeyListener
 
     for (Tank _tank : tanks) {
       _tank.drawSprite(_currentImageGraphics);
+    }
+
+    for (Bullet _bullet : bullets) {
+      _bullet.drawSprite(_currentImageGraphics);
     }
 
     return _currentImage;
@@ -160,6 +168,18 @@ public class GameWorld implements KeyListener
     return gameObject;
   }
 
+  public static boolean checkCollisions(BoxCollider collider)
+  {
+    for (Collidable _c : Instance.collidables) {
+      if (_c.isCollidingWith(collider)) {
+        System.out.println("Colliding");
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public static BufferedImage loadSprite(String fileName)
   {
     BufferedImage _bImg = Instance.spriteCache.get(fileName);
@@ -207,6 +227,28 @@ public class GameWorld implements KeyListener
       }
     } catch(Exception e){
       System.out.println(e.getMessage());
+    }
+  }
+
+  private void placeOuterWalls()
+  {
+    BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
+    int _tileWidth = _tileSprite.getWidth();
+    int _tileHeight = _tileSprite.getHeight();
+    int _gameWorldWidth = Instance.dimension.width;
+    int _gameWorldHeight = Instance.dimension.height;
+
+    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
+      instantiate(new Wall(new Vector2(i, 0)));
+    }
+    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
+      instantiate(new Wall(new Vector2(0, i)));
+    }
+    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
+      instantiate(new Wall(new Vector2(i, _gameWorldHeight-_tileHeight)));
+    }
+    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
+      instantiate(new Wall(new Vector2(_gameWorldWidth-_tileWidth, i)));
     }
   }
 }

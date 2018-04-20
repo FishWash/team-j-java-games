@@ -12,11 +12,11 @@ public class KeyInputHandler
   private final int p1_turnRightKey = KeyEvent.VK_D;
   private final int p1_shootKey = KeyEvent.VK_F;
 
-  private final int p2_moveForwardKey = KeyEvent.VK_O;
-  private final int p2_moveBackwardKey = KeyEvent.VK_L;
-  private final int p2_turnLeftKey = KeyEvent.VK_K;
-  private final int p2_turnRightKey = KeyEvent.VK_SEMICOLON;
-  private final int p2_shootKey = KeyEvent.VK_QUOTE;
+  private final int p2_moveForwardKey = KeyEvent.VK_I;
+  private final int p2_moveBackwardKey = KeyEvent.VK_K;
+  private final int p2_turnLeftKey = KeyEvent.VK_J;
+  private final int p2_turnRightKey = KeyEvent.VK_L;
+  private final int p2_shootKey = KeyEvent.VK_SEMICOLON;
 
   private TankInput p1_tankInput, p2_tankInput;
 

@@ -5,6 +5,7 @@ public class Vector2
 {
   public double x;
   public double y;
+  public static Vector2 zero = new Vector2(0,0);
 
   public Vector2() {
     this.x = 0;
@@ -15,8 +16,11 @@ public class Vector2
     this.y = y;
   }
 
-  public void addVector(Vector2 otherVector) {
-    this.x += otherVector.x;
-    this.y += otherVector.y;
+  public Vector2 addVector(Vector2 otherVector) {
+    return new Vector2(this.x + otherVector.x, this.y + otherVector.y);
+  }
+
+  public String toString() {
+    return "[(Vector2) x: " + x + ", y: " + y + "]";
   }
 }
