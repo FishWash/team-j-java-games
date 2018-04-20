@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.*;
+import java.util.Vector;
 
 public class GameWorld implements KeyListener
 {
@@ -36,6 +37,7 @@ public class GameWorld implements KeyListener
     Instance = this;
     this.dimension = dimension;
     initialize();
+
   }
 
   public void initialize()
@@ -128,7 +130,29 @@ public class GameWorld implements KeyListener
 
   public void keyTyped(KeyEvent keyEvent) {}
 
-  // instantiate() takes a GameObject and puts it in the appropriate ArrayLists.
+
+  public synchronized void gameDisplay(Graphics graphics){
+    BufferedImage currentImage = getCurrentImage();
+    int gameWidth = currentImage.getWidth();
+    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
+    int gameHeight = currentImage.getHeight();
+    int playerDisplayHeight = TankGameApplication.windowDimension.height;
+    Vector2 tankOnePosition = tanks.get(0).getTankCenterPosition();
+    Vector2 tankTwoPosition = tanks.get(1).getTankCenterPosition();
+
+
+    int p1DisplayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankOnePosition.x - playerDisplayWidth / 2));
+    int p2DisplayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankTwoPosition.x - playerDisplayWidth / 2));
+
+    int p1DisplayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankOnePosition.y - playerDisplayHeight / 2));
+    int p2DisplayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankTwoPosition.y - playerDisplayHeight / 2));
+
+    BufferedImage playerOneView = currentImage.getSubimage(p1DisplayX, p1DisplayY, playerDisplayWidth, playerDisplayHeight);
+    BufferedImage playerTwoView = currentImage.getSubimage(p2DisplayX, p2DisplayY, 400, 600);
+    graphics.drawImage(playerOneView, 0, 0, null);
+    graphics.drawImage(playerTwoView, playerDisplayWidth, 0, null);
+  }
+
   public static GameObject instantiate(GameObject gameObject)
   {
     if (gameObject instanceof Wall) {
@@ -160,24 +184,25 @@ public class GameWorld implements KeyListener
     return gameObject;
   }
 
-  public static BufferedImage loadSprite(String fileName)
-  {
+  public static BufferedImage loadSprite(String fileName) {
     BufferedImage _bImg = Instance.spriteCache.get(fileName);
     if (_bImg == null) {
       try {
         _bImg = ImageIO.read(Instance.getClass().getResourceAsStream("/Sprites/" + fileName));
         Instance.spriteCache.put(fileName, _bImg);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         System.out.println("ERROR: " + fileName + " not found");
-      }
+        }
     }
-
     return _bImg;
   }
 
-  private void readMap(String file) throws IOException
-  {
+  private void readMap(String file){
+    String line;
+    BufferedImage wall = loadSprite("wall_indestructible.png");
+    int yPos = 0;
+    int wallDimensions = wall.getWidth();
+
     try {
       FileReader fileReader = new FileReader(file);
       BufferedReader bufferedReader = new BufferedReader(fileReader);

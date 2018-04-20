@@ -17,6 +17,7 @@ public class Tank extends GameObject implements Updatable, Damageable
 
   public Tank(Vector2 position) {
     super(position);
+    sprite = GameWorld.loadSprite("Tank_grey_basic.png");
     multiSprite = new MultiSprite(GameWorld.loadSprite("Tank_blue_base_strip60.png"), 60);
   }
 
@@ -26,6 +27,11 @@ public class Tank extends GameObject implements Updatable, Damageable
     moveVector.y = -tankInput.getMoveInput()*moveSpeed * Math.sin(Math.toRadians(rotation));
 
     position.addVector(moveVector);
+  }
+
+  public Vector2 getTankCenterPosition(){
+    Vector2 centerPosition = new Vector2(position.x + (sprite.getWidth() / 2), position.y + (sprite.getWidth() / 2));
+    return centerPosition;
   }
 
   public void takeDamage(int damage) {

@@ -30,4 +30,8 @@ public abstract class GameObject
       sprite = _spriteImg;
     }
   }
+
+  public BufferedImage getSprite() {
+    return sprite;
+  }
 }
