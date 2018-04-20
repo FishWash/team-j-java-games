@@ -1,10 +1,8 @@
 package Scripts;
 
-import java.awt.*;
-
 public class DestructibleWall extends GameObject implements Collidable, Damageable
 {
-  public DestructibleWall(Vector2D position) {
+  public DestructibleWall(Vector2 position) {
     super(position);
   }
 

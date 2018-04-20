@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable
   public void run()
   {
     while (true) {
+      gameWorld.update();
       repaint();
       try {
         Thread.sleep(frameLength);

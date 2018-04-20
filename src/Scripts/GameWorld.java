@@ -24,7 +24,7 @@ public class GameWorld implements KeyListener
   private ArrayList<Damageable> damageables;
   private ArrayList<Updatable> updatables;
 
-  private HashMap<String, BufferedImage> spriteMap;
+  private HashMap<String, BufferedImage> spriteCache;
 
   private Updater gameUpdater;
   private Thread gameUpdaterThread;
@@ -32,82 +32,35 @@ public class GameWorld implements KeyListener
   private Tank p1_tank, p2_tank;
   private KeyInputHandler keyInputHandler;
 
-  public GameWorld(Dimension dimension) {
+  // Initialization
+  public GameWorld(Dimension dimension)
+  {
     Instance = this;
     this.dimension = dimension;
     initialize();
   }
 
-  public void initialize() {
+  public void initialize()
+  {
     walls = new ArrayList<>();
     tanks = new ArrayList<>();
     bullets = new ArrayList<>();
     collidables = new ArrayList<>();
     damageables = new ArrayList<>();
     updatables = new ArrayList<>();
-    spriteMap = new HashMap<>();
+    spriteCache = new HashMap<>();
     backgroundImage = drawBackgroundImage();
 
-    p1_tank = (Tank) instantiate(new Tank(new Vector2D(100, 100)));
-    p2_tank = (Tank) instantiate(new Tank(new Vector2D(300, 100)));
+    // Tank Initialization
+    p1_tank = (Tank) instantiate( new Tank(new Vector2(100, 100)) );
+    p2_tank = (Tank) instantiate( new Tank(new Vector2(300, 100)) );
 
     keyInputHandler = new KeyInputHandler();
     p1_tank.setTankInput(keyInputHandler.getP1_tankInput());
     p2_tank.setTankInput(keyInputHandler.getP2_tankInput());
 
-    gameUpdater = new Updater(updatables);
-    gameUpdaterThread = new Thread(gameUpdater);
-    gameUpdaterThread.start();
-  }
-
-  public void keyPressed(KeyEvent keyEvent) {
-    keyInputHandler.readKeyPressed(keyEvent);
-  }
-
-  public void keyReleased(KeyEvent keyEvent)
-  {
-    keyInputHandler.readKeyReleased(keyEvent);
-  }
-
-  public void keyTyped(KeyEvent keyEvent)
-  {  }
-
-  public synchronized BufferedImage getCurrentImage()
-  {
-    BufferedImage _currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
-    Graphics _currentImageGraphics = _currentImage.createGraphics();
-    _currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
-
-    // draw other stuff. tanks, bullets, destructible walls, etc
-    for(Tank _tank : tanks) {
-      _tank.drawSprite(_currentImageGraphics);
-    }
-
-    return _currentImage;
-  }
-
-  private GameObject instantiate(GameObject gameObject) {
-    if (gameObject instanceof Wall) {
-      walls.add((Wall) gameObject);
-    }
-    else if (gameObject instanceof Tank) {
-      tanks.add((Tank) gameObject);
-    }
-    else if (gameObject instanceof Bullet) {
-      bullets.add((Bullet) gameObject);
-    }
-
-    if (gameObject instanceof Collidable) {
-      collidables.add((Collidable) gameObject);
-    }
-    if (gameObject instanceof Damageable) {
-      damageables.add((Damageable) gameObject);
-    }
-    if (gameObject instanceof Updatable) {
-      updatables.add((Updatable) gameObject);
-    }
-
-    return gameObject;
+    p1_tank.setSprite("Tank_blue_basic_strip60.png");
+    p2_tank.setSprite("Tank_red_basic_strip60.png");
   }
 
   private BufferedImage drawBackgroundImage()
@@ -137,13 +90,77 @@ public class GameWorld implements KeyListener
     return _backgroundImage;
   }
 
-  public static BufferedImage loadSprite(String fileName) {
-    BufferedImage _bImg = Instance.spriteMap.get(fileName);
+  // Called from GamePanel
+  public void update()
+  {
+    for (Updatable _u : updatables) {
+      _u.update();
+    }
+  }
 
+  public synchronized BufferedImage getCurrentImage()
+  {
+    BufferedImage _currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+    Graphics _currentImageGraphics = _currentImage.createGraphics();
+    _currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
+
+    // draw other stuff. tanks, bullets, destructible walls, etc
+    for(Tank _tank : tanks) {
+      _tank.drawSprite(_currentImageGraphics);
+    }
+
+    return _currentImage;
+  }
+
+  // Keyboard Input
+  public void keyPressed(KeyEvent keyEvent)
+  {
+    keyInputHandler.readKeyPressed(keyEvent);
+  }
+
+  public void keyReleased(KeyEvent keyEvent)
+  {
+    keyInputHandler.readKeyReleased(keyEvent);
+  }
+
+  public void keyTyped(KeyEvent keyEvent) {}
+
+  // instantiate() takes a GameObject and puts it in the appropriate ArrayLists.
+  public static GameObject instantiate(GameObject gameObject)
+  {
+    if (gameObject instanceof Wall) {
+      Instance.walls.add((Wall) gameObject);
+    }
+    else if (gameObject instanceof Bullet) {
+      Instance.bullets.add((Bullet) gameObject);
+    }
+    else if (gameObject instanceof Tank) {
+      Instance.tanks.add((Tank) gameObject);
+    }
+    else {
+      return null;
+    }
+
+    if (gameObject instanceof Collidable) {
+      Instance.collidables.add((Collidable) gameObject);
+    }
+    if (gameObject instanceof Damageable) {
+      Instance.damageables.add((Damageable) gameObject);
+    }
+    if (gameObject instanceof Updatable) {
+      Instance.updatables.add((Updatable) gameObject);
+    }
+
+    return gameObject;
+  }
+
+  public static BufferedImage loadSprite(String fileName)
+  {
+    BufferedImage _bImg = Instance.spriteCache.get(fileName);
     if (_bImg == null) {
       try {
         _bImg = ImageIO.read(Instance.getClass().getResourceAsStream("/Sprites/" + fileName));
-        Instance.spriteMap.put(fileName, _bImg);
+        Instance.spriteCache.put(fileName, _bImg);
       }
       catch (Exception e) {
         System.out.println("ERROR: " + fileName + " not found");
@@ -153,7 +170,9 @@ public class GameWorld implements KeyListener
     return _bImg;
   }
 
-  private void readMap(String file) throws IOException{
+  // Called in
+  private void readMap(String file) throws IOException
+  {
     String line;
     BufferedImage wall = loadSprite("wall_indestructible.png");
     int yPos = 0;
@@ -165,7 +184,7 @@ public class GameWorld implements KeyListener
       while ((line = bufferedReader.readLine()) != null) {
         for (int xPos = 0; xPos < line.length(); xPos ++) {
           char wallNum = line.charAt(xPos);
-          addWall(wallNum, new Vector2D(xPos * wallDimensions, yPos * wallDimensions));
+          addWall(wallNum, new Vector2(xPos * wallDimensions, yPos * wallDimensions));
         }
         yPos ++;
       }
@@ -175,12 +194,12 @@ public class GameWorld implements KeyListener
 
   }
 
-  private void addWall(int wallNum, Vector2D position){
+  private void addWall(int wallNum, Vector2 position){
     if(wallNum == '1'){
-      instantiate(new Wall(position));
+      instantiate( new Wall(position) );
     }
     if(wallNum == '2'){
-      instantiate(new DestructibleWall(position));
+      instantiate( new DestructibleWall(position) );
     }
   }
 }

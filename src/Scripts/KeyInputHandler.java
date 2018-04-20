@@ -22,8 +22,8 @@ public class KeyInputHandler
 
   public KeyInputHandler()
   {
-    p1_tankInput = new TankInput();
-    p2_tankInput = new TankInput();
+    p1_tankInput = new FuzzyTankInput();
+    p2_tankInput = new FuzzyTankInput();
   }
 
   public TankInput getP1_tankInput() {

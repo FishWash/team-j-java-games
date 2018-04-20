@@ -20,17 +20,17 @@ public class TankInput
     shootPressed = pressed;
   }
 
-  public int getMoveInput() {
+  public double getMoveInput() {
     int _moveInput = 0;
     if (moveForwardPressed) _moveInput++;
     if (moveBackwardPressed) _moveInput--;
     return _moveInput;
   }
 
-  public int getTurnInput() {
+  public double getTurnInput() {
     int _turnInput = 0;
-    if (turnLeftPressed) _turnInput++;
-    if (turnRightPressed) _turnInput--;
+    if (turnLeftPressed) _turnInput--;
+    if (turnRightPressed) _turnInput++;
     return _turnInput;
   }
 
