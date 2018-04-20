@@ -15,6 +15,7 @@ public class GameWorld
   private BufferedImage backgroundImage; //image of GameWorld with background tiles and walls
 
   private ArrayList<Wall> walls;
+  private ArrayList<DestructibleWall> destructibleWalls;
   private ArrayList<Tank> tanks;
   private ArrayList<Bullet> bullets;
   // explosions
@@ -28,10 +29,12 @@ public class GameWorld
     Instance = this;
     this.dimension = dimension;
     initialize();
+
   }
 
   public void initialize() {
     walls = new ArrayList<>();
+    destructibleWalls = new ArrayList<>();
     tanks = new ArrayList<>();
     bullets = new ArrayList<>();
     collidables = new ArrayList<>();
@@ -39,7 +42,8 @@ public class GameWorld
 
     backgroundImage = drawBackgroundImage();
 
-    instantiate(new Tank(new Point(100, 100)));
+    instantiate(new Tank(new Point(50, 950)));
+    instantiate(new Tank(new Point(950, 950)));
   }
 
   public static BufferedImage loadSprite(String fileName)
@@ -68,9 +72,36 @@ public class GameWorld
     return _currentImage;
   }
 
+  public synchronized void gameDisplay(Graphics graphics){
+    BufferedImage currentImage = getCurrentImage();
+    int gameWidth = currentImage.getWidth();
+    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
+    int gameHeight = currentImage.getHeight();
+    int playerDisplayHeight = TankGameApplication.windowDimension.height;
+    Point tankOnePosition = tanks.get(0).getTankCenterPosition();
+    Point tankTwoPosition = tanks.get(1).getTankCenterPosition();
+
+
+    int p1DisplayX = Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankOnePosition.x - playerDisplayWidth / 2));
+    int p2DisplayX = Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankTwoPosition.x - playerDisplayWidth / 2));
+
+    int p1DisplayY = Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankOnePosition.y - playerDisplayHeight / 2));
+    int p2DisplayY = Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankTwoPosition.y - playerDisplayHeight / 2));
+
+    System.out.println(p1DisplayY);
+
+    BufferedImage playerOneView = currentImage.getSubimage(p1DisplayX, p1DisplayY, playerDisplayWidth, playerDisplayHeight);
+    BufferedImage playerTwoView = currentImage.getSubimage(p2DisplayX, p2DisplayY, 400, 600);
+    graphics.drawImage(playerOneView, 0, 0, null);
+    graphics.drawImage(playerTwoView, playerDisplayWidth, 0, null);
+  }
+
   private void instantiate(GameObject gameObject) {
     if (gameObject instanceof Wall) {
       walls.add((Wall) gameObject);
+    }
+    else if (gameObject instanceof  DestructibleWall) {
+      destructibleWalls.add((DestructibleWall) gameObject);
     }
     else if (gameObject instanceof Tank) {
       tanks.add((Tank) gameObject);
@@ -99,24 +130,20 @@ public class GameWorld
       }
     }
     File file = new File("src/EditableMap.txt");
-    System.out.println(file.getAbsolutePath() + " yes");
-    System.out.println(file.canRead());
-
-    try {
-      readMap(file.getAbsolutePath());
-    } catch(Exception e){
-      System.out.println("Error:" + e.getMessage());
-    }
+    readMap(file.getAbsolutePath());
 
     //addWall(1,new Point(0,0));
     for(Wall indestructibleWall : walls){
       indestructibleWall.drawSprite(_graphics);
     }
+    for(DestructibleWall destructibleWall : destructibleWalls){
+      destructibleWall.drawSprite(_graphics);
+    }
 
     return _backgroundImage;
   }
 
-  private void readMap(String file) throws IOException{
+  private void readMap(String file){
     String line;
     BufferedImage wall = loadSprite("wall_indestructible.png");
     int yPos = 0;

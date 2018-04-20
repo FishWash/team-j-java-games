@@ -19,4 +19,8 @@ public abstract class GameObject
   public void drawSprite(Graphics graphics) {
     graphics.drawImage(sprite, position.x, position.y, null);
   }
+
+  public BufferedImage getSprite() {
+    return sprite;
+  }
 }

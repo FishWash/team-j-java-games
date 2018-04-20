@@ -15,12 +15,14 @@ public class TankGameApplication
     JFrame gameFrame = new JFrame("TANKS FOR PLAYING OUR GAME");
     gameFrame.setResizable(false);
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    gameFrame.setUndecorated(true);
 
     GameWorld gameWorld = new GameWorld(gameDimension);
     GamePanel gamePanel = new GamePanel(windowDimension, gameWorld);
 
+
     gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
-    gameFrame.pack();
+    //gameFrame.pack();
     gameFrame.setSize(windowDimension);
 
     gameFrame.setVisible(true);

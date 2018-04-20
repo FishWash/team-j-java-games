@@ -6,8 +6,8 @@ public class DestructibleWall extends GameObject implements Collidable, Damageab
 {
   public DestructibleWall(Point position) {
     super(position);
+    sprite = GameWorld.loadSprite("wall.png");
   }
-
   public void takeDamage(int damageAmount) {
     die();
   }

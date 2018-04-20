@@ -12,11 +12,11 @@ public class GamePanel extends JPanel {
     this.gameWorld = gameWorld;
   }
 
+
   @Override
   public void paintComponent(Graphics graphics)
   {
     super.paintComponent(graphics);
-    BufferedImage _currentGameImage = gameWorld.getCurrentImage();
-    graphics.drawImage(_currentGameImage, 0, 0, null);
+    gameWorld.gameDisplay(graphics);
   }
 }
