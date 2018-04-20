@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,27 +132,46 @@ public class GameWorld implements KeyListener
 
   public void keyTyped(KeyEvent keyEvent) {}
 
-
-  public synchronized void gameDisplay(Graphics graphics){
-    BufferedImage currentImage = getCurrentImage();
+  public BufferedImage getPlayerDisplay(BufferedImage currentImage, GameObject gameObject){
     int gameWidth = currentImage.getWidth();
     int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
     int gameHeight = currentImage.getHeight();
     int playerDisplayHeight = TankGameApplication.windowDimension.height;
-    Vector2 tankOnePosition = tanks.get(0).getTankCenterPosition();
-    Vector2 tankTwoPosition = tanks.get(1).getTankCenterPosition();
+    Vector2 tankPosition = gameObject.getCenterPosition();
 
+    int displayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankPosition.x - playerDisplayWidth / 2));
+    int displayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankPosition.y - playerDisplayHeight / 2));
 
-    int p1DisplayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankOnePosition.x - playerDisplayWidth / 2));
-    int p2DisplayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankTwoPosition.x - playerDisplayWidth / 2));
+    BufferedImage playerOneView = currentImage.getSubimage(displayX, displayY, playerDisplayWidth, playerDisplayHeight);
 
-    int p1DisplayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankOnePosition.y - playerDisplayHeight / 2));
-    int p2DisplayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankTwoPosition.y - playerDisplayHeight / 2));
+    return playerOneView;
+  }
 
-    BufferedImage playerOneView = currentImage.getSubimage(p1DisplayX, p1DisplayY, playerDisplayWidth, playerDisplayHeight);
-    BufferedImage playerTwoView = currentImage.getSubimage(p2DisplayX, p2DisplayY, 400, 600);
+  public synchronized void gameDisplay(Graphics graphics){
+    BufferedImage currentImage = getCurrentImage();
+
+    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
+    int playerDisplayHeight = TankGameApplication.windowDimension.height;
+    BufferedImage playerOneView = getPlayerDisplay(currentImage, tanks.get(0));
+    BufferedImage playerTwoView = getPlayerDisplay(currentImage, tanks.get(1));
     graphics.drawImage(playerOneView, 0, 0, null);
     graphics.drawImage(playerTwoView, playerDisplayWidth, 0, null);
+
+    BufferedImage minimap = minimapDisplay(currentImage);
+    graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
+    graphics.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
+    graphics.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
+  }
+
+  public BufferedImage minimapDisplay(BufferedImage currentImage){
+    int minimapSize = TankGameApplication.gameDimension.width / 5;
+    BufferedImage resizedMap = new BufferedImage(minimapSize, minimapSize, BufferedImage.TYPE_INT_ARGB);
+    AffineTransform at = new AffineTransform();
+    at.scale(0.2, 0.2);
+    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+    resizedMap = scaleOp.filter(currentImage, resizedMap);
+
+    return resizedMap;
   }
 
   public static GameObject instantiate(GameObject gameObject)

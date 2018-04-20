@@ -34,4 +34,9 @@ public abstract class GameObject
   public BufferedImage getSprite() {
     return sprite;
   }
+
+  public Vector2 getCenterPosition(){
+    Vector2 centerPosition = new Vector2(position.x + (sprite.getWidth() / 2), position.y + (sprite.getWidth() / 2));
+    return centerPosition;
+  }
 }
