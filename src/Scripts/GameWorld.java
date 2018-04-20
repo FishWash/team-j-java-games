@@ -26,9 +26,6 @@ public class GameWorld implements KeyListener
 
   private HashMap<String, BufferedImage> spriteCache;
 
-  private Updater gameUpdater;
-  private Thread gameUpdaterThread;
-
   private Tank p1_tank, p2_tank;
   private KeyInputHandler keyInputHandler;
 
