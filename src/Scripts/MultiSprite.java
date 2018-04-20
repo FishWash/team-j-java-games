@@ -15,7 +15,6 @@ public class MultiSprite
     this.spriteStrip = spriteStrip;
     this.numSubsprites = numSubsprites;
     subspriteWidth = spriteStrip.getWidth() / numSubsprites;
-
     subspriteCache = new HashMap<>();
   }
 
@@ -45,6 +44,7 @@ public class MultiSprite
   {
     this.spriteStrip = spriteStrip;
     subspriteWidth = spriteStrip.getWidth() / numSubsprites;
+    subspriteCache = new HashMap<>();
   }
 
   public void setNumSubsprites(int numSubsprites)
