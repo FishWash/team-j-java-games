@@ -7,33 +7,30 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 // GamePanel runs on a thread and updates its display every frame.
-public class GamePanel extends JPanel implements Runnable
+public class GamePanel extends JPanel implements ClockObserver
 {
+  private Clock clock;
+  private Thread clockThread;
   private GameWorld gameWorld;
-  final long frameLength = 10;
+  private KeyInputHandler keyInputHandler;
 
-  public GamePanel(Dimension dimension, GameWorld gameWorld)
+  public GamePanel(Dimension dimension)
   {
+    clock = new Clock();
+    Thread clockThread = new Thread(clock);
+    clock.addClockObserver(this);
+    keyInputHandler = new KeyInputHandler();
+    this.addKeyListener(keyInputHandler);
+    gameWorld = new GameWorld(TankGameApplication.gameDimension);
+
     super.setSize(dimension);
-    this.gameWorld = gameWorld;
-    this.addKeyListener(gameWorld);
     this.setFocusable(true);
+    clockThread.start();
   }
 
-  @Override
-  public void run()
-  {
-    while (true) {
-      gameWorld.update();
-      repaint();
-      try {
-        Thread.sleep(frameLength);
-      } catch (Exception e) {
-        // do catch stuff
-      }
-    }
+  public void update() {
+    repaint();
   }
-
 
   @Override
   public void paintComponent(Graphics graphics)

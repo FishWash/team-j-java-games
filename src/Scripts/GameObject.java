@@ -9,7 +9,7 @@ public abstract class GameObject
   protected BufferedImage sprite;
 
   public GameObject() {
-    this.position = Vector2.zero;
+    this.position = Vector2.ZERO;
   }
   public GameObject(Vector2 position) {
     this.position = position;

@@ -3,23 +3,21 @@ package Scripts;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-public class MultiSprite
-{
+public class MultiSprite {
+
   private BufferedImage spriteStrip;
   private int numSubsprites;
   private int subspriteWidth;
   private HashMap<Integer, BufferedImage> subspriteCache;
 
-  public MultiSprite(BufferedImage spriteStrip, int numSubsprites)
-  {
+  public MultiSprite(BufferedImage spriteStrip, int numSubsprites) {
     this.spriteStrip = spriteStrip;
     this.numSubsprites = numSubsprites;
     subspriteWidth = spriteStrip.getWidth() / numSubsprites;
     subspriteCache = new HashMap<>();
   }
 
-  public BufferedImage getSubsprite(int index)
-  {
+  public BufferedImage getSubsprite(int index) {
     BufferedImage _subsprite = subspriteCache.get(index);
 
     if (_subsprite == null) {
@@ -35,20 +33,25 @@ public class MultiSprite
     return _subsprite;
   }
 
+  public BufferedImage getSubSpriteByRotation(double rotation) {
+    double angleStep = 360/this.getNumSubsprites();
+    double spriteRotation = (360 + rotation + angleStep/2) % 360;
+    int index = (int) (spriteRotation / angleStep);
+    return getSubsprite(index);
+  }
+
   public int getNumSubsprites()
   {
     return numSubsprites;
   }
 
-  public void setSpriteStrip(BufferedImage spriteStrip)
-  {
+  public void setSpriteStrip(BufferedImage spriteStrip) {
     this.spriteStrip = spriteStrip;
     subspriteWidth = spriteStrip.getWidth() / numSubsprites;
     subspriteCache = new HashMap<>();
   }
 
-  public void setNumSubsprites(int numSubsprites)
-  {
+  public void setNumSubsprites(int numSubsprites) {
     this.numSubsprites = numSubsprites;
     subspriteWidth = spriteStrip.getWidth() / numSubsprites;
   }

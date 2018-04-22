@@ -1,10 +1,14 @@
 package Scripts;
 
 // Made this just for fun. Adds drag to the controls to make the tanks feel more realistic.
-public class FuzzyTankInput extends TankInput
+public class FuzzyTankKeyInput extends TankKeyInput
 {
   private double fuzzedMoveInput = 0, fuzzedTurnInput = 0;
-  private double moveStep = 0.02, turnStep = 0.05;
+  private double moveStep = 0.04, turnStep = 0.05;
+
+  public FuzzyTankKeyInput(Tank.Player player) {
+    super(player);
+  }
 
   @Override
   public double getMoveInput() {
@@ -18,5 +22,9 @@ public class FuzzyTankInput extends TankInput
     Double _difference = super.getTurnInput() - fuzzedTurnInput;
     fuzzedTurnInput += Math.min(turnStep, Math.max(-turnStep, _difference));
     return fuzzedTurnInput;
+  }
+
+  public void addFuzzedMoveInput(double amount) {
+    fuzzedMoveInput = Math.max(Math.min(fuzzedMoveInput+amount, 1.2), -1.2);
   }
 }

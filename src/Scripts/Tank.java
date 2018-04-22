@@ -3,42 +3,31 @@ package Scripts;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Tank extends CollidableGameObject implements Updatable, Damageable
+public class Tank extends CollidableGameObject implements ClockObserver, Damageable
 {
+  public enum Player {One, Two}
+
+  private final double MOVE_SPEED = 3;
+  private final double TURN_SPEED = 2;
+  private final double SHOOT_OFFSET = 30;
+  private final int SHOOT_DELAY = 30;
+
   private int health = 100;
-  private double moveSpeed = 2;
   private Vector2 moveVector = new Vector2(0, 0);
   private double rotation = 0; //rotation in angles. (0-360)
-  private double turnSpeed = 2;
-  private int shootDelay = 30;
 
   private MultiSprite multiSprite;
-  private TankInput tankInput;
+  private TankKeyInput tankKeyInput;
   private Timer shootTimer;
 
-  public Tank(Vector2 position) {
+  public Tank(Player player, Vector2 position) {
     super(position);
     sprite = GameWorld.loadSprite("Tank_grey_basic.png");
     multiSprite = new MultiSprite(GameWorld.loadSprite("Tank_blue_base_strip60.png"), 60);
     collider.setSize(new Vector2(sprite.getWidth(), sprite.getHeight()));
     shootTimer = new Timer();
-  }
 
-  @Override
-  public void setSprite(String fileName)
-  {
-    BufferedImage _spriteImg = GameWorld.loadSprite(fileName);
-    if (_spriteImg != null) {
-      multiSprite.setSpriteStrip(_spriteImg);
-    }
-  }
-
-  @Override
-  public void drawSprite(Graphics graphics)
-  {
-    int index = (int) (rotation / (360 / multiSprite.getNumSubsprites()));
-    BufferedImage _sprite = multiSprite.getSubsprite(index);
-    graphics.drawImage(_sprite, (int)position.x, (int)position.y, null);
+    tankKeyInput = new FuzzyTankKeyInput(player);
   }
 
   public void update() {
@@ -48,23 +37,29 @@ public class Tank extends CollidableGameObject implements Updatable, Damageable
   }
 
   private void turn() {
-    rotation = (rotation+360 - tankInput.getTurnInput()*turnSpeed) % 360;
+    double rotationalVelocity = tankKeyInput.getTurnInput()*TURN_SPEED;
+    rotation = (rotation+360 - rotationalVelocity) % 360;
   }
 
   private void move() {
-    moveVector.x = tankInput.getMoveInput()*moveSpeed * Math.cos(Math.toRadians(rotation));
-    moveVector.y = -tankInput.getMoveInput()*moveSpeed * Math.sin(Math.toRadians(rotation));
-
+    double newMoveVectorMagnitude = tankKeyInput.getMoveInput()*MOVE_SPEED;
+    moveVector = Vector2.newRotationMagnitudeVector(rotation, newMoveVectorMagnitude);
+    position = Vector2.addVectors(position, moveVector);
     GameWorld.checkCollisions(collider);
-
-    position = position.addVector(moveVector);
   }
 
   private void shoot() {
-    if (tankInput.getShootInput() == 1 && shootTimer.isDone()) {
-      Bullet _bullet = (Bullet) GameWorld.instantiate(new Bullet(position));
-      _bullet.setRotation(rotation);
-      shootTimer.set(shootDelay);
+    if (tankKeyInput.getShootPressed() && shootTimer.isDone()) {
+      Vector2 offsetPosition = Vector2.newRotationMagnitudeVector(rotation, SHOOT_OFFSET);
+      Vector2 bulletPosition = Vector2.addVectors(this.getCenterPosition(), offsetPosition);
+      Bullet bullet = (Bullet) GameWorld.instantiate( new Bullet(bulletPosition) );
+      bullet.setRotation(rotation);
+      shootTimer.set(SHOOT_DELAY);
+
+      // recoil
+      if (tankKeyInput instanceof FuzzyTankKeyInput) {
+        ((FuzzyTankKeyInput) tankKeyInput).addFuzzedMoveInput(-0.8);
+      }
     }
   }
 
@@ -74,11 +69,26 @@ public class Tank extends CollidableGameObject implements Updatable, Damageable
       die();
   }
 
-  public void setTankInput(TankInput tankInput) {
-    this.tankInput = tankInput;
-  }
+
 
   private void die() {
     // do die stuff
+  }
+
+  // Sprite stuff
+  @Override
+  public void setSprite(String fileName)
+  {
+    BufferedImage sprite = GameWorld.loadSprite(fileName);
+    if (sprite != null) {
+      multiSprite.setSpriteStrip(sprite);
+    }
+  }
+
+  @Override
+  public void drawSprite(Graphics graphics)
+  {
+    BufferedImage sprite = multiSprite.getSubSpriteByRotation(rotation);
+    graphics.drawImage(sprite, (int)position.x, (int)position.y, null);
   }
 }

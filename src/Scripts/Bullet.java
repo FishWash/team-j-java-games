@@ -3,20 +3,23 @@ package Scripts;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Bullet extends GameObject implements Updatable
+public class Bullet extends GameObject implements ClockObserver
 {
-  private double moveSpeed = 5;
+  private final double MOVE_SPEED = 5;
+
   private Vector2 moveVector = new Vector2(0, 0);
   private double rotation = 0; //rotation in angles. (0-360)
   private BoxCollider collider;
-
   private MultiSprite multiSprite;
 
   public Bullet(Vector2 position) {
     super(position);
-    sprite = GameWorld.loadSprite("Shell_basic.png");
-    multiSprite = multiSprite = new MultiSprite(GameWorld.loadSprite("Shell_basic_strip60.png"), 60);
-    collider = new BoxCollider(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
+    this.sprite = GameWorld.loadSprite("Shell_basic.png");
+    this.multiSprite = multiSprite = new MultiSprite(GameWorld.loadSprite("Shell_heavy_strip60.png"), 60);
+    this.collider = new BoxCollider(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
+    this.moveVector = Vector2.newMagnitudeVector(MOVE_SPEED);
+
+    this.position = Vector2.subtractVectors( position, new Vector2(sprite.getWidth()/2, sprite.getHeight()/2 ));
   }
 
   @Override
@@ -31,8 +34,7 @@ public class Bullet extends GameObject implements Updatable
   @Override
   public void drawSprite(Graphics graphics)
   {
-    int index = (int) (rotation / (360 / multiSprite.getNumSubsprites()));
-    BufferedImage _sprite = multiSprite.getSubsprite(index);
+    BufferedImage _sprite = multiSprite.getSubSpriteByRotation(rotation);
     graphics.drawImage(_sprite, (int)position.x, (int)position.y, null);
   }
 
@@ -41,15 +43,12 @@ public class Bullet extends GameObject implements Updatable
   }
 
   private void move() {
-    moveVector.x = moveSpeed * Math.cos(Math.toRadians(rotation));
-    moveVector.y = -moveSpeed * Math.sin(Math.toRadians(rotation));
-
-    position = position.addVector(moveVector);
-
+    position = Vector2.addVectors( position, moveVector);
     GameWorld.checkCollisions(collider);
   }
 
   public void setRotation(double angle) {
     this.rotation = (angle+360) % 360;
+    moveVector = Vector2.newRotationMagnitudeVector(rotation, MOVE_SPEED);
   }
 }

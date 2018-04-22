@@ -2,8 +2,6 @@ package Scripts;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -11,10 +9,9 @@ import java.util.HashMap;
 import java.io.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GameWorld implements KeyListener
+public class GameWorld
 {
-  public static GameWorld Instance;
-  public int framesSinceStart;
+  private static GameWorld instance;
 
   private Dimension dimension;
   private BufferedImage backgroundImage; //image of GameWorld with background tiles and walls
@@ -26,17 +23,15 @@ public class GameWorld implements KeyListener
   // explosions
   private CopyOnWriteArrayList<Collidable> collidables;
   private CopyOnWriteArrayList<Damageable> damageables;
-  private CopyOnWriteArrayList<Updatable> updatables;
 
   private HashMap<String, BufferedImage> spriteCache;
 
   private Tank p1_tank, p2_tank;
-  private KeyInputHandler keyInputHandler;
 
   // Initialization
   public GameWorld(Dimension dimension)
   {
-    Instance = this;
+    instance = this;
     this.dimension = dimension;
     initialize();
 
@@ -50,22 +45,20 @@ public class GameWorld implements KeyListener
     bullets = new CopyOnWriteArrayList<>();
     collidables = new CopyOnWriteArrayList<>();
     damageables = new CopyOnWriteArrayList<>();
-    updatables = new CopyOnWriteArrayList<>();
     spriteCache = new HashMap<>();
 
     placeOuterWalls();
     backgroundImage = drawBackgroundImage();
 
     // Tank Initialization
-    p1_tank = (Tank) instantiate( new Tank(new Vector2(100, 100)) );
-    p2_tank = (Tank) instantiate( new Tank(new Vector2(300, 100)) );
-
-    keyInputHandler = new KeyInputHandler();
-    p1_tank.setTankInput(keyInputHandler.getP1_tankInput());
-    p2_tank.setTankInput(keyInputHandler.getP2_tankInput());
-
+    p1_tank = (Tank) instantiate(new Tank( Tank.Player.One, new Vector2(100, 100) ));
+    p2_tank = (Tank) instantiate(new Tank( Tank.Player.Two, new Vector2(300, 100) ));
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
+  }
+
+  public static GameWorld getInstance() {
+    return instance;
   }
 
   private BufferedImage drawBackgroundImage()
@@ -95,15 +88,6 @@ public class GameWorld implements KeyListener
     return _backgroundImage;
   }
 
-  // Called from GamePanel
-  public void update()
-  {
-    for (Updatable _u : updatables) {
-      _u.update();
-    }
-    framesSinceStart++;
-  }
-
   public synchronized BufferedImage getCurrentImage()
   {
     BufferedImage _currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
@@ -115,29 +99,16 @@ public class GameWorld implements KeyListener
       _dWall.drawSprite(_currentImageGraphics);
     }
 
-    for (Tank _tank : tanks) {
-      _tank.drawSprite(_currentImageGraphics);
-    }
-
     for (Bullet _bullet : bullets) {
       _bullet.drawSprite(_currentImageGraphics);
     }
 
+    for (Tank _tank : tanks) {
+      _tank.drawSprite(_currentImageGraphics);
+    }
+
     return _currentImage;
   }
-
-  // Keyboard Input
-  public void keyPressed(KeyEvent keyEvent)
-  {
-    keyInputHandler.readKeyPressed(keyEvent);
-  }
-
-  public void keyReleased(KeyEvent keyEvent)
-  {
-    keyInputHandler.readKeyReleased(keyEvent);
-  }
-
-  public void keyTyped(KeyEvent keyEvent) {}
 
   public BufferedImage getPlayerDisplay(BufferedImage currentImage, GameObject gameObject){
     int gameWidth = currentImage.getWidth();
@@ -184,29 +155,29 @@ public class GameWorld implements KeyListener
   public static GameObject instantiate(GameObject gameObject)
   {
     if (gameObject instanceof Wall) {
-      Instance.walls.add((Wall) gameObject);
+      instance.walls.add((Wall) gameObject);
     }
     else if (gameObject instanceof DestructibleWall) {
-      Instance.destructibleWalls.add((DestructibleWall) gameObject);
+      instance.destructibleWalls.add((DestructibleWall) gameObject);
     }
     else if (gameObject instanceof Bullet) {
-      Instance.bullets.add((Bullet) gameObject);
+      instance.bullets.add((Bullet) gameObject);
     }
     else if (gameObject instanceof Tank) {
-      Instance.tanks.add((Tank) gameObject);
+      instance.tanks.add((Tank) gameObject);
     }
     else {
       return null;
     }
 
     if (gameObject instanceof Collidable) {
-      Instance.collidables.add((Collidable) gameObject);
+      instance.collidables.add((Collidable) gameObject);
     }
     if (gameObject instanceof Damageable) {
-      Instance.damageables.add((Damageable) gameObject);
+      instance.damageables.add((Damageable) gameObject);
     }
-    if (gameObject instanceof Updatable) {
-      Instance.updatables.add((Updatable) gameObject);
+    if (gameObject instanceof ClockObserver) {
+      Clock.getInstance().addClockObserver((ClockObserver) gameObject);
     }
 
     return gameObject;
@@ -214,9 +185,9 @@ public class GameWorld implements KeyListener
 
   public static boolean checkCollisions(BoxCollider collider)
   {
-    for (Collidable _c : Instance.collidables) {
+    for (Collidable _c : instance.collidables) {
       if (_c.isCollidingWith(collider)) {
-        System.out.println("Colliding");
+        //System.out.println("Colliding");
         return true;
       }
     }
@@ -226,11 +197,11 @@ public class GameWorld implements KeyListener
 
   public static BufferedImage loadSprite(String fileName)
   {
-    BufferedImage _bImg = Instance.spriteCache.get(fileName);
+    BufferedImage _bImg = instance.spriteCache.get(fileName);
     if (_bImg == null) {
       try {
-        _bImg = ImageIO.read(Instance.getClass().getResourceAsStream("/Sprites/" + fileName));
-        Instance.spriteCache.put(fileName, _bImg);
+        _bImg = ImageIO.read(instance.getClass().getResourceAsStream("/Sprites/" + fileName));
+        instance.spriteCache.put(fileName, _bImg);
       } catch (Exception e) {
         System.out.println("ERROR: " + fileName + " not found");
         }
@@ -250,8 +221,8 @@ public class GameWorld implements KeyListener
 
       String _line;
       BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
-      int _gameWorldWidth = Instance.dimension.width;
-      int _gameWorldHeight = Instance.dimension.height;
+      int _gameWorldWidth = instance.dimension.width;
+      int _gameWorldHeight = instance.dimension.height;
       int _xPos, _yPos = 0;
 
       while ((_line = bufferedReader.readLine()) != null && _yPos < _gameWorldHeight) {
@@ -281,8 +252,8 @@ public class GameWorld implements KeyListener
     BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
     int _tileWidth = _tileSprite.getWidth();
     int _tileHeight = _tileSprite.getHeight();
-    int _gameWorldWidth = Instance.dimension.width;
-    int _gameWorldHeight = Instance.dimension.height;
+    int _gameWorldWidth = instance.dimension.width;
+    int _gameWorldHeight = instance.dimension.height;
 
     for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
       instantiate(new Wall(new Vector2(i, 0)));

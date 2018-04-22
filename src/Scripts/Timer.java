@@ -8,11 +8,11 @@ public class Timer
     endFrame = 0;
   }
 
-  public void set(int frames) {
-    endFrame = GameWorld.Instance.framesSinceStart + frames;
+  public void set(int numFrames) {
+    endFrame = Clock.getInstance().getNumFramesSinceStart() + numFrames;
   }
 
   public boolean isDone() {
-    return GameWorld.Instance.framesSinceStart >= endFrame;
+    return Clock.getInstance().getNumFramesSinceStart() >= endFrame;
   }
 }

@@ -12,7 +12,7 @@ public class BoxCollider
 
   public BoxCollider(GameObject parent) {
     this.parent = parent;
-    this.size = Vector2.zero;
+    this.size = Vector2.ZERO;
   }
 
   public boolean isCollidingWith(BoxCollider otherCollider) {
@@ -53,9 +53,9 @@ public class BoxCollider
     return parent.position;
   }
 
-  // returns position of bottom right corner
+  // Returns in-world position of bottom-right corner.
   public Vector2 getCorner() {
-    return parent.position.addVector(size);
+    return Vector2.addVectors(parent.position, this.size);
   }
 
   public void setSize(Vector2 size) {
