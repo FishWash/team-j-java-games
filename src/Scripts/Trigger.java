@@ -1,5 +1,5 @@
 package Scripts;
 
-public class Terrain
+public class Trigger
 {
 }

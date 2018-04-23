@@ -44,6 +44,13 @@ public class Clock implements Runnable
     }
   }
 
+  public void removeClockObserver(ClockObserver clockObserver) {
+    if (addedClockObservers.containsKey(clockObserver)) {
+      clockObservers.remove(clockObserver);
+      addedClockObservers.remove(clockObserver);
+    }
+  }
+
   public int getNumFramesSinceStart() {
     return numFramesSinceStart;
   }

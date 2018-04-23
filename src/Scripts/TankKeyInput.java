@@ -7,21 +7,22 @@ public class TankKeyInput
 {
   private int moveForwardKeyCode, moveBackwardKeyCode, turnLeftKeyCode, turnRightKeyCode, shootKeyCode;
 
-  public TankKeyInput(Tank.Player player) {
-    if (player == Tank.Player.Two) {
-      moveForwardKeyCode = KeyEvent.VK_I;
-      moveBackwardKeyCode = KeyEvent.VK_K;
-      turnLeftKeyCode = KeyEvent.VK_J;
-      turnRightKeyCode = KeyEvent.VK_L;
-      shootKeyCode = KeyEvent.VK_P;
-    }
-    else {
+  public TankKeyInput(GameWorld.Player player) {
+    if (player == GameWorld.Player.One) {
       moveForwardKeyCode = KeyEvent.VK_W;
       moveBackwardKeyCode = KeyEvent.VK_S;
       turnLeftKeyCode = KeyEvent.VK_A;
       turnRightKeyCode = KeyEvent.VK_D;
       shootKeyCode = KeyEvent.VK_R;
     }
+    else if (player == GameWorld.Player.Two) {
+      moveForwardKeyCode = KeyEvent.VK_I;
+      moveBackwardKeyCode = KeyEvent.VK_K;
+      turnLeftKeyCode = KeyEvent.VK_J;
+      turnRightKeyCode = KeyEvent.VK_L;
+      shootKeyCode = KeyEvent.VK_P;
+    }
+
     KeyInputHandler.getInstance().addValidKeyCodes(getUsedKeyCodes());
   }
 

@@ -7,6 +7,9 @@ public class Timer
   public Timer() {
     endFrame = 0;
   }
+  public Timer(int frames) {
+    this.set(frames);
+  }
 
   public void set(int numFrames) {
     endFrame = Clock.getInstance().getNumFramesSinceStart() + numFrames;

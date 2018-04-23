@@ -11,6 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameWorld
 {
+  public enum Player {Neutral, One, Two};
+
   private static GameWorld instance;
 
   private Dimension dimension;
@@ -19,9 +21,9 @@ public class GameWorld
   private CopyOnWriteArrayList<Wall> walls;
   private CopyOnWriteArrayList<DestructibleWall> destructibleWalls;
   private CopyOnWriteArrayList<Tank> tanks;
-  private CopyOnWriteArrayList<Bullet> bullets;
+  private CopyOnWriteArrayList<Projectile> projectiles;
   // explosions
-  private CopyOnWriteArrayList<Collidable> collidables;
+  private CopyOnWriteArrayList<CollidableGameObject> collidables;
   private CopyOnWriteArrayList<Damageable> damageables;
 
   private HashMap<String, BufferedImage> spriteCache;
@@ -42,7 +44,7 @@ public class GameWorld
     walls = new CopyOnWriteArrayList<>();
     destructibleWalls = new CopyOnWriteArrayList<>();
     tanks = new CopyOnWriteArrayList<>();
-    bullets = new CopyOnWriteArrayList<>();
+    projectiles = new CopyOnWriteArrayList<>();
     collidables = new CopyOnWriteArrayList<>();
     damageables = new CopyOnWriteArrayList<>();
     spriteCache = new HashMap<>();
@@ -51,8 +53,8 @@ public class GameWorld
     backgroundImage = drawBackgroundImage();
 
     // Tank Initialization
-    p1_tank = (Tank) instantiate(new Tank( Tank.Player.One, new Vector2(100, 100) ));
-    p2_tank = (Tank) instantiate(new Tank( Tank.Player.Two, new Vector2(300, 100) ));
+    p1_tank = (Tank) instantiate(new Tank( new Vector2(100, 100), Player.One ));
+    p2_tank = (Tank) instantiate(new Tank( new Vector2(300, 100), Player.Two ));
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
   }
@@ -61,8 +63,7 @@ public class GameWorld
     return instance;
   }
 
-  private BufferedImage drawBackgroundImage()
-  {
+  private BufferedImage drawBackgroundImage() {
     BufferedImage _bgTile = loadSprite("background_tile.png");
     BufferedImage _backgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     Graphics _graphics = _backgroundImage.createGraphics();
@@ -94,17 +95,14 @@ public class GameWorld
     Graphics _currentImageGraphics = _currentImage.createGraphics();
     _currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
 
-    // draw other stuff. tanks, bullets, destructible walls, etc
-    for (DestructibleWall _dWall : destructibleWalls) {
-      _dWall.drawSprite(_currentImageGraphics);
+    for (DestructibleWall dw : destructibleWalls) {
+      dw.drawSprite(_currentImageGraphics);
     }
-
-    for (Bullet _bullet : bullets) {
-      _bullet.drawSprite(_currentImageGraphics);
+    for (Projectile p : projectiles) {
+      p.drawSprite(_currentImageGraphics);
     }
-
-    for (Tank _tank : tanks) {
-      _tank.drawSprite(_currentImageGraphics);
+    for (Tank t : tanks) {
+      t.drawSprite(_currentImageGraphics);
     }
 
     return _currentImage;
@@ -154,14 +152,14 @@ public class GameWorld
 
   public static GameObject instantiate(GameObject gameObject)
   {
-    if (gameObject instanceof Wall) {
-      instance.walls.add((Wall) gameObject);
-    }
-    else if (gameObject instanceof DestructibleWall) {
+    if (gameObject instanceof DestructibleWall) {
       instance.destructibleWalls.add((DestructibleWall) gameObject);
     }
-    else if (gameObject instanceof Bullet) {
-      instance.bullets.add((Bullet) gameObject);
+    else if (gameObject instanceof Wall) {
+      instance.walls.add((Wall) gameObject);
+    }
+    else if (gameObject instanceof Projectile) {
+      instance.projectiles.add((Projectile) gameObject);
     }
     else if (gameObject instanceof Tank) {
       instance.tanks.add((Tank) gameObject);
@@ -170,8 +168,8 @@ public class GameWorld
       return null;
     }
 
-    if (gameObject instanceof Collidable) {
-      instance.collidables.add((Collidable) gameObject);
+    if (gameObject instanceof CollidableGameObject) {
+      instance.collidables.add((CollidableGameObject) gameObject);
     }
     if (gameObject instanceof Damageable) {
       instance.damageables.add((Damageable) gameObject);
@@ -183,16 +181,62 @@ public class GameWorld
     return gameObject;
   }
 
-  public static boolean checkCollisions(BoxCollider collider)
-  {
-    for (Collidable _c : instance.collidables) {
-      if (_c.isCollidingWith(collider)) {
-        //System.out.println("Colliding");
-        return true;
+  public static void destroy(GameObject gameObject) {
+    if (gameObject instanceof DestructibleWall) {
+      instance.destructibleWalls.remove(gameObject);
+    }
+    else if (gameObject instanceof Wall) {
+      instance.walls.remove(gameObject);
+    }
+    else if (gameObject instanceof Projectile) {
+      instance.projectiles.remove(gameObject);
+    }
+    else if (gameObject instanceof Tank) {
+      instance.tanks.remove(gameObject);
+    }
+
+    if (gameObject instanceof CollidableGameObject) {
+      instance.collidables.remove(gameObject);
+    }
+    if (gameObject instanceof Damageable) {
+      instance.damageables.remove(gameObject);
+    }
+    if (gameObject instanceof ClockObserver) {
+      Clock.getInstance().removeClockObserver((ClockObserver) gameObject);
+    }
+  }
+
+  public static CollidableGameObject findOverlappingGameObject(BoxTrigger trigger) {
+    for (CollidableGameObject c : instance.collidables) {
+      if (c.isOverlapping(trigger)) {
+        return c;
       }
     }
 
-    return false;
+    return null;
+  }
+
+  public static Wall findOverlappingWalls(BoxTrigger trigger) {
+    for (Wall w : instance.walls) {
+      if (w.isOverlapping(trigger)) {
+        return w;
+      }
+    }
+
+    return null;
+  }
+
+  public static boolean damageOverlappingEnemyDamageables(BoxTrigger trigger, int damage, Player owner) {
+    boolean damageableFound = false;
+    for (Damageable d : instance.damageables) {
+      if (d instanceof TriggerGameObject && ((TriggerGameObject) d).isOverlapping(trigger)) {
+        if (((TriggerGameObject) d).getOwner() != owner) {
+          d.takeDamage(damage);
+          damageableFound = true;
+        }
+      }
+    }
+    return damageableFound;
   }
 
   public static BufferedImage loadSprite(String fileName)
