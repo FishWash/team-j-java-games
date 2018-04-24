@@ -2,25 +2,14 @@ package Scripts;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-<<<<<<< HEAD
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-=======
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
->>>>>>> temp
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.io.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-<<<<<<< HEAD
-public class GameWorld
-=======
-
-public class GameWorld implements KeyListener
->>>>>>> temp
-{
+public class GameWorld {
   public enum Player {Neutral, One, Two};
 
   private static GameWorld instance;
@@ -118,25 +107,7 @@ public class GameWorld implements KeyListener
     return _currentImage;
   }
 
-<<<<<<< HEAD
-  public BufferedImage getPlayerDisplay(BufferedImage currentImage, GameObject gameObject){
-    int gameWidth = currentImage.getWidth();
-=======
-  // Keyboard Input
-  public void keyPressed(KeyEvent keyEvent)
-  {
-    keyInputHandler.readKeyPressed(keyEvent);
-  }
-
-  public void keyReleased(KeyEvent keyEvent)
-  {
-    keyInputHandler.readKeyReleased(keyEvent);
-  }
-
-  public void keyTyped(KeyEvent keyEvent) {}
-
   public void getDisplay(Graphics graphics){
->>>>>>> temp
     int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
     int playerDisplayHeight = TankGameApplication.windowDimension.height;
     BufferedImage currentImage = getCurrentImage();
