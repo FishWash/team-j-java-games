@@ -58,6 +58,7 @@ public class GameWorld
     // Tank Initialization
     p1_tank = (Tank) instantiate(new Tank( new Vector2(96, 96), Player.One ));
     p2_tank = (Tank) instantiate(new Tank( new Vector2(864, 864), Player.Two ));
+
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
   }

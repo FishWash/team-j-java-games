@@ -11,8 +11,8 @@ public class Camera {
     int gameHeight = currentImage.getHeight();
     Vector2 tankPosition = gameObject.getCenterPosition();
 
-    int displayX = (int) Math.max(0, Math.min(gameWidth - screenWidth, tankPosition.x - screenWidth));
-    int displayY = (int) Math.max(0, Math.min(gameHeight - screenHeight, tankPosition.y - screenHeight));
+    int displayX = (int) Math.max(0, Math.min(gameWidth - screenWidth, tankPosition.x - screenWidth / 2));
+    int displayY = (int) Math.max(0, Math.min(gameHeight - screenHeight, tankPosition.y - screenHeight / 2));
 
     BufferedImage playerDisplay = currentImage.getSubimage(displayX, displayY, screenWidth, screenHeight);
 
