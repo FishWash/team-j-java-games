@@ -5,7 +5,7 @@ public class ShellWeapon extends Weapon
   public ShellWeapon() {
     super();
     shootDelay = 30;
-    recoil = -1.2;
+    recoil = -0.4;
   }
 
   @Override
