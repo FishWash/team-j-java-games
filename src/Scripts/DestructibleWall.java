@@ -1,6 +1,6 @@
 package Scripts;
 
-public class DestructibleWall extends Wall implements Damageable
+public class DestructibleWall extends TriggerGameObject implements Damageable
 {
   public DestructibleWall(Vector2 position) {
     super(position);

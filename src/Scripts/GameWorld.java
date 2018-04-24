@@ -13,10 +13,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameWorld
 {
   public enum Player {Neutral, One, Two}
+  public final int TILE_SIZE = 32;
 
   private static GameWorld instance;
 
-  private Dimension dimension;
+  private Dimension dimension = new Dimension(1024, 1024);
   private BufferedImage backgroundImage; //image of GameWorld with background tiles and walls
 
   private CopyOnWriteArrayList<Wall> walls;
@@ -29,15 +30,15 @@ public class GameWorld
 
   private HashMap<String, BufferedImage> spriteCache;
 
+  private int[][] mapGrid;
+
   private Tank p1_tank, p2_tank;
 
   // Initialization
-  public GameWorld(Dimension dimension)
+  public GameWorld()
   {
     instance = this;
-    this.dimension = dimension;
     initialize();
-
   }
 
   public void initialize()
@@ -50,7 +51,8 @@ public class GameWorld
     damageables = new CopyOnWriteArrayList<>();
     spriteCache = new HashMap<>();
 
-    placeOuterWalls();
+    readMap("src/CollisionTestMap.txt");
+
     backgroundImage = drawBackgroundImage();
 
     // Tank Initialization
@@ -58,6 +60,50 @@ public class GameWorld
     p2_tank = (Tank) instantiate(new Tank( new Vector2(300, 100), Player.Two ));
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
+  }
+
+  private void readMap(String fileName){
+    try {
+      File file = new File(fileName);
+      fileName = file.getAbsolutePath();
+      FileReader fileReader = new FileReader(fileName);
+      BufferedReader bufferedReader = new BufferedReader(fileReader);
+      String line = bufferedReader.readLine();
+
+      int xMax = dimension.width/TILE_SIZE;
+      int yMax = dimension.height/TILE_SIZE;
+      mapGrid = new int[xMax][yMax];
+
+      for (int y=0; y < yMax && line != null; y++) {
+        for (int x=0; x < xMax && x < line.length(); x++) {
+          int tileInt = line.charAt(x) - '0';
+          if (tileInt >= 0 && tileInt <= 2) {
+            mapGrid[x][y] = tileInt;
+          }
+        }
+        line = bufferedReader.readLine();
+      }
+
+    } catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+
+    // Add outer walls
+    for (int i=0; i<mapGrid.length; i++) {
+      mapGrid[i][0] = 1;
+      mapGrid[i][mapGrid[i].length-1] = 1;
+    }
+    for (int j=0; j<mapGrid[0].length; j++) {
+      mapGrid[0][j] = 1;
+      mapGrid[mapGrid.length-1][j] = 1;
+    }
+
+//    for (int i=0; i<mapGrid.length; i++) {
+//      for (int j=0; j<mapGrid[i].length; j++) {
+//        System.out.print(mapGrid[i][j] + " ");
+//      }
+//      System.out.println();
+//    }
   }
 
   public static GameWorld getInstance() {
@@ -74,24 +120,15 @@ public class GameWorld
         _graphics.drawImage(_bgTile, i, j, null);
       }
     }
-    File file = new File("src/CollisionTestMap.txt");
 
-    try {
-      readMap(file.getAbsolutePath());
-    } catch(Exception e){
-      System.out.println("Error:" + e.getMessage());
-    }
-
-    //addWall(1,new Point(0,0));
-    for(Wall indestructibleWall : walls){
-      indestructibleWall.drawSprite(_graphics);
+    for(Wall wall : walls){
+      wall.drawSprite(_graphics);
     }
 
     return _backgroundImage;
   }
 
-  public synchronized BufferedImage getCurrentImage()
-  {
+  public synchronized BufferedImage getCurrentImage() {
     BufferedImage _currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     Graphics _currentImageGraphics = _currentImage.createGraphics();
     _currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
@@ -215,9 +252,6 @@ public class GameWorld
 
   public static Wall findOverlappingWall(BoxTrigger trigger) {
     for (Wall w : instance.walls) {
-      if (w.isOverlapping(trigger)) {
-        return w;
-      }
     }
     return null;
   }
@@ -246,64 +280,5 @@ public class GameWorld
         }
     }
     return _bImg;
-  }
-
-  private void readMap(String file){
-    String line;
-    BufferedImage wall = loadSprite("wall_indestructible.png");
-    int yPos = 0;
-    int wallDimensions = wall.getWidth();
-
-    try {
-      FileReader fileReader = new FileReader(file);
-      BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-      String _line;
-      BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
-      int _gameWorldWidth = instance.dimension.width;
-      int _gameWorldHeight = instance.dimension.height;
-      int _xPos, _yPos = 0;
-
-      while ((_line = bufferedReader.readLine()) != null && _yPos < _gameWorldHeight) {
-        _xPos = 0;
-        for (int i=0; i<_line.length() && _xPos<_gameWorldWidth; i++) {
-          char wallChar = _line.charAt(i);
-          switch (wallChar) {
-            case '1':
-              instantiate( new Wall(new Vector2(_xPos, _yPos)) );
-              break;
-            case '2':
-              instantiate( new DestructibleWall(new Vector2(_xPos, _yPos)) );
-              break;
-          }
-          _xPos += _tileSprite.getWidth();
-        }
-
-        _yPos += _tileSprite.getHeight();
-      }
-    } catch(Exception e){
-      System.out.println(e.getMessage());
-    }
-  }
-
-  private void placeOuterWalls() {
-    BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
-    int _tileWidth = _tileSprite.getWidth();
-    int _tileHeight = _tileSprite.getHeight();
-    int _gameWorldWidth = instance.dimension.width;
-    int _gameWorldHeight = instance.dimension.height;
-
-    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
-      instantiate(new Wall(new Vector2(i, 0)));
-    }
-    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
-      instantiate(new Wall(new Vector2(0, i)));
-    }
-    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
-      instantiate(new Wall(new Vector2(i, _gameWorldHeight-_tileHeight)));
-    }
-    for (int i=0; i<_gameWorldWidth; i+= _tileWidth) {
-      instantiate(new Wall(new Vector2(_gameWorldWidth-_tileWidth, i)));
-    }
   }
 }

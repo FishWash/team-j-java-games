@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements ClockObserver
     clock.addClockObserver(this);
     keyInputHandler = new KeyInputHandler();
     this.addKeyListener(keyInputHandler);
-    gameWorld = new GameWorld(TankGameApplication.gameDimension);
+    gameWorld = new GameWorld();
 
     super.setSize(dimension);
     this.setFocusable(true);
