@@ -17,7 +17,7 @@ public class TankGameApplication
     gameFrame.setSize(windowDimension);
     gameFrame.setResizable(false);
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    gameFrame.setUndecorated(true);
+    //gameFrame.setUndecorated(true);
 
     GameWorld gameWorld = new GameWorld(gameDimension);
     GamePanel gamePanel = new GamePanel(windowDimension, gameWorld);

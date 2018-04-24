@@ -4,12 +4,11 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.io.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 
 public class GameWorld implements KeyListener
 {
@@ -139,46 +138,23 @@ public class GameWorld implements KeyListener
 
   public void keyTyped(KeyEvent keyEvent) {}
 
-  public BufferedImage getPlayerDisplay(BufferedImage currentImage, GameObject gameObject){
-    int gameWidth = currentImage.getWidth();
+  public void getDisplay(Graphics graphics){
     int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
-    int gameHeight = currentImage.getHeight();
     int playerDisplayHeight = TankGameApplication.windowDimension.height;
-    Vector2 tankPosition = gameObject.getCenterPosition();
-
-    int displayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankPosition.x - playerDisplayWidth / 2));
-    int displayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankPosition.y - playerDisplayHeight / 2));
-
-    BufferedImage playerOneView = currentImage.getSubimage(displayX, displayY, playerDisplayWidth, playerDisplayHeight);
-
-    return playerOneView;
-  }
-
-  public synchronized void gameDisplay(Graphics graphics){
     BufferedImage currentImage = getCurrentImage();
+    BufferedImage p1Display = Camera.getPlayerDisplay(currentImage, tanks.get(0), playerDisplayWidth, playerDisplayHeight);
+    BufferedImage p2Display = Camera.getPlayerDisplay(currentImage, tanks.get(1), playerDisplayWidth, playerDisplayHeight);
+    BufferedImage minimap = Camera.getMinimapDisplay(currentImage);
 
-    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
-    int playerDisplayHeight = TankGameApplication.windowDimension.height;
-    BufferedImage playerOneView = getPlayerDisplay(currentImage, tanks.get(0));
-    BufferedImage playerTwoView = getPlayerDisplay(currentImage, tanks.get(1));
-    graphics.drawImage(playerOneView, 0, 0, null);
-    graphics.drawImage(playerTwoView, playerDisplayWidth, 0, null);
+    graphics.drawImage(p1Display, 0, 0, null);
+    graphics.drawImage(p2Display, playerDisplayWidth, 0, null);
 
-    BufferedImage minimap = minimapDisplay(currentImage);
     graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
-    graphics.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
-    graphics.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
-  }
-
-  public BufferedImage minimapDisplay(BufferedImage currentImage){
-    int minimapSize = TankGameApplication.gameDimension.width / 5;
-    BufferedImage resizedMap = new BufferedImage(minimapSize, minimapSize, BufferedImage.TYPE_INT_ARGB);
-    AffineTransform at = new AffineTransform();
-    at.scale(0.2, 0.2);
-    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-    resizedMap = scaleOp.filter(currentImage, resizedMap);
-
-    return resizedMap;
+    Graphics2D g2D = (Graphics2D) graphics;
+    g2D.setStroke(new BasicStroke(4));
+    g2D.setColor(Color.BLACK);
+    g2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
+    g2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
   }
 
   public static GameObject instantiate(GameObject gameObject)
@@ -239,11 +215,6 @@ public class GameWorld implements KeyListener
   }
 
   private void readMap(String file){
-    String line;
-    BufferedImage wall = loadSprite("wall_indestructible.png");
-    int yPos = 0;
-    int wallDimensions = wall.getWidth();
-
     try {
       FileReader fileReader = new FileReader(file);
       BufferedReader bufferedReader = new BufferedReader(fileReader);
