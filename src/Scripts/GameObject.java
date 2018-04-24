@@ -42,6 +42,9 @@ public abstract class GameObject
   public void setPosition(Vector2 position) {
     this.position = position;
   }
+  public void movePosition(Vector2 moveVector) {
+    this.position = Vector2.addVectors(position, moveVector);
+  }
   public void setRotation(double rotation) {
     this.rotation = (rotation+360) % 360;
   }

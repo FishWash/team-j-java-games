@@ -2,6 +2,7 @@ package Scripts;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Projectile extends TriggerGameObject implements ClockObserver
 {
@@ -20,6 +21,7 @@ public class Projectile extends TriggerGameObject implements ClockObserver
   }
 
   public void update() {
+    checkCollisions();
     move();
 
     if (lifeTimer.isDone()) {
@@ -30,12 +32,20 @@ public class Projectile extends TriggerGameObject implements ClockObserver
   private void move() {
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation, moveSpeed);
     position = Vector2.addVectors( position, moveVector );
+  }
 
-    if (GameWorld.damageOverlappingEnemyDamageables(trigger, damage, owner)) {
+  protected void checkCollisions() {
+    ArrayList<Damageable> overlappingDamageables = GameWorld.findOverlappingEnemyDamageable(trigger, owner);
+    if (overlappingDamageables.size() > 0) {
+      for (Damageable d : overlappingDamageables) {
+        d.takeDamage(damage);
+      }
       die();
     }
-    else if (GameWorld.findOverlappingWalls(trigger) != null) {
-      die();
+    else {
+      if (GameWorld.findOverlappingWall(trigger) != null) {
+        die();
+      }
     }
   }
 

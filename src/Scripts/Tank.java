@@ -42,8 +42,7 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
   private void move() {
     double newMoveVectorMagnitude = tankKeyInput.getMoveInput()*MOVE_SPEED;
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation, newMoveVectorMagnitude);
-    position = Vector2.addVectors(position, moveVector);
-//    GameWorld.checkCollisions(trigger);
+    GameWorld.moveWithCollision(this, moveVector);
   }
 
   private void shoot() {

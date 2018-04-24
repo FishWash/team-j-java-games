@@ -5,13 +5,14 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameWorld
 {
-  public enum Player {Neutral, One, Two};
+  public enum Player {Neutral, One, Two}
 
   private static GameWorld instance;
 
@@ -23,7 +24,7 @@ public class GameWorld
   private CopyOnWriteArrayList<Tank> tanks;
   private CopyOnWriteArrayList<Projectile> projectiles;
   // explosions
-  private CopyOnWriteArrayList<CollidableGameObject> collidables;
+  private CopyOnWriteArrayList<Collidable> collidables;
   private CopyOnWriteArrayList<Damageable> damageables;
 
   private HashMap<String, BufferedImage> spriteCache;
@@ -150,8 +151,7 @@ public class GameWorld
     return resizedMap;
   }
 
-  public static GameObject instantiate(GameObject gameObject)
-  {
+  public static GameObject instantiate(GameObject gameObject) {
     if (gameObject instanceof DestructibleWall) {
       instance.destructibleWalls.add((DestructibleWall) gameObject);
     }
@@ -168,8 +168,8 @@ public class GameWorld
       return null;
     }
 
-    if (gameObject instanceof CollidableGameObject) {
-      instance.collidables.add((CollidableGameObject) gameObject);
+    if (gameObject instanceof Collidable) {
+      instance.collidables.add((Collidable) gameObject);
     }
     if (gameObject instanceof Damageable) {
       instance.damageables.add((Damageable) gameObject);
@@ -206,41 +206,36 @@ public class GameWorld
     }
   }
 
-  public static CollidableGameObject findOverlappingGameObject(BoxTrigger trigger) {
-    for (CollidableGameObject c : instance.collidables) {
-      if (c.isOverlapping(trigger)) {
-        return c;
-      }
+  public static void moveWithCollision(TriggerGameObject triggerGameObject, Vector2 moveVector) {
+    for (Collidable c : instance.collidables) {
+      moveVector = c.getMoveVectorWithCollision(triggerGameObject.getTrigger(), moveVector);
     }
-
-    return null;
+    triggerGameObject.movePosition(moveVector);
   }
 
-  public static Wall findOverlappingWalls(BoxTrigger trigger) {
+  public static Wall findOverlappingWall(BoxTrigger trigger) {
     for (Wall w : instance.walls) {
       if (w.isOverlapping(trigger)) {
         return w;
       }
     }
-
     return null;
   }
 
-  public static boolean damageOverlappingEnemyDamageables(BoxTrigger trigger, int damage, Player owner) {
-    boolean damageableFound = false;
+  public static ArrayList<Damageable> findOverlappingEnemyDamageable(BoxTrigger trigger, Player owner) {
+    ArrayList<Damageable> overlappingDamageables = new ArrayList<>();
     for (Damageable d : instance.damageables) {
-      if (d instanceof TriggerGameObject && ((TriggerGameObject) d).isOverlapping(trigger)) {
-        if (((TriggerGameObject) d).getOwner() != owner) {
-          d.takeDamage(damage);
-          damageableFound = true;
+      if (d instanceof TriggerGameObject) {
+        TriggerGameObject tgo = (TriggerGameObject) d;
+        if (tgo.isOverlapping(trigger) && (tgo.getOwner() != owner)) {
+          overlappingDamageables.add(d);
         }
       }
     }
-    return damageableFound;
+    return overlappingDamageables;
   }
 
-  public static BufferedImage loadSprite(String fileName)
-  {
+  public static BufferedImage loadSprite(String fileName) {
     BufferedImage _bImg = instance.spriteCache.get(fileName);
     if (_bImg == null) {
       try {
@@ -291,8 +286,7 @@ public class GameWorld
     }
   }
 
-  private void placeOuterWalls()
-  {
+  private void placeOuterWalls() {
     BufferedImage _tileSprite = loadSprite("wall_indestructible.png");
     int _tileWidth = _tileSprite.getWidth();
     int _tileHeight = _tileSprite.getHeight();
