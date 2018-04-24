@@ -2,8 +2,8 @@ package Scripts;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,13 +72,13 @@ public class GameWorld
 
       int xMax = dimension.width/TILE_SIZE;
       int yMax = dimension.height/TILE_SIZE;
-      mapGrid = new int[xMax][yMax];
+      mapGrid = new int[yMax][xMax];
 
-      for (int y=0; y < yMax && line != null; y++) {
-        for (int x=0; x < xMax && x < line.length(); x++) {
-          int tileInt = line.charAt(x) - '0';
+      for (int i=0; i<yMax && line!=null; i++) {
+        for (int j=0; j<xMax && j<line.length(); j++) {
+          int tileInt = line.charAt(j) - '0';
           if (tileInt >= 0 && tileInt <= 2) {
-            mapGrid[x][y] = tileInt;
+            mapGrid[i][j] = tileInt;
           }
         }
         line = bufferedReader.readLine();
@@ -104,6 +104,39 @@ public class GameWorld
 //      }
 //      System.out.println();
 //    }
+
+    initializeCollidables();
+    initializeWalls();
+  }
+
+  private void initializeCollidables() {
+    for (int i=0; i<mapGrid.length; i++) {
+      for (int j=0; j<mapGrid[i].length; j++) {
+        if (mapGrid[i][j] == 1 || mapGrid[i][j] == 2) {
+          CollidableGameObject collidableGameObject = new CollidableGameObject(new Vector2(j*TILE_SIZE, i*TILE_SIZE));
+          int collidableLength = 0;
+          do {
+            collidableLength++;
+            j++;
+          } while (j<mapGrid[i].length && (mapGrid[i][j] == 1 || mapGrid[i][j] == 2));
+          collidableGameObject.setTriggerSize(new Vector2(collidableLength*TILE_SIZE, TILE_SIZE));
+          collidables.add(collidableGameObject);
+        }
+      }
+    }
+  }
+
+  private void initializeWalls() {
+    for (int i=0; i<mapGrid.length; i++) {
+      for (int j=0; j<mapGrid[i].length; j++) {
+        if (mapGrid[i][j] == 1) {
+          instantiate(new Wall(new Vector2(j*TILE_SIZE, i*TILE_SIZE)));
+        }
+        else if (mapGrid[i][j] == 2) {
+          instantiate(new DestructibleWall(new Vector2(j*TILE_SIZE, i*TILE_SIZE)));
+        }
+      }
+    }
   }
 
   public static GameWorld getInstance() {
@@ -111,21 +144,21 @@ public class GameWorld
   }
 
   private BufferedImage drawBackgroundImage() {
-    BufferedImage _bgTile = loadSprite("background_tile.png");
-    BufferedImage _backgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
-    Graphics _graphics = _backgroundImage.createGraphics();
+    BufferedImage bgTile = loadSprite("background_tile.png");
+    BufferedImage backgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+    Graphics graphics = backgroundImage.createGraphics();
 
-    for(int i=0; i<dimension.width; i += _bgTile.getWidth()) {
-      for (int j=0; j<dimension.height; j += _bgTile.getHeight()) {
-        _graphics.drawImage(_bgTile, i, j, null);
+    for(int i=0; i<dimension.width; i += bgTile.getWidth()) {
+      for (int j=0; j<dimension.height; j += bgTile.getHeight()) {
+        graphics.drawImage(bgTile, i, j, null);
       }
     }
 
-    for(Wall wall : walls){
-      wall.drawSprite(_graphics);
+    for (Wall w : walls) {
+      w.drawSprite(graphics);
     }
 
-    return _backgroundImage;
+    return backgroundImage;
   }
 
   public synchronized BufferedImage getCurrentImage() {
@@ -146,46 +179,23 @@ public class GameWorld
     return _currentImage;
   }
 
-  public BufferedImage getPlayerDisplay(BufferedImage currentImage, GameObject gameObject){
-    int gameWidth = currentImage.getWidth();
+  public void getDisplay(Graphics graphics){
     int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
-    int gameHeight = currentImage.getHeight();
     int playerDisplayHeight = TankGameApplication.windowDimension.height;
-    Vector2 tankPosition = gameObject.getCenterPosition();
-
-    int displayX = (int) Math.max(0, Math.min(gameWidth - playerDisplayWidth, tankPosition.x - playerDisplayWidth / 2));
-    int displayY = (int) Math.max(0, Math.min(gameHeight - playerDisplayHeight, tankPosition.y - playerDisplayHeight / 2));
-
-    BufferedImage playerOneView = currentImage.getSubimage(displayX, displayY, playerDisplayWidth, playerDisplayHeight);
-
-    return playerOneView;
-  }
-
-  public synchronized void gameDisplay(Graphics graphics){
     BufferedImage currentImage = getCurrentImage();
+    BufferedImage p1Display = Camera.getPlayerDisplay(currentImage, tanks.get(0), playerDisplayWidth, playerDisplayHeight);
+    BufferedImage p2Display = Camera.getPlayerDisplay(currentImage, tanks.get(1), playerDisplayWidth, playerDisplayHeight);
+    BufferedImage minimap = Camera.getMinimapDisplay(currentImage);
 
-    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
-    int playerDisplayHeight = TankGameApplication.windowDimension.height;
-    BufferedImage playerOneView = getPlayerDisplay(currentImage, tanks.get(0));
-    BufferedImage playerTwoView = getPlayerDisplay(currentImage, tanks.get(1));
-    graphics.drawImage(playerOneView, 0, 0, null);
-    graphics.drawImage(playerTwoView, playerDisplayWidth, 0, null);
+    graphics.drawImage(p1Display, 0, 0, null);
+    graphics.drawImage(p2Display, playerDisplayWidth, 0, null);
 
-    BufferedImage minimap = minimapDisplay(currentImage);
     graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
-    graphics.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
-    graphics.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
-  }
-
-  public BufferedImage minimapDisplay(BufferedImage currentImage){
-    int minimapSize = TankGameApplication.gameDimension.width / 5;
-    BufferedImage resizedMap = new BufferedImage(minimapSize, minimapSize, BufferedImage.TYPE_INT_ARGB);
-    AffineTransform at = new AffineTransform();
-    at.scale(0.2, 0.2);
-    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-    resizedMap = scaleOp.filter(currentImage, resizedMap);
-
-    return resizedMap;
+    Graphics2D g2D = (Graphics2D) graphics;
+    g2D.setStroke(new BasicStroke(4));
+    g2D.setColor(Color.BLACK);
+    g2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
+    g2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
   }
 
   public static GameObject instantiate(GameObject gameObject) {
