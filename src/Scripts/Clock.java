@@ -12,7 +12,7 @@ public class Clock implements Runnable
   private CopyOnWriteArrayList<ClockObserver> clockObservers;
   private HashMap<ClockObserver, Boolean> addedClockObservers;
 
-  private static final long FRAME_LENGTH = 10;
+  private static final long FRAME_LENGTH = 15;
 
   public Clock() {
     instance = this;

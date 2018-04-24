@@ -43,7 +43,8 @@ public class Projectile extends TriggerGameObject implements ClockObserver
       die();
     }
     else {
-      if (GameWorld.findOverlappingWall(trigger) != null) {
+      Collidable c = GameWorld.findOverlappingCollidable(trigger);
+      if (c != null && !(c instanceof Tank)) {
         die();
       }
     }

@@ -1,12 +1,12 @@
 package Scripts;
 
-public abstract class Item
+public abstract class Weapon
 {
   protected int shootDelay;
   protected Timer shootTimer;
   protected double recoil;
 
-  public Item() {
+  public Weapon() {
     shootTimer = new Timer();
   }
 

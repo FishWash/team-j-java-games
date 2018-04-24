@@ -31,10 +31,6 @@ public abstract class GameObject
   public BufferedImage getSprite() {
     return sprite;
   }
-  public Vector2 getCenterPosition() {
-    Vector2 centerPosition = new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
-    return centerPosition;
-  }
 
   public void setOwner(GameWorld.Player owner) {
     this.owner = owner;
@@ -55,6 +51,10 @@ public abstract class GameObject
     }
   }
 
+  public Vector2 getCenterPosition() {
+    Vector2 centerPosition = new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
+    return centerPosition;
+  }
   public void drawSprite(Graphics graphics) {
     if (sprite != null) {
       graphics.drawImage(sprite, (int)position.x, (int)position.y, null);

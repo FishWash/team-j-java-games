@@ -6,7 +6,6 @@ public class Vector2
 {
   public double x;
   public double y;
-  public static final Vector2 ZERO = new Vector2(0,0);
 
   public Vector2(double x, double y) {
     this.x = x;

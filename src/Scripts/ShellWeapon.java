@@ -1,11 +1,11 @@
 package Scripts;
 
-public class ShellItem extends Item
+public class ShellWeapon extends Weapon
 {
-  public ShellItem() {
+  public ShellWeapon() {
     super();
     shootDelay = 30;
-    recoil = -1.3;
+    recoil = -1.2;
   }
 
   @Override

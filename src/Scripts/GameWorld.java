@@ -56,8 +56,8 @@ public class GameWorld
     backgroundImage = drawBackgroundImage();
 
     // Tank Initialization
-    p1_tank = (Tank) instantiate(new Tank( new Vector2(100, 100), Player.One ));
-    p2_tank = (Tank) instantiate(new Tank( new Vector2(300, 100), Player.Two ));
+    p1_tank = (Tank) instantiate(new Tank( new Vector2(96, 96), Player.One ));
+    p2_tank = (Tank) instantiate(new Tank( new Vector2(864, 864), Player.Two ));
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
   }
@@ -105,25 +105,8 @@ public class GameWorld
 //      System.out.println();
 //    }
 
-    initializeCollidables();
     initializeWalls();
-  }
-
-  private void initializeCollidables() {
-    for (int i=0; i<mapGrid.length; i++) {
-      for (int j=0; j<mapGrid[i].length; j++) {
-        if (mapGrid[i][j] == 1 || mapGrid[i][j] == 2) {
-          CollidableGameObject collidableGameObject = new CollidableGameObject(new Vector2(j*TILE_SIZE, i*TILE_SIZE));
-          int collidableLength = 0;
-          do {
-            collidableLength++;
-            j++;
-          } while (j<mapGrid[i].length && (mapGrid[i][j] == 1 || mapGrid[i][j] == 2));
-          collidableGameObject.setTriggerSize(new Vector2(collidableLength*TILE_SIZE, TILE_SIZE));
-          collidables.add(collidableGameObject);
-        }
-      }
-    }
+    initializeWallCollidables();
   }
 
   private void initializeWalls() {
@@ -134,6 +117,23 @@ public class GameWorld
         }
         else if (mapGrid[i][j] == 2) {
           instantiate(new DestructibleWall(new Vector2(j*TILE_SIZE, i*TILE_SIZE)));
+        }
+      }
+    }
+  }
+
+  private void initializeWallCollidables() {
+    for (int i=0; i<mapGrid.length; i++) {
+      for (int j=0; j<mapGrid[i].length; j++) {
+        if (mapGrid[i][j] == 1) {
+          CollidableGameObject collidableGameObject = new CollidableGameObject(new Vector2(j*TILE_SIZE, i*TILE_SIZE));
+          int collidableLength = 0;
+          do {
+            collidableLength++;
+            j++;
+          } while (j<mapGrid[i].length && mapGrid[i][j] == 1);
+          collidableGameObject.setTriggerSize(new Vector2(collidableLength*TILE_SIZE, TILE_SIZE));
+          collidables.add(collidableGameObject);
         }
       }
     }
@@ -260,8 +260,11 @@ public class GameWorld
     triggerGameObject.movePosition(moveVector);
   }
 
-  public static Wall findOverlappingWall(BoxTrigger trigger) {
-    for (Wall w : instance.walls) {
+  public static Collidable findOverlappingCollidable(BoxTrigger trigger) {
+    for (Collidable c : instance.collidables) {
+      if (((TriggerGameObject) c).isOverlapping(trigger)) {
+        return c;
+      }
     }
     return null;
   }
@@ -286,7 +289,7 @@ public class GameWorld
         _bImg = ImageIO.read(instance.getClass().getResourceAsStream("/Sprites/" + fileName));
         instance.spriteCache.put(fileName, _bImg);
       } catch (Exception e) {
-        System.out.println("ERROR: " + fileName + " not found");
+        System.out.println("ERROR in GameWorld.loadSprite(): " + fileName + " not found");
         }
     }
     return _bImg;

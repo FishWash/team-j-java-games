@@ -12,7 +12,7 @@ public class BoxTrigger
 
   public BoxTrigger(GameObject parent) {
     this.parent = parent;
-    this.size = Vector2.ZERO;
+    this.size = new Vector2(0, 0);
   }
 
   public boolean isOverlapping(BoxTrigger otherTrigger) {
@@ -21,37 +21,12 @@ public class BoxTrigger
       return false;
     }
 
-    return (checkOverlapping(this.getPosition(), this.getCorner(), otherTrigger.getPosition(), otherTrigger.getCorner()));
-
-//    boolean xColliding=false, yColliding=false;
-//
-//    if (otherTrigger.getPosition().x >= this.getPosition().x) {
-//      if (this.getCorner().x >= otherTrigger.getPosition().x) {
-//        xColliding = true;
-//      }
-//    }
-//    else {
-//      if (otherTrigger.getCorner().x >= this.getPosition().x) {
-//        xColliding = true;
-//      }
-//    }
-//
-//    if (otherTrigger.getPosition().y >= this.getPosition().y) {
-//      if (this.getCorner().y >= otherTrigger.getPosition().y) {
-//        yColliding = true;
-//      }
-//    }
-//    else {
-//      if (otherTrigger.getCorner().y >= this.getPosition().y) {
-//        yColliding = true;
-//      }
-//    }
-//
-//    return (xColliding && yColliding);
+    return (checkOverlapping(this.getPosition(), this.getCorner(),
+                             otherTrigger.getPosition(), otherTrigger.getCorner()));
   }
 
   public static boolean checkOverlapping(Vector2 firstTriggerPosition, Vector2 firstTriggerCorner,
-                                          Vector2 secondTriggerPosition, Vector2 secondTriggerCorner)
+                                         Vector2 secondTriggerPosition, Vector2 secondTriggerCorner)
   {
     boolean xColliding=false, yColliding=false;
 
@@ -80,16 +55,13 @@ public class BoxTrigger
     return (xColliding && yColliding);
   }
 
+  // Returns in-world position of top-left corner.
   public Vector2 getPosition() {
     return parent.position;
   }
-  public Vector2 getSize() {
-    return size;
-  }
-
   // Returns in-world position of bottom-right corner.
   public Vector2 getCorner() {
-    return Vector2.addVectors(parent.position, this.size);
+    return Vector2.addVectors(getPosition(), size);
   }
 
   public void setSize(Vector2 size) {
