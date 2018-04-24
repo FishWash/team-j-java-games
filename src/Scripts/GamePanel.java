@@ -36,6 +36,6 @@ public class GamePanel extends JPanel implements ClockObserver
   public void paintComponent(Graphics graphics)
   {
     super.paintComponent(graphics);
-    gameWorld.gameDisplay(graphics);
+    gameWorld.getDisplay(graphics);
   }
 }
