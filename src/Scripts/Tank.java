@@ -10,7 +10,8 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
   private final double SHOOT_OFFSET = 25;
   private final double COLLIDER_SIZE = 48;
 
-  private int health = 100;
+  private int maxHealth = 100;
+  private int health = maxHealth;
   private MultiSprite multiSprite;
   private TankKeyInput tankKeyInput;
 
@@ -29,6 +30,14 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
     if (owner == GameWorld.Player.Two) {
       rotation = 180;
     }
+  }
+
+  public int getMaxHealth() {
+    return maxHealth;
+  }
+
+  public int getHealth(){
+    return health;
   }
 
   public void update() {

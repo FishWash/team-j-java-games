@@ -32,6 +32,8 @@ public class GameWorld
 
   private BufferedImage backgroundImage;
   private Tank p1_tank, p2_tank;
+  private PlayerCamera playerOneCamera;
+  private PlayerCamera playerTwoCamera;
 
   // Initialization
   public GameWorld()
@@ -53,6 +55,9 @@ public class GameWorld
 
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
+
+    playerOneCamera = new PlayerCamera(p1_tank);
+    playerTwoCamera = new PlayerCamera(p2_tank);
   }
 
 //  private void drawB(String fileName){
@@ -190,19 +195,19 @@ public class GameWorld
     int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
     int playerDisplayHeight = TankGameApplication.windowDimension.height;
     BufferedImage currentImage = getCurrentImage();
-    BufferedImage p1Display = Camera.getPlayerDisplay(currentImage, tanks.get(0), playerDisplayWidth, playerDisplayHeight);
-    BufferedImage p2Display = Camera.getPlayerDisplay(currentImage, tanks.get(1), playerDisplayWidth, playerDisplayHeight);
+    BufferedImage p1Display = playerOneCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
+    BufferedImage p2Display = playerTwoCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
     BufferedImage minimap = Camera.getMinimapDisplay(currentImage);
 
     graphics.drawImage(p1Display, 0, 0, null);
     graphics.drawImage(p2Display, playerDisplayWidth, 0, null);
 
     graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
-    Graphics2D g2D = (Graphics2D) graphics;
-    g2D.setStroke(new BasicStroke(4));
-    g2D.setColor(Color.BLACK);
-    g2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
-    g2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
+    Graphics2D graphics2D = (Graphics2D) graphics;
+    graphics2D.setStroke(new BasicStroke(4));
+    graphics2D.setColor(Color.BLACK);
+    graphics2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
+    graphics2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
   }
 
   public static GameObject instantiate(GameObject gameObject) {

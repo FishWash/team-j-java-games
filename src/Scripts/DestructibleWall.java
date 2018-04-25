@@ -2,12 +2,21 @@ package Scripts;
 
 public class DestructibleWall extends CollidableGameObject implements Damageable
 {
-  private int health = 15;
+  private int maxHealth = 15;
+  private int health = maxHealth;
 
   public DestructibleWall(Vector2 position) {
     super(position);
     sprite = GameWorld.loadSprite("wall_destructible1.png");
     trigger.setSize(new Vector2(GameWorld.getInstance().TILE_SIZE, GameWorld.getInstance().TILE_SIZE));
+  }
+
+  public  int getMaxHealth(){
+    return maxHealth;
+  }
+
+  public int getHealth(){
+    return health;
   }
 
   public void takeDamage(int damageAmount) {

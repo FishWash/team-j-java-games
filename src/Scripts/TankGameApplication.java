@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class TankGameApplication
 {
-  public static final Dimension gameDimension = new Dimension(1000, 1000);
+  public static final Dimension gameDimension = new Dimension(1024, 1024);
   public static final Dimension windowDimension = new Dimension(800, 600);
 
   public static void main (String[] args)
