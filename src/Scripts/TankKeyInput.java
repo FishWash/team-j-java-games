@@ -23,7 +23,7 @@ public class TankKeyInput
       shootKeyCode = KeyEvent.VK_P;
     }
 
-    KeyInputHandler.getInstance().addValidKeyCodes(getUsedKeyCodes());
+    addUsedKeyCodes(KeyInputHandler.getInstance());
   }
 
   public double getMoveInput() {
@@ -52,13 +52,11 @@ public class TankKeyInput
     return ( KeyInputHandler.getInstance().getKeyPressed(shootKeyCode) );
   }
 
-  private ArrayList<Integer> getUsedKeyCodes() {
-    ArrayList<Integer> _usedKeyCodes = new ArrayList<>();
-    _usedKeyCodes.add(moveForwardKeyCode);
-    _usedKeyCodes.add(moveBackwardKeyCode);
-    _usedKeyCodes.add(turnLeftKeyCode);
-    _usedKeyCodes.add(turnRightKeyCode);
-    _usedKeyCodes.add(shootKeyCode);
-    return _usedKeyCodes;
+  private void addUsedKeyCodes(KeyInputHandler keyInputHandlerInstance) {
+    keyInputHandlerInstance.addValidKeyCode(moveForwardKeyCode);
+    keyInputHandlerInstance.addValidKeyCode(moveBackwardKeyCode);
+    keyInputHandlerInstance.addValidKeyCode(turnLeftKeyCode);
+    keyInputHandlerInstance.addValidKeyCode(turnRightKeyCode);
+    keyInputHandlerInstance.addValidKeyCode(shootKeyCode);
   }
 }

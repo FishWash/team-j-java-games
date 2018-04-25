@@ -1,13 +1,10 @@
 package Scripts;
 
-import Scripts.GameWorld;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class TankGameApplication
 {
-  public static final Dimension gameDimension = new Dimension(1024, 1024);
   public static final Dimension windowDimension = new Dimension(800, 600);
 
   public static void main (String[] args)
@@ -16,7 +13,7 @@ public class TankGameApplication
     gameFrame.setSize(windowDimension);
     gameFrame.setResizable(false);
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //gameFrame.setUndecorated(true);
+    gameFrame.setUndecorated(true);
 
     GamePanel gamePanel = new GamePanel(windowDimension);
     gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);

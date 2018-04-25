@@ -12,10 +12,12 @@ public class Camera {
   }
 
   public static BufferedImage getMinimapDisplay(BufferedImage currentImage){
-    int minimapSize = TankGameApplication.gameDimension.width / 5;
-    BufferedImage resizedMap = new BufferedImage(minimapSize, minimapSize, BufferedImage.TYPE_INT_ARGB);
+    double scale = 0.2;
+    int minimapWidth = (int) (GameWorld.getInstance().getDimension().width * scale);
+    int minimapHeight = (int) (GameWorld.getInstance().getDimension().width * scale);
+    BufferedImage resizedMap = new BufferedImage(minimapWidth, minimapHeight, BufferedImage.TYPE_INT_ARGB);
     AffineTransform at = new AffineTransform();
-    at.scale(0.2, 0.2);
+    at.scale(scale, scale);
     AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
     resizedMap = scaleOp.filter(currentImage, resizedMap);
 

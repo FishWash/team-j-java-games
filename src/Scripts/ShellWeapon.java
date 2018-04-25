@@ -6,6 +6,9 @@ public class ShellWeapon extends Weapon
     super();
     shootDelay = 30;
     recoil = -0.4;
+
+    GameWorld.loadSprite("Shell_heavy_strip60.png");
+    GameWorld.loadSprite("Explosion_small_strip6.png");
   }
 
   @Override
