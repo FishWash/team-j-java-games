@@ -30,24 +30,24 @@ public class BoxTrigger
   {
     boolean xColliding=false, yColliding=false;
 
-    if (secondTriggerPosition.x > firstTriggerPosition.x) {
-      if (firstTriggerCorner.x > secondTriggerPosition.x) {
+    if (secondTriggerPosition.x >= firstTriggerPosition.x) {
+      if (firstTriggerCorner.x >= secondTriggerPosition.x) {
         xColliding = true;
       }
     }
     else {
-      if (secondTriggerCorner.x > firstTriggerPosition.x) {
+      if (secondTriggerCorner.x >= firstTriggerPosition.x) {
         xColliding = true;
       }
     }
 
-    if (secondTriggerPosition.y > firstTriggerPosition.y) {
-      if (firstTriggerCorner.y > secondTriggerPosition.y) {
+    if (secondTriggerPosition.y >= firstTriggerPosition.y) {
+      if (firstTriggerCorner.y >= secondTriggerPosition.y) {
         yColliding = true;
       }
     }
     else {
-      if (secondTriggerCorner.y > firstTriggerPosition.y) {
+      if (secondTriggerCorner.y >= firstTriggerPosition.y) {
         yColliding = true;
       }
     }
@@ -58,6 +58,9 @@ public class BoxTrigger
   // Returns in-world position of top-left corner.
   public Vector2 getPosition() {
     return parent.position;
+  }
+  public Vector2 getSize() {
+    return size;
   }
   // Returns in-world position of bottom-right corner.
   public Vector2 getCorner() {

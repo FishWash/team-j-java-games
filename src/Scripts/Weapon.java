@@ -14,8 +14,7 @@ public abstract class Weapon
     return recoil;
   }
 
-  // Returns true if a shot was fired.
-  public boolean shoot(Vector2 position, double rotation, GameWorld.Player owner) {
+  public boolean fire(Vector2 position, double rotation, GameWorld.Player owner) {
     if (shootTimer.isDone()) {
       instantiateProjectile(position, rotation, owner);
       shootTimer.set(shootDelay);

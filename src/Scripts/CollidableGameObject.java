@@ -36,4 +36,7 @@ public class CollidableGameObject extends TriggerGameObject implements Collidabl
   public void setTriggerSize(Vector2 triggerSize) {
     trigger.setSize(triggerSize);
   }
+  public void addTriggerSize(Vector2 triggerSize) {
+    trigger.setSize( Vector2.addVectors(trigger.getSize(), triggerSize) );
+  }
 }

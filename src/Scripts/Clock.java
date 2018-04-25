@@ -30,7 +30,7 @@ public class Clock implements Runnable
     while (true) {
       updateClockObservers();
       try {
-        Thread.sleep(FRAME_LENGTH);
+          Thread.sleep(FRAME_LENGTH);
       } catch (Exception e) {
         // do catch stuff
       }

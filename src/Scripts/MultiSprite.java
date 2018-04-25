@@ -6,53 +6,57 @@ import java.util.HashMap;
 public class MultiSprite {
 
   private BufferedImage spriteStrip;
-  private int numSubsprites;
-  private int subspriteWidth;
-  private HashMap<Integer, BufferedImage> subspriteCache;
+  private int numSubSprites;
+  private int subSpriteWidth;
+  private HashMap<Integer, BufferedImage> subSpriteCache = new HashMap<>();
 
-  public MultiSprite(BufferedImage spriteStrip, int numSubsprites) {
+  public MultiSprite(BufferedImage spriteStrip, int numSubSprites) {
     this.spriteStrip = spriteStrip;
-    this.numSubsprites = numSubsprites;
-    subspriteWidth = spriteStrip.getWidth() / numSubsprites;
-    subspriteCache = new HashMap<>();
+    this.numSubSprites = numSubSprites;
+    if (spriteStrip != null) {
+      subSpriteWidth = spriteStrip.getWidth() / numSubSprites;
+    }
   }
 
-  public BufferedImage getSubsprite(int index) {
-    BufferedImage _subsprite = subspriteCache.get(index);
-
-    if (_subsprite == null) {
-      if (index < numSubsprites) {
-        _subsprite = spriteStrip.getSubimage( subspriteWidth*index, 0, subspriteWidth, spriteStrip.getHeight() );
-        subspriteCache.put(index, _subsprite);
+  public BufferedImage getSubSprite(int index) {
+    BufferedImage subSprite = subSpriteCache.get(index);
+    if (subSprite == null) {
+      if (index < numSubSprites) {
+        try {
+          subSprite = spriteStrip.getSubimage( subSpriteWidth*index, 0, subSpriteWidth, spriteStrip.getHeight() );
+          subSpriteCache.put(index, subSprite);
+        } catch (Exception e) {
+          System.out.println("ERROR in MultiSprite: " + e);
+        }
       }
       else {
-        System.out.println("Subsprite out of bounds.");
+        System.out.println("SubSprite out of bounds.");
       }
     }
 
-    return _subsprite;
+    return subSprite;
   }
 
   public BufferedImage getSubSpriteByRotation(double rotation) {
-    double angleStep = 360/this.getNumSubsprites();
+    double angleStep = 360/this.getNumSubSprites();
     double spriteRotation = (360 + rotation + angleStep/2) % 360;
     int index = (int) (spriteRotation / angleStep);
-    return getSubsprite(index);
+    return getSubSprite(index);
   }
 
-  public int getNumSubsprites()
+  public int getNumSubSprites()
   {
-    return numSubsprites;
+    return numSubSprites;
   }
 
   public void setSpriteStrip(BufferedImage spriteStrip) {
     this.spriteStrip = spriteStrip;
-    subspriteWidth = spriteStrip.getWidth() / numSubsprites;
-    subspriteCache = new HashMap<>();
+    subSpriteWidth = spriteStrip.getWidth() / numSubSprites;
+    subSpriteCache = new HashMap<>();
   }
 
-  public void setNumSubsprites(int numSubsprites) {
-    this.numSubsprites = numSubsprites;
-    subspriteWidth = spriteStrip.getWidth() / numSubsprites;
+  public void setNumSubSprites(int numSubSprites) {
+    this.numSubSprites = numSubSprites;
+    subSpriteWidth = spriteStrip.getWidth() / numSubSprites;
   }
 }

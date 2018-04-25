@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 public abstract class GameObject
 {
+  protected boolean alive = true;
   protected GameWorld.Player owner;
   protected Vector2 position;
   protected double rotation;
@@ -19,6 +20,27 @@ public abstract class GameObject
     this.rotation = 0;
   }
 
+  public Vector2 getCenterPosition() {
+    if (sprite != null) {
+      return new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
+    }
+    return null;
+  }
+  public void drawSprite(Graphics graphics) {
+    if (sprite != null) {
+      graphics.drawImage(sprite, (int)position.x, (int)position.y, null);
+    }
+  }
+
+  protected void die() {
+    GameWorld.destroy(this);
+    alive = false;
+  }
+
+  // Getters
+  public boolean getAlive() {
+    return alive;
+  }
   public GameWorld.Player getOwner() {
     return owner;
   }
@@ -32,6 +54,10 @@ public abstract class GameObject
     return sprite;
   }
 
+  // Setters
+  public void setAlive(boolean alive) {
+    this.alive = alive;
+  }
   public void setOwner(GameWorld.Player owner) {
     this.owner = owner;
   }
@@ -49,19 +75,5 @@ public abstract class GameObject
     if (_spriteImg != null) {
       sprite = _spriteImg;
     }
-  }
-
-  public Vector2 getCenterPosition() {
-    Vector2 centerPosition = new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
-    return centerPosition;
-  }
-  public void drawSprite(Graphics graphics) {
-    if (sprite != null) {
-      graphics.drawImage(sprite, (int)position.x, (int)position.y, null);
-    }
-  }
-
-  protected void die() {
-    GameWorld.destroy(this);
   }
 }

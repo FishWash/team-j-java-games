@@ -6,22 +6,21 @@ import java.util.ArrayList;
 
 public class Projectile extends TriggerGameObject implements ClockObserver
 {
-  private double moveSpeed = 1;
-  private int damage = 1;
-  private MultiSprite multiSprite;
-  private Timer lifeTimer;
+  protected double moveSpeed = 1;
+  protected MultiSprite multiSprite;
+  protected Timer lifeTimer;
 
   public Projectile(int lifeTime, GameWorld.Player owner) {
     super();
-    this.sprite = GameWorld.loadSprite("Shell_basic.png");
-    this.multiSprite = new MultiSprite(GameWorld.loadSprite("Shell_basic_strip60.png"), 60);
-    this.trigger = new BoxTrigger(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
-    this.lifeTimer = new Timer(lifeTime);
+    sprite = GameWorld.loadSprite("Shell_basic.png");
+    multiSprite = new MultiSprite(GameWorld.loadSprite("Shell_basic_strip60.png"), 60);
+    trigger = new BoxTrigger(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
+    lifeTimer = new Timer(lifeTime);
     this.owner = owner;
   }
 
   public void update() {
-    checkCollisions();
+    checkCollidables();
     move();
 
     if (lifeTimer.isDone()) {
@@ -34,33 +33,16 @@ public class Projectile extends TriggerGameObject implements ClockObserver
     position = Vector2.addVectors( position, moveVector );
   }
 
-  protected void checkCollisions() {
-    ArrayList<Damageable> overlappingDamageables = GameWorld.findOverlappingEnemyDamageable(trigger, owner);
-    if (overlappingDamageables.size() > 0) {
-      for (Damageable d : overlappingDamageables) {
-        d.takeDamage(damage);
-      }
+  private void checkCollidables() {
+    Collidable c = GameWorld.findOverlappingCollidable(trigger);
+    if (c != null && (owner == GameWorld.Player.Neutral || ((GameObject) c).getOwner() != owner)) {
       die();
-    }
-    else {
-      Collidable c = GameWorld.findOverlappingCollidable(trigger);
-      if (c != null && !(c instanceof Tank)) {
-        die();
-      }
     }
   }
 
-  public void setPosition(Vector2 position) {
-    this.position = Vector2.subtractVectors( position, new Vector2(sprite.getWidth()/2, sprite.getHeight()/2 ));
-  }
-  public void setRotation(double angle) {
-    this.rotation = (angle+360) % 360;
-  }
-  public void setMoveSpeed(double moveSpeed) {
-    this.moveSpeed = moveSpeed;
-  }
-  public void setDamage(int damage) {
-    this.damage = damage;
+  @Override
+  public void die() {
+    super.die();
   }
 
   @Override
@@ -75,5 +57,15 @@ public class Projectile extends TriggerGameObject implements ClockObserver
   public void drawSprite(Graphics graphics) {
     BufferedImage _sprite = multiSprite.getSubSpriteByRotation(rotation);
     graphics.drawImage(_sprite, (int)position.x, (int)position.y, null);
+  }
+
+  public void setPosition(Vector2 position) {
+    this.position = Vector2.subtractVectors( position, new Vector2(sprite.getWidth()/2, sprite.getHeight()/2 ));
+  }
+  public void setRotation(double angle) {
+    this.rotation = (angle+360) % 360;
+  }
+  public void setMoveSpeed(double moveSpeed) {
+    this.moveSpeed = moveSpeed;
   }
 }

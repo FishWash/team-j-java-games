@@ -45,7 +45,8 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
   private void move() {
     double newMoveVectorMagnitude = tankKeyInput.getMoveInput()*MOVE_SPEED;
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation, newMoveVectorMagnitude);
-    GameWorld.moveWithCollision(this, moveVector);
+    moveVector = GameWorld.getMoveVectorWithCollision(trigger, moveVector);
+    position = Vector2.addVectors(position, moveVector);
   }
 
   private void shoot() {
@@ -61,7 +62,7 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
         weapon = defaultWeapon;
       }
 
-      boolean shotFired = weapon.shoot(bulletPosition, rotation, owner);
+      boolean shotFired = weapon.fire(bulletPosition, rotation, owner);
       if (shotFired && tankKeyInput instanceof FuzzyTankKeyInput) {
         ((FuzzyTankKeyInput) tankKeyInput).addFuzzedMoveInput(weapon.getRecoil());
       }
