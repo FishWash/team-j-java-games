@@ -1,5 +1,6 @@
 package Scripts;
 
+// CollidableGameObject has no sprite. Only for collision.
 public class CollidableGameObject extends TriggerGameObject implements Collidable
 {
   public CollidableGameObject(Vector2 position) {

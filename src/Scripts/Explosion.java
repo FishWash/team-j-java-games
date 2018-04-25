@@ -5,8 +5,10 @@ import java.util.ArrayList;
 public class Explosion extends TriggerGameObject implements ClockObserver
 {
   protected MultiSprite multiSprite;
-  protected int animationIndex = 0;
   protected int damage = 10;
+  protected int animationIndex = 0;
+  protected Timer animationTimer = new Timer();
+  protected int animationFrameLength = 4;
 
   public Explosion (Vector2 position, GameWorld.Player owner) {
     super(position);
@@ -25,8 +27,11 @@ public class Explosion extends TriggerGameObject implements ClockObserver
       alive = false;
     }
     if (animationIndex < multiSprite.getNumSubSprites()) {
-      sprite = multiSprite.getSubSprite(animationIndex);
-      animationIndex++;
+      if (animationTimer.isDone()) {
+        sprite = multiSprite.getSubSprite(animationIndex);
+        animationIndex++;
+        animationTimer.set(animationFrameLength);
+      }
     }
     else {
       sprite = null;

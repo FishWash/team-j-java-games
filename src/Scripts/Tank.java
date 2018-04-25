@@ -21,6 +21,7 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
     sprite = GameWorld.loadSprite("Tank_grey_basic.png");
     multiSprite = new MultiSprite(GameWorld.loadSprite("Tank_blue_base_strip60.png"), 60);
     trigger.setSize(new Vector2(48, 48));
+    setPosition(Vector2.subtractVectors(trigger.getPosition(), Vector2.multiplyVector(trigger.getSize(), 0.5)));
 
     defaultWeapon = new ShellWeapon();
 

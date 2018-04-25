@@ -34,22 +34,20 @@ public class GameWorld
   private Tank p1_tank, p2_tank;
 
   // Initialization
-  public GameWorld()
-  {
+  public GameWorld() {
     instance = this;
     initialize();
   }
 
-  public void initialize()
-  {
+  public void initialize() {
     collisionHandler.readMapFile("CollisionTestMap.txt", TILE_SIZE);
     backgroundImage = drawBackgroundImage("CollisionTestMap.txt",
                                           loadSprite("background_tile.png"),
                                           loadSprite("wall_indestructible2.png"));
 
     // Tank Initialization
-    p1_tank = (Tank) instantiate(new Tank( new Vector2(96, 96), Player.One ));
-    p2_tank = (Tank) instantiate(new Tank( new Vector2(864, 864), Player.Two ));
+    p1_tank = (Tank) instantiate(new Tank( new Vector2(128, 128), Player.One ));
+    p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
 
     p1_tank.setSprite("Tank_blue_basic_strip60.png");
     p2_tank.setSprite("Tank_red_basic_strip60.png");
@@ -133,8 +131,9 @@ public class GameWorld
   }
 
   // drawBackgroundImage draws background tiles and indestructible walls onto a BufferedImage and returns it.
-  private BufferedImage drawBackgroundImage(String mapFileName,
-                                                   BufferedImage backgroundTile, BufferedImage wallImage) {
+  private BufferedImage drawBackgroundImage(String mapFileName, BufferedImage backgroundTile,
+                                            BufferedImage wallImage)
+  {
     BufferedImage backgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     Graphics graphics = backgroundImage.createGraphics();
 
@@ -165,25 +164,8 @@ public class GameWorld
     return backgroundImage;
   }
 
-  public BufferedImage getCurrentImage() {
-    BufferedImage currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
-    Graphics currentImageGraphics = currentImage.createGraphics();
-
-    currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
-    for (DestructibleWall dw : destructibleWalls) {
-      dw.drawSprite(currentImageGraphics);
-    }
-    for (Projectile p : projectiles) {
-      p.drawSprite(currentImageGraphics);
-    }
-    for (Tank t : tanks) {
-      t.drawSprite(currentImageGraphics);
-    }
-    for (Explosion e : explosions) {
-      e.drawSprite(currentImageGraphics);
-    }
-
-    return currentImage;
+  public Dimension getDimension() {
+    return dimension;
   }
 
   public void getDisplay(Graphics graphics){
@@ -203,6 +185,27 @@ public class GameWorld
     g2D.setColor(Color.BLACK);
     g2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
     g2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
+  }
+
+  private BufferedImage getCurrentImage() {
+    BufferedImage currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+    Graphics currentImageGraphics = currentImage.createGraphics();
+
+    currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
+    for (DestructibleWall dw : destructibleWalls) {
+      dw.drawSprite(currentImageGraphics);
+    }
+    for (Projectile p : projectiles) {
+      p.drawSprite(currentImageGraphics);
+    }
+    for (Tank t : tanks) {
+      t.drawSprite(currentImageGraphics);
+    }
+    for (Explosion e : explosions) {
+      e.drawSprite(currentImageGraphics);
+    }
+
+    return currentImage;
   }
 
   public static GameObject instantiate(GameObject gameObject) {
@@ -250,7 +253,7 @@ public class GameWorld
       instance.collisionHandler.removeCollidable((Collidable) gameObject);
     }
     if (gameObject instanceof Damageable) {
-      instance.damageables.remove(gameObject);
+      instance.damageables.remove((Damageable) gameObject);
     }
     if (gameObject instanceof ClockObserver) {
       Clock.getInstance().removeClockObserver((ClockObserver) gameObject);

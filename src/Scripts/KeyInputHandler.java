@@ -7,12 +7,11 @@ import java.util.HashMap;
 
 public class KeyInputHandler implements KeyListener {
 
-  private static KeyInputHandler instance;
-  private HashMap<Integer, Boolean> keyCodeMap;
+  public static KeyInputHandler instance;
+  private HashMap<Integer, Boolean> keyCodeMap = new HashMap<>();
 
   public KeyInputHandler() {
     instance = this;
-    keyCodeMap = new HashMap<>();
   }
 
   public static KeyInputHandler getInstance() {
@@ -28,11 +27,9 @@ public class KeyInputHandler implements KeyListener {
     return false;
   }
 
-  public void addValidKeyCodes(ArrayList<Integer> validKeyCodes) {
-    for (int i : validKeyCodes) {
-      if (!keyCodeMap.containsKey(i)) {
-        keyCodeMap.put(i, false);
-      }
+  public void addValidKeyCode(int validKeyCode) {
+    if (!keyCodeMap.containsKey(validKeyCode)) {
+      keyCodeMap.put(validKeyCode, false);
     }
   }
 
