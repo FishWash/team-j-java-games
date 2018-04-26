@@ -3,7 +3,7 @@ package Scripts;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Tank extends CollidableGameObject implements ClockObserver, Damageable
+public class Tank extends CollidableGameObject implements ClockListener, Damageable
 {
   private final double MOVE_SPEED = 3;
   private final double TURN_SPEED = 3;
@@ -27,10 +27,14 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
     defaultWeapon = new ShellWeapon();
 
     this.owner = owner;
-    tankKeyInput = new FuzzyTankKeyInput(owner);
-    if (owner == GameWorld.Player.Two) {
+    if (owner == GameWorld.Player.One) {
+      setSprite("Tank_blue_basic_strip60.png");
+    }
+    else if (owner == GameWorld.Player.Two) {
+      setSprite("Tank_red_basic_strip60.png");
       rotation = 180;
     }
+    tankKeyInput = new FuzzyTankKeyInput(owner);
   }
 
   public int getMaxHealth() {
@@ -42,9 +46,11 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
   }
 
   public void update() {
-    turn();
-    move();
-    shoot();
+    if (alive) {
+      turn();
+      move();
+      shoot();
+    }
   }
 
   private void turn() {
@@ -84,6 +90,13 @@ public class Tank extends CollidableGameObject implements ClockObserver, Damagea
     System.out.println(health);
     if (health <= 0)
       die();
+  }
+
+  @Override
+  public void die() {
+    GameWorld.instantiate(new TankExplosion(getCenterPosition()));
+    super.die();
+    System.out.println("asdf");
   }
 
   @Override

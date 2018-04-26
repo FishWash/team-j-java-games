@@ -2,22 +2,16 @@ package Scripts;
 
 import java.util.ArrayList;
 
-public class Explosion extends TriggerGameObject implements ClockObserver
+public class Explosion extends TriggerGameObject implements ClockListener
 {
   protected MultiSprite multiSprite;
-  protected int damage = 10;
+  protected int damage = 1;
   protected int animationIndex = 0;
   protected Timer animationTimer = new Timer();
   protected int animationFrameLength = 4;
 
   public Explosion (Vector2 position, GameWorld.Player owner) {
     super(position);
-    multiSprite = new MultiSprite(GameWorld.loadSprite("Explosion_small_strip6.png"), 6);
-    sprite = multiSprite.getSubSprite(0);
-    if (sprite != null) {
-      trigger = new BoxTrigger(this, new Vector2( sprite.getWidth(), sprite.getHeight() ));
-      this.position = Vector2.subtractVectors(position, new Vector2(sprite.getWidth()/2, sprite.getHeight()/2));
-    }
     this.owner = owner;
   }
 
@@ -26,6 +20,11 @@ public class Explosion extends TriggerGameObject implements ClockObserver
       damageDamageables();
       alive = false;
     }
+
+    animate();
+  }
+
+  private void animate() {
     if (animationIndex < multiSprite.getNumSubSprites()) {
       if (animationTimer.isDone()) {
         sprite = multiSprite.getSubSprite(animationIndex);
