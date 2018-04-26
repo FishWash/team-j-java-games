@@ -4,10 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 
 // GamePanel runs on a thread and updates its display every frame.
-public class GamePanel extends JPanel implements KeyListener, ClockObserver
+public class GamePanel extends JPanel implements KeyListener, ClockListener
 {
   private Clock clock;
   private Thread clockThread;

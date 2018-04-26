@@ -2,19 +2,16 @@ package Scripts;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GameWorld
+public class GameWorld implements ClockListener
 {
   public enum Player {Neutral, One, Two}
   public final int TILE_SIZE = 32;
@@ -25,13 +22,17 @@ public class GameWorld
   private CopyOnWriteArrayList<DestructibleWall> destructibleWalls  = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<Tank> tanks                          = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<Projectile> projectiles              = new CopyOnWriteArrayList<>();
-  private CopyOnWriteArrayList<Explosion> explosions                = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> effects                  = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<Damageable> damageables              = new CopyOnWriteArrayList<>();
   private HashMap<String, BufferedImage> spriteCache                = new HashMap<>();
   private CollisionHandler collisionHandler                         = new CollisionHandler();
 
   private BufferedImage backgroundImage;
   private Tank p1_tank, p2_tank;
+  private boolean p1_respawning, p2_respawning;
+  private Timer p1_respawnTimer = new Timer();
+  private Timer p2_respawnTimer = new Timer();
+  private int respawnDelay = 100;
   private PlayerCamera playerOneCamera;
   private PlayerCamera playerTwoCamera;
 
@@ -47,15 +48,10 @@ public class GameWorld
                                           loadSprite("background_tile.png"),
                                           loadSprite("wall_indestructible2.png"));
 
-    // Tank Initialization
-    p1_tank = (Tank) instantiate(new Tank( new Vector2(128, 128), Player.One ));
-    p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
+    spawnTank(Player.One);
+    spawnTank(Player.Two);
 
-    p1_tank.setSprite("Tank_blue_basic_strip60.png");
-    p2_tank.setSprite("Tank_red_basic_strip60.png");
-
-    playerOneCamera = new PlayerCamera(p1_tank);
-    playerTwoCamera = new PlayerCamera(p2_tank);
+    Clock.getInstance().addClockObserver(this);
   }
 
 //  private void drawB(String fileName){
@@ -135,10 +131,43 @@ public class GameWorld
     return instance;
   }
 
+  public void update() {
+    if (!p1_tank.getAlive()) {
+      if (!p1_respawning) {
+        p1_respawnTimer.set(respawnDelay);
+        p1_respawning = true;
+      }
+      else if (p1_respawnTimer.isDone()) {
+        spawnTank(Player.One);
+        p1_respawning = false;
+      }
+    }
+    if (!p2_tank.getAlive()) {
+      if (!p2_respawning) {
+        p2_respawnTimer.set(respawnDelay);
+        p2_respawning = true;
+      }
+      else if (p2_respawnTimer.isDone()) {
+        spawnTank(Player.Two);
+        p2_respawning = false;
+      }
+    }
+  }
+
+  private void spawnTank(Player player) {
+    if (player == Player.One) {
+      p1_tank = (Tank) instantiate(new Tank( new Vector2(128, 128), Player.One ));
+      playerOneCamera = new PlayerCamera(p1_tank);
+    }
+    else if (player == Player.Two) {
+      p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
+      playerTwoCamera = new PlayerCamera(p2_tank);
+    }
+  }
+
   // drawBackgroundImage draws background tiles and indestructible walls onto a BufferedImage and returns it.
   private BufferedImage drawBackgroundImage(String mapFileName, BufferedImage backgroundTile,
-                                            BufferedImage wallImage)
-  {
+                                            BufferedImage wallImage) {
     BufferedImage backgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     Graphics graphics = backgroundImage.createGraphics();
 
@@ -206,7 +235,7 @@ public class GameWorld
     for (Tank t : tanks) {
       t.drawSprite(currentImageGraphics);
     }
-    for (Explosion e : explosions) {
+    for (GameObject e : effects) {
       e.drawSprite(currentImageGraphics);
     }
 
@@ -223,8 +252,8 @@ public class GameWorld
     else if (gameObject instanceof Tank) {
       instance.tanks.add((Tank) gameObject);
     }
-    else if (gameObject instanceof Explosion) {
-      instance.explosions.add((Explosion) gameObject);
+    else if (gameObject instanceof Explosion || gameObject instanceof TankExplosion) {
+      instance.effects.add(gameObject);
     }
 
     if (gameObject instanceof Collidable) {
@@ -233,8 +262,8 @@ public class GameWorld
     if (gameObject instanceof Damageable) {
       instance.damageables.add((Damageable) gameObject);
     }
-    if (gameObject instanceof ClockObserver) {
-      Clock.getInstance().addClockObserver((ClockObserver) gameObject);
+    if (gameObject instanceof ClockListener) {
+      Clock.getInstance().addClockObserver((ClockListener) gameObject);
     }
 
     return gameObject;
@@ -250,8 +279,8 @@ public class GameWorld
     else if (gameObject instanceof Tank) {
       instance.tanks.remove(gameObject);
     }
-    else if (gameObject instanceof Explosion) {
-      instance.explosions.remove(gameObject);
+    else if (gameObject instanceof Explosion || gameObject instanceof TankExplosion) {
+      instance.effects.remove(gameObject);
     }
 
     if (gameObject instanceof CollidableGameObject) {
@@ -260,8 +289,8 @@ public class GameWorld
     if (gameObject instanceof Damageable) {
       instance.damageables.remove((Damageable) gameObject);
     }
-    if (gameObject instanceof ClockObserver) {
-      Clock.getInstance().removeClockObserver((ClockObserver) gameObject);
+    if (gameObject instanceof ClockListener) {
+      Clock.getInstance().removeClockObserver((ClockListener) gameObject);
     }
   }
 

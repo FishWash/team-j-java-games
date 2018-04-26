@@ -1,7 +1,7 @@
 package Scripts;
 
 // ClockObservers will have the update() function called every frame.
-public interface ClockObserver
+public interface ClockListener
 {
   void update();
 }

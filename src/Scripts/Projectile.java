@@ -2,9 +2,8 @@ package Scripts;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-public class Projectile extends TriggerGameObject implements ClockObserver
+public class Projectile extends TriggerGameObject implements ClockListener
 {
   protected double moveSpeed = 1;
   protected MultiSprite multiSprite;

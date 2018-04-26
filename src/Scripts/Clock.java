@@ -1,7 +1,5 @@
 package Scripts;
 
-import javafx.beans.Observable;
-
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -9,8 +7,8 @@ public class Clock implements Runnable
 {
   private static Clock instance;
   private int numFramesSinceStart = 0;
-  private CopyOnWriteArrayList<ClockObserver> clockObservers = new CopyOnWriteArrayList<>();
-  private HashMap<ClockObserver, Boolean> addedClockObservers = new HashMap<>();
+  private CopyOnWriteArrayList<ClockListener> clockListeners = new CopyOnWriteArrayList<>();
+  private HashMap<ClockListener, Boolean> addedClockObservers = new HashMap<>();
   private boolean stopped;
   private boolean paused;
 
@@ -38,17 +36,17 @@ public class Clock implements Runnable
     }
   }
 
-  public void addClockObserver(ClockObserver clockObserver) {
-    if (!addedClockObservers.containsKey(clockObserver)) {
-      clockObservers.add(clockObserver);
-      addedClockObservers.put(clockObserver, true);
+  public void addClockObserver(ClockListener clockListener) {
+    if (!addedClockObservers.containsKey(clockListener)) {
+      clockListeners.add(clockListener);
+      addedClockObservers.put(clockListener, true);
     }
   }
 
-  public void removeClockObserver(ClockObserver clockObserver) {
-    if (addedClockObservers.containsKey(clockObserver)) {
-      clockObservers.remove(clockObserver);
-      addedClockObservers.remove(clockObserver);
+  public void removeClockObserver(ClockListener clockListener) {
+    if (addedClockObservers.containsKey(clockListener)) {
+      clockListeners.remove(clockListener);
+      addedClockObservers.remove(clockListener);
     }
   }
 
@@ -68,7 +66,7 @@ public class Clock implements Runnable
   }
 
   public void updateClockObservers() {
-    for (ClockObserver _co : clockObservers) {
+    for (ClockListener _co : clockListeners) {
       _co.update();
     }
   }
