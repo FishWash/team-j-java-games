@@ -19,18 +19,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameWorld implements ClockListener
 {
   public enum Player {Neutral, One, Two}
+  public enum RenderingLayer {BackgroundGameObject, ForegroundGameObject, Walls, Projectiles, Tanks};
   public final int TILE_SIZE = 32;
 
   private static GameWorld instance;
   private final Dimension dimension = new Dimension(1024, 1024);
 
-  private CopyOnWriteArrayList<DestructibleWall> destructibleWalls  = new CopyOnWriteArrayList<>();
-  private CopyOnWriteArrayList<Tank> tanks                          = new CopyOnWriteArrayList<>();
-  private CopyOnWriteArrayList<Projectile> projectiles              = new CopyOnWriteArrayList<>();
-  private CopyOnWriteArrayList<GameObject> effects                  = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<Damageable> damageables              = new CopyOnWriteArrayList<>();
   private HashMap<String, BufferedImage> spriteCache                = new HashMap<>();
   private CollisionHandler collisionHandler                         = new CollisionHandler();
+
+  // These are for rendering
+  private CopyOnWriteArrayList<GameObject> backgroundGameObjects    = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> walls                    = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> projectiles              = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> tanks                    = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> foregroundGameObjects    = new CopyOnWriteArrayList<>();
 
   private BufferedImage backgroundImage;
   private Tank p1_tank, p2_tank;
@@ -55,82 +59,11 @@ public class GameWorld implements ClockListener
 
     spawnTank(Player.One);
     spawnTank(Player.Two);
+    instantiate( new HealthPad(new Vector2(32, 32), Player.One) );
+    instantiate( new HealthPad(new Vector2(800, 800), Player.Two) );
 
     Clock.getInstance().addClockObserver(this);
   }
-
-//  private void drawB(String fileName){
-//    try {
-//      File file = new File(fileName);
-//      fileName = file.getAbsolutePath();
-//      FileReader fileReader = new FileReader(fileName);
-//      BufferedReader bufferedReader = new BufferedReader(fileReader);
-//      String line = bufferedReader.readLine();
-//
-//      for (int i=0; i<yMax && line!=null; i++) {
-//        for (int j=0; j<xMax && j<line.length(); j++) {
-//          int tileInt = line.charAt(j) - '0';
-//          if (tileInt >= 0 && tileInt <= 2) {
-//            mapGrid[i][j] = tileInt;
-//          }
-//        }
-//        line = bufferedReader.readLine();
-//      }
-//
-//    } catch(Exception e){
-//      System.out.println(e.getMessage());
-//    }
-//
-//    // Add outer walls
-//    for (int i=0; i<mapGrid.length; i++) {
-//      mapGrid[i][0] = 1;
-//      mapGrid[i][mapGrid[i].length-1] = 1;
-//    }
-//    for (int j=0; j<mapGrid[0].length; j++) {
-//      mapGrid[0][j] = 1;
-//      mapGrid[mapGrid.length-1][j] = 1;
-//    }
-//
-////    for (int i=0; i<mapGrid.length; i++) {
-////      for (int j=0; j<mapGrid[i].length; j++) {
-////        System.out.print(mapGrid[i][j] + " ");
-////      }
-////      System.out.println();
-////    }
-//
-//    initializeWalls();
-//    initializeWallCollidables();
-//  }
-
-//  private void initializeWalls() {
-//    for (int i=0; i<mapGrid.length; i++) {
-//      for (int j=0; j<mapGrid[i].length; j++) {
-//        if (mapGrid[i][j] == 1) {
-//          instantiate(new Wall(new Vector2(j*TILE_SIZE, i*TILE_SIZE)));
-//        }
-//        else if (mapGrid[i][j] == 2) {
-//          instantiate(new DestructibleWall(new Vector2(j*TILE_SIZE, i*TILE_SIZE)));
-//        }
-//      }
-//    }
-//  }
-
-//  private void initializeWallCollidables() {
-//    for (int i=0; i<mapGrid.length; i++) {
-//      for (int j=0; j<mapGrid[i].length; j++) {
-//        if (mapGrid[i][j] == 1) {
-//          CollidableGameObject collidableGameObject = new CollidableGameObject(new Vector2(j*TILE_SIZE, i*TILE_SIZE));
-//          int collidableLength = 0;
-//          do {
-//            collidableLength++;
-//            j++;
-//          } while (j<mapGrid[i].length && mapGrid[i][j] == 1);
-//          collidableGameObject.setTriggerSize(new Vector2(collidableLength*TILE_SIZE, TILE_SIZE));
-//          collidables.add(collidableGameObject);
-//        }
-//      }
-//    }
-//  }
 
   public static GameWorld getInstance() {
     return instance;
@@ -231,34 +164,42 @@ public class GameWorld implements ClockListener
     Graphics currentImageGraphics = currentImage.createGraphics();
 
     currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
-    for (DestructibleWall dw : destructibleWalls) {
-      dw.drawSprite(currentImageGraphics);
+
+    for (GameObject go : backgroundGameObjects) {
+      go.drawSprite(currentImageGraphics);
     }
-    for (Projectile p : projectiles) {
-      p.drawSprite(currentImageGraphics);
+    for (GameObject go : walls) {
+      go.drawSprite(currentImageGraphics);
     }
-    for (Tank t : tanks) {
-      t.drawSprite(currentImageGraphics);
+    for (GameObject go : projectiles) {
+      go.drawSprite(currentImageGraphics);
     }
-    for (GameObject e : effects) {
-      e.drawSprite(currentImageGraphics);
+    for (GameObject go : tanks) {
+      go.drawSprite(currentImageGraphics);
+    }
+    for (GameObject go : foregroundGameObjects) {
+      go.drawSprite(currentImageGraphics);
     }
 
     return currentImage;
   }
 
+  // Takes a GameObject and adds it to the correct instance lists.
   public static GameObject instantiate(GameObject gameObject) {
-    if (gameObject instanceof DestructibleWall) {
-      instance.destructibleWalls.add((DestructibleWall) gameObject);
+    if (gameObject.getRenderingLayer() == RenderingLayer.Walls) {
+      instance.walls.add(gameObject);
     }
-    else if (gameObject instanceof Projectile) {
-      instance.projectiles.add((Projectile) gameObject);
+    else if (gameObject.getRenderingLayer() == RenderingLayer.Projectiles) {
+      instance.projectiles.add(gameObject);
     }
-    else if (gameObject instanceof Tank) {
-      instance.tanks.add((Tank) gameObject);
+    else if (gameObject.getRenderingLayer() == RenderingLayer.Tanks) {
+      instance.tanks.add(gameObject);
     }
-    else if (gameObject instanceof Explosion || gameObject instanceof TankExplosion) {
-      instance.effects.add(gameObject);
+    else if (gameObject.getRenderingLayer() == RenderingLayer.ForegroundGameObject) {
+      instance.foregroundGameObjects.add(gameObject);
+    }
+    else {
+      instance.backgroundGameObjects.add(gameObject);
     }
 
     if (gameObject instanceof Collidable) {
@@ -273,19 +214,22 @@ public class GameWorld implements ClockListener
 
     return gameObject;
   }
-
+  // Removes a previously instantiated GameObject from instance lists.
   public static void destroy(GameObject gameObject) {
-    if (gameObject instanceof DestructibleWall) {
-      instance.destructibleWalls.remove(gameObject);
+    if (gameObject.getRenderingLayer() == RenderingLayer.Walls) {
+      instance.walls.remove(gameObject);
     }
-    else if (gameObject instanceof Projectile) {
+    else if (gameObject.getRenderingLayer() == RenderingLayer.Projectiles) {
       instance.projectiles.remove(gameObject);
     }
-    else if (gameObject instanceof Tank) {
+    else if (gameObject.getRenderingLayer() == RenderingLayer.Tanks) {
       instance.tanks.remove(gameObject);
     }
-    else if (gameObject instanceof Explosion || gameObject instanceof TankExplosion) {
-      instance.effects.remove(gameObject);
+    else if (gameObject.getRenderingLayer() == RenderingLayer.ForegroundGameObject) {
+      instance.foregroundGameObjects.remove(gameObject);
+    }
+    else if (gameObject.getRenderingLayer() == RenderingLayer.BackgroundGameObject){
+      instance.backgroundGameObjects.remove(gameObject);
     }
 
     if (gameObject instanceof CollidableGameObject) {
@@ -313,6 +257,18 @@ public class GameWorld implements ClockListener
       if (d instanceof TriggerGameObject) {
         TriggerGameObject tgo = (TriggerGameObject) d;
         if (tgo.isOverlapping(trigger) && ((owner == Player.Neutral) || (tgo.getOwner() != owner))) {
+          overlappingDamageables.add(d);
+        }
+      }
+    }
+    return overlappingDamageables;
+  }
+  public static ArrayList<Damageable> findOverlappingFriendlyDamageables(BoxTrigger trigger, Player owner) {
+    ArrayList<Damageable> overlappingDamageables = new ArrayList<>();
+    for (Damageable d : instance.damageables) {
+      if (d instanceof TriggerGameObject) {
+        TriggerGameObject tgo = (TriggerGameObject) d;
+        if (tgo.isOverlapping(trigger) && tgo.getOwner() == owner) {
           overlappingDamageables.add(d);
         }
       }

@@ -31,8 +31,6 @@ public class Tank extends CollidableGameObject implements ClockListener, Damagea
     trigger.setSize(new Vector2(48, 48));
     setPosition(Vector2.subtractVectors(trigger.getPosition(), Vector2.multiplyVector(trigger.getSize(), 0.5)));
 
-    defaultWeapon = new ShellWeapon();
-
     this.owner = owner;
     if (owner == GameWorld.Player.One) {
       setSprite("Tank_blue_basic_strip60.png");
@@ -42,6 +40,11 @@ public class Tank extends CollidableGameObject implements ClockListener, Damagea
       rotation = 180;
     }
     tankKeyInput = new FuzzyTankKeyInput(owner);
+
+    renderingLayer = GameWorld.RenderingLayer.Tanks;
+
+    defaultWeapon = new ShellWeapon();
+    equippedWeapon = new MachineGunWeapon();
   }
 
   public int getMaxHealth() {
@@ -89,14 +92,24 @@ public class Tank extends CollidableGameObject implements ClockListener, Damagea
       if (shotFired && tankKeyInput instanceof FuzzyTankKeyInput) {
         ((FuzzyTankKeyInput) tankKeyInput).addFuzzedMoveInput(weapon.getRecoil());
       }
+      if (equippedWeapon != null && equippedWeapon.getAmmo() <= 0) {
+        equippedWeapon = null;
+      }
     }
   }
 
-  public void takeDamage(int damage) {
-    health -= damage;
+  public void damage(int damageAmount) {
+    health -= damageAmount;
     if (health <= 0) {
       health = 0;
       die();
+    }
+  }
+
+  public void heal(int healAmount) {
+    health += healAmount;
+    if (health > maxHealth) {
+      health = maxHealth;
     }
   }
 
@@ -104,7 +117,6 @@ public class Tank extends CollidableGameObject implements ClockListener, Damagea
   public void die() {
     GameWorld.instantiate(new TankExplosion(getCenterPosition()));
     super.die();
-    System.out.println("asdf");
   }
 
   @Override

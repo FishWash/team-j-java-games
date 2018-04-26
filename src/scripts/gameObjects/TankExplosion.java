@@ -20,6 +20,7 @@ public class TankExplosion extends GameObject implements ClockListener {
     if (sprite != null) {
       this.position = Vector2.subtractVectors(position, new Vector2(sprite.getWidth()*0.5, sprite.getHeight()*0.7));
     }
+    renderingLayer = GameWorld.RenderingLayer.ForegroundGameObject;
   }
 
   public void update() {

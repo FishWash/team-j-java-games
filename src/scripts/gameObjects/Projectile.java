@@ -19,6 +19,7 @@ public class Projectile extends TriggerGameObject implements ClockListener
     trigger = new BoxTrigger(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
     lifeTimer = new Timer(lifeTime);
     this.owner = owner;
+    renderingLayer = GameWorld.RenderingLayer.Projectiles;
   }
 
   public void update() {
@@ -35,7 +36,7 @@ public class Projectile extends TriggerGameObject implements ClockListener
     position = Vector2.addVectors( position, moveVector );
   }
 
-  private void checkCollidables() {
+  protected void checkCollidables() {
     Collidable c = GameWorld.findOverlappingCollidable(trigger);
     if (c != null && (owner == GameWorld.Player.Neutral || ((GameObject) c).getOwner() != owner)) {
       die();

@@ -2,7 +2,9 @@ package scripts.gameObjects;
 
 public interface Damageable
 {
-  void takeDamage(int damageAmount);
+  void damage(int damageAmount);
+
+  void heal(int healAmount);
 
   int getMaxHealth();
 

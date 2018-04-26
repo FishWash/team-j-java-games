@@ -16,6 +16,7 @@ public abstract class Explosion extends TriggerGameObject implements ClockListen
   public Explosion (Vector2 position, GameWorld.Player owner) {
     super(position);
     this.owner = owner;
+    renderingLayer = GameWorld.RenderingLayer.ForegroundGameObject;
   }
 
   public void update() {
@@ -44,7 +45,7 @@ public abstract class Explosion extends TriggerGameObject implements ClockListen
   private void damageDamageables() {
     ArrayList<Damageable> damageables = GameWorld.findOverlappingEnemyDamageables(trigger, owner);
     for (Damageable d : damageables) {
-      d.takeDamage(damage);
+      d.damage(damage);
     }
   }
 }

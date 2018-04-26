@@ -9,35 +9,29 @@ import java.awt.image.BufferedImage;
 public abstract class GameObject
 {
   protected boolean alive = true;
-  protected GameWorld.Player owner;
-  protected Vector2 position;
-  protected double rotation;
+  protected Vector2 position = new Vector2(0, 0);
+  protected double rotation = 0;
   protected BufferedImage sprite;
+  protected GameWorld.Player owner = GameWorld.Player.Neutral;
+  protected GameWorld.RenderingLayer renderingLayer = GameWorld.RenderingLayer.BackgroundGameObject;
 
   public GameObject() {
-    this.position = new Vector2(0,0);
-    this.rotation = 0;
   }
   public GameObject(Vector2 position) {
     this.position = position;
-    this.rotation = 0;
   }
 
-  public Vector2 getCenterPosition() {
-    if (sprite != null) {
-      return new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
-    }
-    return null;
-  }
+  // Public Methods
   public void drawSprite(Graphics graphics) {
     if (sprite != null) {
       graphics.drawImage(sprite, (int)position.x, (int)position.y, null);
     }
   }
-
-  protected void die() {
-    GameWorld.destroy(this);
-    alive = false;
+  public Vector2 getCenterPosition() {
+    if (sprite != null) {
+      return new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
+    }
+    return null;
   }
 
   // Getters
@@ -46,6 +40,9 @@ public abstract class GameObject
   }
   public GameWorld.Player getOwner() {
     return owner;
+  }
+  public GameWorld.RenderingLayer getRenderingLayer() {
+    return renderingLayer;
   }
   public Vector2 getPosition() {
     return position;
@@ -78,5 +75,11 @@ public abstract class GameObject
     if (_spriteImg != null) {
       sprite = _spriteImg;
     }
+  }
+
+  // Other
+  protected void die() {
+    GameWorld.destroy(this);
+    alive = false;
   }
 }

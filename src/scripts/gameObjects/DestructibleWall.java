@@ -12,6 +12,7 @@ public class DestructibleWall extends CollidableGameObject implements Damageable
     super(position);
     sprite = GameWorld.loadSprite("wall_destructible1.png");
     trigger.setSize(new Vector2(GameWorld.getInstance().TILE_SIZE, GameWorld.getInstance().TILE_SIZE));
+    renderingLayer = GameWorld.RenderingLayer.Walls;
   }
 
   public  int getMaxHealth(){
@@ -22,13 +23,15 @@ public class DestructibleWall extends CollidableGameObject implements Damageable
     return health;
   }
 
-  public void takeDamage(int damageAmount) {
+  public void damage(int damageAmount) {
     health -= damageAmount;
     if (health <= 0) {
       die();
     }
-    else if (health <= 10) {
+    else if (health <= 5) {
       sprite = GameWorld.loadSprite("wall_destructible2.png");
     }
   }
+
+  public void heal(int healAmount) {}
 }
