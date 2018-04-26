@@ -11,7 +11,7 @@ public class ShellProjectile extends Projectile {
   @Override
   public void die() {
     if (alive) {
-      GameWorld.instantiate(new Explosion(getCenterPosition(), GameWorld.Player.Neutral));
+      GameWorld.instantiate(new ShellExplosion(getCenterPosition(), GameWorld.Player.Neutral));
     }
     super.die();
   }

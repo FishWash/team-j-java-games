@@ -2,7 +2,7 @@ package Scripts;
 
 import java.util.ArrayList;
 
-public class Explosion extends TriggerGameObject implements ClockListener
+public abstract class Explosion extends TriggerGameObject implements ClockListener
 {
   protected MultiSprite multiSprite;
   protected int damage = 1;
