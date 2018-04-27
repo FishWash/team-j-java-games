@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class GameWorld extends DisplayableElement
 {
   public enum Player {Neutral, One, Two}
-  public enum RenderingLayer {BackgroundGameObject, ForegroundGameObject, Walls, Projectiles, Tanks};
+  public enum RenderingLayer {BackgroundGameObject, ForegroundGameObject, Walls, Projectiles, Tanks}
   public final int TILE_SIZE = 32;
 
   protected static GameWorld instance;

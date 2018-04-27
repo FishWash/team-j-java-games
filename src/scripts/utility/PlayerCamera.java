@@ -1,7 +1,7 @@
 package scripts.utility;
 
 import scripts.GameWorld;
-import scripts.gameObjects.Damageable;
+import scripts.Damageable;
 import scripts.gameObjects.GameObject;
 
 import java.awt.*;

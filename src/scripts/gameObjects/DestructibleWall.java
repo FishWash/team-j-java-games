@@ -1,5 +1,6 @@
 package scripts.gameObjects;
 
+import scripts.Damageable;
 import scripts.GameWorld;
 import scripts.utility.Vector2;
 

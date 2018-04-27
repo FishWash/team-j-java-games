@@ -1,8 +1,7 @@
 package scripts;
 
-import scripts.gameObjects.HealthPad;
+import scripts.gameObjects.TankSpawner;
 import scripts.utility.Camera;
-import scripts.utility.Clock;
 import scripts.utility.Vector2;
 
 import java.awt.*;

@@ -1,7 +1,5 @@
 package scripts;
 
-import scripts.utility.DisplayableElement;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

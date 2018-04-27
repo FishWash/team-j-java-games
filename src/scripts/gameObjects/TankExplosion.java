@@ -21,6 +21,7 @@ public class TankExplosion extends GameObject implements ClockListener {
     sprite = multiSprite.getSubSprite(0);
     this.position = Vector2.subtractVectors(position, new Vector2(0, 48));
     renderingLayer = GameWorld.RenderingLayer.ForegroundGameObject;
+    GameWorld.getInstance().playSound("BIGEXPLOSION.wav");
   }
 
   public void update() {
