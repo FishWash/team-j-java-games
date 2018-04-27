@@ -14,6 +14,7 @@ public class TankSpawner extends GameObject implements ClockListener {
   private boolean spawnTimerStarted = false;
   private Timer spawnTimer = new Timer();
   private int spawnDelay = 128;
+  private int lives = 3;
 
   public TankSpawner(Vector2 position, GameWorld.Player owner) {
     this.position = position;
@@ -30,8 +31,13 @@ public class TankSpawner extends GameObject implements ClockListener {
       else if (spawnTimer.isDone()){
         spawnedTank = spawnTank();
         spawnTimerStarted = false;
+        lives--;
       }
     }
+  }
+
+  public int getLives(){
+    return lives;
   }
 
   public Tank spawnTank() {

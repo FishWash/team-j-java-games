@@ -53,6 +53,10 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     return health;
   }
 
+  public MultiSprite getMultiSprite() {
+    return multiSprite;
+  }
+
   public void update() {
     if (alive) {
       turn();

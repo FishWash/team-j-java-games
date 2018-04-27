@@ -17,11 +17,7 @@ public class Camera {
     double scale = 0.2;
     int minimapWidth = (int) (GameWorld.getInstance().getDimension().width * scale);
     int minimapHeight = (int) (GameWorld.getInstance().getDimension().width * scale);
-    BufferedImage resizedMap = new BufferedImage(minimapWidth, minimapHeight, BufferedImage.TYPE_INT_ARGB);
-    AffineTransform at = new AffineTransform();
-    at.scale(scale, scale);
-    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-    resizedMap = scaleOp.filter(currentImage, resizedMap);
+    BufferedImage resizedMap = DisplayableElement.getScaledImage(currentImage, scale, minimapWidth, minimapHeight);
 
     return resizedMap;
   }

@@ -1,8 +1,10 @@
 package scripts.utility;
 
 import scripts.GameWorld;
+import scripts.TankBattleWorld;
 import scripts.gameObjects.Damageable;
 import scripts.gameObjects.GameObject;
+import scripts.gameObjects.Tank;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -99,6 +101,28 @@ public class PlayerCamera extends GameObject {
     graphics2D.setColor(Color.WHITE);
     graphics2D.drawString(playerString, margin+4, yPos);
 
+    addLives(graphics2D, margin + fontMetrics.stringWidth(playerString) + 10, margin - fontMetrics.getHeight(), (int)((fontMetrics.getHeight() + 3) * 0.95));
+
     return playerDisplay;
+  }
+
+  public void addLives(Graphics currentPlayerImage, int xPos, int yPos, int size){
+    GameWorld gameWorld = GameWorld.getInstance();
+    int lives = 0;
+    int spriteGap = 2;
+    BufferedImage lifeSprite;
+    if (playerToFollow instanceof Tank) {
+      lifeSprite = DisplayableElement.getScaledImage(((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90), size /(double)playerToFollow.getSprite().getHeight(), size, size);
+      //lifeSprite = ((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90);
+      int lifeSpriteWidth = lifeSprite.getWidth();
+
+      if (gameWorld instanceof TankBattleWorld) {
+        lives = ((TankBattleWorld) gameWorld).getLives(owner);
+      }
+      for (int i = lives; i > 0; i--) {
+        currentPlayerImage.drawImage(lifeSprite, xPos, yPos, null);
+        xPos += lifeSpriteWidth + spriteGap;
+      }
+    }
   }
 }

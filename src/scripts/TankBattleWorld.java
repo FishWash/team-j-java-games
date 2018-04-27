@@ -12,6 +12,8 @@ public class TankBattleWorld extends GameWorld {
 
   private PlayerCamera playerOneCamera;
   private PlayerCamera playerTwoCamera;
+  private TankSpawner playerOneSpawner;
+  private TankSpawner playerTwoSpawner;
 
   protected void initialize() {
     GameWorld.instance = this;
@@ -19,9 +21,8 @@ public class TankBattleWorld extends GameWorld {
     collisionHandler.readMapFile("CollisionTestMap.txt", TILE_SIZE);
     drawBackgroundImage("CollisionTestMap.txt", loadSprite("background_tile.png"),
                         loadSprite("wall_indestructible2.png"));
-
-    instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
-    instantiate( new TankSpawner(new Vector2(896, 896), Player.Two) );
+    playerOneSpawner = (TankSpawner) instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
+    playerTwoSpawner = (TankSpawner) instantiate( new TankSpawner(new Vector2(896, 896), Player.Two) );
 
     instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
     instantiate( new HealthPad(new Vector2(896, 896), Player.Two) );
@@ -54,6 +55,17 @@ public class TankBattleWorld extends GameWorld {
 
     } catch (Exception e) {
       System.out.println("ERROR in TankBattleWorld: " + e);
+    }
+  }
+
+  public int getLives(GameWorld.Player player){
+    if(player == Player.One){
+      return playerOneSpawner.getLives();
+    }
+    else if(player == Player.Two){
+      return playerTwoSpawner.getLives();
+    } else {
+      return 0;
     }
   }
 }

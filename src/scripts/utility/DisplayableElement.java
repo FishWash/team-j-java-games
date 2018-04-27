@@ -2,6 +2,8 @@ package scripts.utility;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -29,4 +31,15 @@ public abstract class DisplayableElement {
     }
     return _bImg;
   }
+
+  public static BufferedImage getScaledImage(BufferedImage imageToResize, double scale, int newWidth, int newHeight){
+    BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+    AffineTransform at = new AffineTransform();
+    at.scale(scale, scale);
+    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+    scaledImage = scaleOp.filter(imageToResize, scaledImage);
+
+    return scaledImage;
+  }
+
 }
