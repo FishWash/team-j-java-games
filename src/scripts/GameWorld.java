@@ -98,25 +98,6 @@ public abstract class GameWorld extends DisplayableElement
     this.backgroundImage = newBackgroundImage;
   }
 
-//  public void displayOnGraphics(Graphics graphics) {
-//    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
-//    int playerDisplayHeight = TankGameApplication.windowDimension.height;
-//    BufferedImage currentImage = getCurrentImage();
-//    BufferedImage p1Display = playerOneCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
-//    BufferedImage p2Display = playerTwoCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
-//    BufferedImage minimap = Camera.getMinimapDisplay(currentImage);
-//
-//    graphics.drawImage(p1Display, 0, 0, null);
-//    graphics.drawImage(p2Display, playerDisplayWidth, 0, null);
-//
-//    graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
-//    Graphics2D graphics2D = (Graphics2D) graphics;
-//    graphics2D.setStroke(new BasicStroke(4));
-//    graphics2D.setColor(Color.BLACK);
-//    graphics2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
-//    graphics2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
-//  }
-//
   protected BufferedImage getCurrentImage() {
     BufferedImage currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     Graphics currentImageGraphics = currentImage.createGraphics();
