@@ -1,113 +1,75 @@
 package scripts;
 
-import scripts.gameObjects.Projectile;
-import scripts.gameObjects.TriggerGameObject;
 import scripts.gameObjects.*;
 import scripts.utility.*;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GameWorld implements ClockListener
+public abstract class GameWorld extends DisplayableElement
 {
   public enum Player {Neutral, One, Two}
   public enum RenderingLayer {BackgroundGameObject, ForegroundGameObject, Walls, Projectiles, Tanks};
   public final int TILE_SIZE = 32;
 
-  private static GameWorld instance;
-  private final Dimension dimension = new Dimension(1024, 1024);
+  protected static GameWorld instance;
+  protected Dimension dimension;
 
-  private CopyOnWriteArrayList<Damageable> damageables              = new CopyOnWriteArrayList<>();
-  private HashMap<String, BufferedImage> spriteCache                = new HashMap<>();
-  private CollisionHandler collisionHandler                         = new CollisionHandler();
+  protected CollisionHandler collisionHandler                       = new CollisionHandler();
+  protected CopyOnWriteArrayList<Damageable> damageables            = new CopyOnWriteArrayList<>();
 
   // These are for rendering
   private CopyOnWriteArrayList<GameObject> backgroundGameObjects    = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> walls                    = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> projectiles              = new CopyOnWriteArrayList<>();
-  private CopyOnWriteArrayList<GameObject> tanks                    = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> players                  = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> foregroundGameObjects    = new CopyOnWriteArrayList<>();
-
   private BufferedImage backgroundImage;
-  private Tank p1_tank, p2_tank;
-  private PlayerCamera playerOneCamera;
-  private PlayerCamera playerTwoCamera;
-  private Timer p1_respawnTimer = new Timer();
-  private Timer p2_respawnTimer = new Timer();
-  private int respawnDelay = 128;
-  private boolean p1_respawning, p2_respawning;
 
-  // Initialization
   public GameWorld() {
     instance = this;
     initialize();
   }
+  protected abstract void initialize();
 
-  public void initialize() {
-    collisionHandler.readMapFile("maps/CollisionTestMap.txt", TILE_SIZE);
-    backgroundImage = drawBackgroundImage("maps/CollisionTestMap.txt",
-                                          loadSprite("background_tile.png"),
-                                          loadSprite("wall_indestructible2.png"));
-
-    spawnTank(Player.One);
-    spawnTank(Player.Two);
-    instantiate( new HealthPad(new Vector2(32, 32), Player.One) );
-    instantiate( new HealthPad(new Vector2(800, 800), Player.Two) );
-
-    Clock.getInstance().addClockObserver(this);
-  }
+//  public void initialize() {
+//    collisionHandler.readMapFile("maps/CollisionTestMap.txt", TILE_SIZE);
+//    drawBackgroundImage("maps/CollisionTestMap.txt", loadSprite("background_tile.png"),
+//                        loadSprite("wall_indestructible2.png"));
+//
+//    instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
+//    instantiate( new TankSpawner(new Vector2(896, 896), Player.Two) );
+//
+//    instantiate( new HealthPad(new Vector2(32, 32), Player.One) );
+//    instantiate( new HealthPad(new Vector2(800, 800), Player.Two) );
+//  }
 
   public static GameWorld getInstance() {
     return instance;
   }
 
-  public void update() {
-    if (!p1_tank.getAlive()) {
-      if (!p1_respawning) {
-        p1_respawnTimer.set(respawnDelay);
-        p1_respawning = true;
-      }
-      else if (p1_respawnTimer.isDone()) {
-        spawnTank(Player.One);
-        p1_respawning = false;
-      }
-    }
-    if (!p2_tank.getAlive()) {
-      if (!p2_respawning) {
-        p2_respawnTimer.set(respawnDelay);
-        p2_respawning = true;
-      }
-      else if (p2_respawnTimer.isDone()) {
-        spawnTank(Player.Two);
-        p2_respawning = false;
-      }
-    }
-  }
-
-  private void spawnTank(Player player) {
-    if (player == Player.One) {
-      p1_tank = (Tank) instantiate(new Tank(new Vector2(128, 128), Player.One ));
-      playerOneCamera = new PlayerCamera(p1_tank);
-    }
-    else if (player == Player.Two) {
-      p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
-      playerTwoCamera = new PlayerCamera(p2_tank);
-    }
-  }
+//  public void spawnTank(Player player) {
+//    if (player == Player.One) {
+//      p1_tank = (Tank) instantiate(new Tank(new Vector2(128, 128), Player.One ));
+//      playerOneCamera = new PlayerCamera(p1_tank);
+//    }
+//    else if (player == Player.Two) {
+//      p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
+//      playerTwoCamera = new PlayerCamera(p2_tank);
+//    }
+//  }
 
   // drawBackgroundImage draws background tiles and indestructible walls onto a BufferedImage and returns it.
-  private BufferedImage drawBackgroundImage(String mapFileName, BufferedImage backgroundTile,
+  protected void drawBackgroundImage(String mapFileName, BufferedImage backgroundTile,
                                             BufferedImage wallImage) {
-    BufferedImage backgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
-    Graphics graphics = backgroundImage.createGraphics();
+    BufferedImage newBackgroundImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+    Graphics graphics = newBackgroundImage.createGraphics();
 
     for(int i=0; i<dimension.width; i += backgroundTile.getWidth()) {
       for (int j=0; j<dimension.height; j += backgroundTile.getHeight()) {
@@ -116,7 +78,7 @@ public class GameWorld implements ClockListener
     }
 
     try {
-      Path filePath = Paths.get("src/" + mapFileName);
+      Path filePath = Paths.get("src/maps/" + mapFileName);
       List<String> fileLines = Files.readAllLines(filePath);
 
       int row = 0;
@@ -133,33 +95,29 @@ public class GameWorld implements ClockListener
       System.out.println("ERROR in GameWorld: " + e);
     }
 
-    return backgroundImage;
+    this.backgroundImage = newBackgroundImage;
   }
 
-  public Dimension getDimension() {
-    return dimension;
-  }
-
-  public void getDisplay(Graphics graphics){
-    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
-    int playerDisplayHeight = TankGameApplication.windowDimension.height;
-    BufferedImage currentImage = getCurrentImage();
-    BufferedImage p1Display = playerOneCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
-    BufferedImage p2Display = playerTwoCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
-    BufferedImage minimap = Camera.getMinimapDisplay(currentImage);
-
-    graphics.drawImage(p1Display, 0, 0, null);
-    graphics.drawImage(p2Display, playerDisplayWidth, 0, null);
-
-    graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
-    Graphics2D graphics2D = (Graphics2D) graphics;
-    graphics2D.setStroke(new BasicStroke(4));
-    graphics2D.setColor(Color.BLACK);
-    graphics2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
-    graphics2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
-  }
-
-  private BufferedImage getCurrentImage() {
+//  public void displayOnGraphics(Graphics graphics) {
+//    int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
+//    int playerDisplayHeight = TankGameApplication.windowDimension.height;
+//    BufferedImage currentImage = getCurrentImage();
+//    BufferedImage p1Display = playerOneCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
+//    BufferedImage p2Display = playerTwoCamera.getPlayerDisplay(currentImage, playerDisplayWidth, playerDisplayHeight);
+//    BufferedImage minimap = Camera.getMinimapDisplay(currentImage);
+//
+//    graphics.drawImage(p1Display, 0, 0, null);
+//    graphics.drawImage(p2Display, playerDisplayWidth, 0, null);
+//
+//    graphics.drawImage(minimap, playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), null);
+//    Graphics2D graphics2D = (Graphics2D) graphics;
+//    graphics2D.setStroke(new BasicStroke(4));
+//    graphics2D.setColor(Color.BLACK);
+//    graphics2D.drawLine(playerDisplayWidth, 0, playerDisplayWidth,playerDisplayHeight - minimap.getHeight());
+//    graphics2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(), minimap.getWidth(), minimap.getHeight());
+//  }
+//
+  protected BufferedImage getCurrentImage() {
     BufferedImage currentImage = new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     Graphics currentImageGraphics = currentImage.createGraphics();
 
@@ -174,7 +132,7 @@ public class GameWorld implements ClockListener
     for (GameObject go : projectiles) {
       go.drawSprite(currentImageGraphics);
     }
-    for (GameObject go : tanks) {
+    for (GameObject go : players) {
       go.drawSprite(currentImageGraphics);
     }
     for (GameObject go : foregroundGameObjects) {
@@ -193,7 +151,7 @@ public class GameWorld implements ClockListener
       instance.projectiles.add(gameObject);
     }
     else if (gameObject.getRenderingLayer() == RenderingLayer.Tanks) {
-      instance.tanks.add(gameObject);
+      instance.players.add(gameObject);
     }
     else if (gameObject.getRenderingLayer() == RenderingLayer.ForegroundGameObject) {
       instance.foregroundGameObjects.add(gameObject);
@@ -223,7 +181,7 @@ public class GameWorld implements ClockListener
       instance.projectiles.remove(gameObject);
     }
     else if (gameObject.getRenderingLayer() == RenderingLayer.Tanks) {
-      instance.tanks.remove(gameObject);
+      instance.players.remove(gameObject);
     }
     else if (gameObject.getRenderingLayer() == RenderingLayer.ForegroundGameObject) {
       instance.foregroundGameObjects.remove(gameObject);
@@ -232,7 +190,7 @@ public class GameWorld implements ClockListener
       instance.backgroundGameObjects.remove(gameObject);
     }
 
-    if (gameObject instanceof CollidableGameObject) {
+    if (gameObject instanceof Collidable) {
       instance.collisionHandler.removeCollidable((Collidable) gameObject);
     }
     if (gameObject instanceof Damageable) {
@@ -243,49 +201,56 @@ public class GameWorld implements ClockListener
     }
   }
 
+  public Dimension getDimension() {
+    return dimension;
+  }
+
   public static Vector2 getMoveVectorWithCollision(BoxTrigger trigger, Vector2 moveVector) {
     return instance.collisionHandler.getMoveVectorWithCollision(trigger, moveVector);
   }
 
-  public static Collidable findOverlappingCollidable(BoxTrigger trigger) {
-    return instance.collisionHandler.findOverlappingCollidable(trigger);
+  public CopyOnWriteArrayList<GameObject> getPlayers() {
+    return players;
   }
 
-  public static ArrayList<Damageable> findOverlappingEnemyDamageables(BoxTrigger trigger, Player owner) {
+  public static Collidable findOverlappingCollidable(BoxTrigger boxTrigger) {
+    return instance.collisionHandler.findOverlappingCollidable(boxTrigger);
+  }
+
+  public static ArrayList<Damageable> findOverlappingDamageables(BoxTrigger boxTrigger) {
     ArrayList<Damageable> overlappingDamageables = new ArrayList<>();
     for (Damageable d : instance.damageables) {
-      if (d instanceof TriggerGameObject) {
-        TriggerGameObject tgo = (TriggerGameObject) d;
-        if (tgo.isOverlapping(trigger) && ((owner == Player.Neutral) || (tgo.getOwner() != owner))) {
+      if (d instanceof BoxTriggerGameObject) {
+        BoxTriggerGameObject btgo = (BoxTriggerGameObject) d;
+        if (btgo.isOverlapping(boxTrigger)) {
           overlappingDamageables.add(d);
         }
       }
     }
     return overlappingDamageables;
   }
-  public static ArrayList<Damageable> findOverlappingFriendlyDamageables(BoxTrigger trigger, Player owner) {
+  public static ArrayList<Damageable> findOverlappingEnemyDamageables(BoxTrigger boxTrigger, Player owner) {
     ArrayList<Damageable> overlappingDamageables = new ArrayList<>();
     for (Damageable d : instance.damageables) {
-      if (d instanceof TriggerGameObject) {
-        TriggerGameObject tgo = (TriggerGameObject) d;
-        if (tgo.isOverlapping(trigger) && tgo.getOwner() == owner) {
+      if (d instanceof BoxTriggerGameObject) {
+        BoxTriggerGameObject tgo = (BoxTriggerGameObject) d;
+        if (tgo.isOverlapping(boxTrigger) && ((owner == Player.Neutral) || (tgo.getOwner() != owner))) {
           overlappingDamageables.add(d);
         }
       }
     }
     return overlappingDamageables;
   }
-
-  public static BufferedImage loadSprite(String fileName) {
-    BufferedImage _bImg = instance.spriteCache.get(fileName);
-    if (_bImg == null) {
-      try {
-        _bImg = ImageIO.read(instance.getClass().getResourceAsStream("/sprites/" + fileName));
-        instance.spriteCache.put(fileName, _bImg);
-      } catch (Exception e) {
-        System.out.println("ERROR in GameWorld: " + fileName + " not found");
+  public static ArrayList<Damageable> findOverlappingFriendlyDamageables(BoxTrigger boxTrigger, Player owner) {
+    ArrayList<Damageable> overlappingDamageables = new ArrayList<>();
+    for (Damageable d : instance.damageables) {
+      if (d instanceof BoxTriggerGameObject) {
+        BoxTriggerGameObject tgo = (BoxTriggerGameObject) d;
+        if (tgo.isOverlapping(boxTrigger) && tgo.getOwner() == owner) {
+          overlappingDamageables.add(d);
         }
+      }
     }
-    return _bImg;
+    return overlappingDamageables;
   }
 }

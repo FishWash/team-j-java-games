@@ -1,11 +1,12 @@
 package scripts.gameObjects;
 
 import scripts.GameWorld;
+import scripts.utility.Vector2;
 
 public class ShellProjectile extends Projectile {
 
-  public ShellProjectile(int lifeTime, GameWorld.Player owner) {
-    super(lifeTime, owner);
+  public ShellProjectile(Vector2 position, int lifeTime, GameWorld.Player owner) {
+    super(position, lifeTime, owner);
     moveSpeed = 5;
     setSprite("Shell_heavy_strip60.png");
   }
@@ -13,7 +14,7 @@ public class ShellProjectile extends Projectile {
   @Override
   public void die() {
     if (alive) {
-      GameWorld.instantiate(new ShellExplosion(getCenterPosition(), GameWorld.Player.Neutral));
+      GameWorld.instantiate(new ShellExplosion(position, GameWorld.Player.Neutral));
     }
     super.die();
   }

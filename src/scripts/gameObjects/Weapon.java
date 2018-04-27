@@ -18,7 +18,6 @@ public abstract class Weapon
   public boolean fire(Vector2 position, double rotation, GameWorld.Player owner) {
     if (shootTimer.isDone() && ammo > 0) {
       Projectile p = instantiateProjectile(position, rotation, owner);
-      p.setPosition(position);
       p.setRotation(rotation);
       ammo--;
       shootTimer.set(shootDelay);

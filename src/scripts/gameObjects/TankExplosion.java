@@ -6,6 +6,8 @@ import scripts.utility.ClockListener;
 import scripts.utility.MultiSprite;
 import scripts.utility.Vector2;
 
+import java.awt.*;
+
 public class TankExplosion extends GameObject implements ClockListener {
 
   private MultiSprite multiSprite;
@@ -15,11 +17,9 @@ public class TankExplosion extends GameObject implements ClockListener {
 
   public TankExplosion (Vector2 position) {
     super(position);
-    multiSprite = new MultiSprite(GameWorld.loadSprite("Tank_explosion_strip19.png"), 19);
+    multiSprite = new MultiSprite(GameWorld.getInstance().loadSprite("Tank_explosion_strip19.png"), 19);
     sprite = multiSprite.getSubSprite(0);
-    if (sprite != null) {
-      this.position = Vector2.subtractVectors(position, new Vector2(sprite.getWidth()*0.5, sprite.getHeight()*0.7));
-    }
+    this.position = Vector2.subtractVectors(position, new Vector2(0, 48));
     renderingLayer = GameWorld.RenderingLayer.ForegroundGameObject;
   }
 

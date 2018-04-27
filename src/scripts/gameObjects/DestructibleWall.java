@@ -3,15 +3,18 @@ package scripts.gameObjects;
 import scripts.GameWorld;
 import scripts.utility.Vector2;
 
-public class DestructibleWall extends CollidableGameObject implements Damageable
+import java.awt.*;
+
+public class DestructibleWall extends BoxCollidableGameObject implements Damageable
 {
   private int maxHealth = 15;
   private int health = maxHealth;
 
   public DestructibleWall(Vector2 position) {
     super(position);
-    sprite = GameWorld.loadSprite("wall_destructible1.png");
-    trigger.setSize(new Vector2(GameWorld.getInstance().TILE_SIZE, GameWorld.getInstance().TILE_SIZE));
+    sprite = GameWorld.getInstance().loadSprite("wall_destructible1.png");
+    boxTrigger = new CornerBoxTrigger(this,
+                                   new Vector2(GameWorld.getInstance().TILE_SIZE, GameWorld.getInstance().TILE_SIZE));
     renderingLayer = GameWorld.RenderingLayer.Walls;
   }
 
@@ -29,9 +32,18 @@ public class DestructibleWall extends CollidableGameObject implements Damageable
       die();
     }
     else if (health <= 5) {
-      sprite = GameWorld.loadSprite("wall_destructible2.png");
+      sprite = GameWorld.getInstance().loadSprite("wall_destructible2.png");
     }
   }
 
   public void heal(int healAmount) {}
+
+  @Override
+  public void drawSprite(Graphics graphics) {
+    if (sprite != null) {
+      double xPos = position.x;
+      double yPos = position.y;
+      graphics.drawImage(sprite, (int)xPos, (int)yPos, null);
+    }
+  }
 }

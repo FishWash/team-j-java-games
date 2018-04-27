@@ -5,7 +5,7 @@ import scripts.utility.*;
 
 import java.util.ArrayList;
 
-public abstract class Explosion extends TriggerGameObject implements ClockListener
+public abstract class Explosion extends BoxTriggerGameObject implements ClockListener
 {
   protected MultiSprite multiSprite;
   protected int damage = 1;
@@ -43,7 +43,7 @@ public abstract class Explosion extends TriggerGameObject implements ClockListen
   }
 
   private void damageDamageables() {
-    ArrayList<Damageable> damageables = GameWorld.findOverlappingEnemyDamageables(trigger, owner);
+    ArrayList<Damageable> damageables = GameWorld.findOverlappingEnemyDamageables(boxTrigger, owner);
     for (Damageable d : damageables) {
       d.damage(damage);
     }

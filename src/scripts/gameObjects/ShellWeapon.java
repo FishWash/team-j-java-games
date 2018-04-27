@@ -11,15 +11,14 @@ public class ShellWeapon extends Weapon
     recoil = -0.4;
     ammo = 1;
 
-    GameWorld.loadSprite("Shell_light_strip60.png");
-    GameWorld.loadSprite("Explosion_small_strip6.png");
+    GameWorld.getInstance().loadSprite("Shell_light_strip60.png");
+    GameWorld.getInstance().loadSprite("Explosion_small_strip6.png");
   }
 
   @Override
   public boolean fire(Vector2 position, double rotation, GameWorld.Player owner) {
     if (shootTimer.isDone()) {
       Projectile p = instantiateProjectile(position, rotation, owner);
-      p.setPosition(position);
       p.setRotation(rotation);
       shootTimer.set(shootDelay);
       return true;
@@ -31,6 +30,6 @@ public class ShellWeapon extends Weapon
 
   @Override
   protected Projectile instantiateProjectile(Vector2 position, double rotation, GameWorld.Player owner) {
-    return (Projectile) GameWorld.instantiate(new ShellProjectile(200, owner));
+    return (Projectile) GameWorld.instantiate(new ShellProjectile(position, 200, owner));
   }
 }

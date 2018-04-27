@@ -24,14 +24,10 @@ public abstract class GameObject
   // Public Methods
   public void drawSprite(Graphics graphics) {
     if (sprite != null) {
-      graphics.drawImage(sprite, (int)position.x, (int)position.y, null);
+      double xPos = position.x - sprite.getWidth()/2;
+      double yPos = position.y - sprite.getHeight()/2;
+      graphics.drawImage(sprite, (int)xPos, (int)yPos, null);
     }
-  }
-  public Vector2 getCenterPosition() {
-    if (sprite != null) {
-      return new Vector2(position.x + (sprite.getWidth()/2), position.y + (sprite.getWidth()/2));
-    }
-    return null;
   }
 
   // Getters
@@ -71,7 +67,7 @@ public abstract class GameObject
     this.rotation = (rotation+360) % 360;
   }
   public void setSprite(String fileName) {
-    BufferedImage _spriteImg = GameWorld.loadSprite(fileName);
+    BufferedImage _spriteImg = GameWorld.getInstance().loadSprite(fileName);
     if (_spriteImg != null) {
       sprite = _spriteImg;
     }

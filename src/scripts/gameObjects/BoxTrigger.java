@@ -2,74 +2,75 @@ package scripts.gameObjects;
 
 import scripts.utility.Vector2;
 
-public class BoxTrigger
+public abstract class BoxTrigger extends Trigger
 {
-  private GameObject parent;
+  private GameObject parentGameObject;
   private Vector2 size;
 
-  public BoxTrigger(GameObject parent, Vector2 size) {
-    this.parent = parent;
+  public BoxTrigger(GameObject parentGameObject, Vector2 size) {
+    super(parentGameObject);
     this.size = size;
   }
 
-  public BoxTrigger(GameObject parent) {
-    this.parent = parent;
+  public BoxTrigger(GameObject parentGameObject) {
+    super(parentGameObject);
     this.size = new Vector2(0, 0);
   }
 
-  public boolean isOverlapping(BoxTrigger otherTrigger) {
+  public boolean isOverlapping(Trigger otherTrigger) {
 
     if (this.equals(otherTrigger)) {
       return false;
     }
 
-    return (checkOverlapping(this.getPosition(), this.getCorner(),
-                             otherTrigger.getPosition(), otherTrigger.getCorner()));
+    if (otherTrigger instanceof BoxTrigger) {
+      BoxTrigger otherBoxTrigger = (BoxTrigger) otherTrigger;
+      return (checkOverlapping(this.getMinCorner(), this.getMaxCorner(),
+                               otherBoxTrigger.getMinCorner(), otherBoxTrigger.getMaxCorner()));
+    }
+
+    return false;
   }
 
-  public static boolean checkOverlapping(Vector2 firstTriggerPosition, Vector2 firstTriggerCorner,
-                                         Vector2 secondTriggerPosition, Vector2 secondTriggerCorner)
+  public Vector2 getSize() {
+    return size;
+  }
+  // Returns in-world position of top-left corner.
+  public abstract Vector2 getMinCorner();
+  // Returns in-world position of bottom-right corner.
+  public abstract Vector2 getMaxCorner();
+
+  public void setSize(Vector2 size) {
+    this.size = size;
+  }
+
+  public static boolean checkOverlapping(Vector2 firstMinCorner, Vector2 firstMaxCorner,
+                                         Vector2 secondMinCorner, Vector2 secondMaxCorner)
   {
     boolean xColliding=false, yColliding=false;
 
-    if (secondTriggerPosition.x >= firstTriggerPosition.x) {
-      if (firstTriggerCorner.x >= secondTriggerPosition.x) {
+    if (secondMinCorner.x >= firstMinCorner.x) {
+      if (firstMaxCorner.x >= secondMinCorner.x) {
         xColliding = true;
       }
     }
     else {
-      if (secondTriggerCorner.x >= firstTriggerPosition.x) {
+      if (secondMaxCorner.x >= firstMinCorner.x) {
         xColliding = true;
       }
     }
 
-    if (secondTriggerPosition.y >= firstTriggerPosition.y) {
-      if (firstTriggerCorner.y >= secondTriggerPosition.y) {
+    if (secondMinCorner.y >= firstMinCorner.y) {
+      if (firstMaxCorner.y >= secondMinCorner.y) {
         yColliding = true;
       }
     }
     else {
-      if (secondTriggerCorner.y >= firstTriggerPosition.y) {
+      if (secondMaxCorner.y >= firstMinCorner.y) {
         yColliding = true;
       }
     }
 
     return (xColliding && yColliding);
-  }
-
-  // Returns in-world position of top-left corner.
-  public Vector2 getPosition() {
-    return parent.position;
-  }
-  public Vector2 getSize() {
-    return size;
-  }
-  // Returns in-world position of bottom-right corner.
-  public Vector2 getCorner() {
-    return Vector2.addVectors(getPosition(), size);
-  }
-
-  public void setSize(Vector2 size) {
-    this.size = size;
   }
 }

@@ -1,11 +1,7 @@
 package scripts.utility;
 
 import scripts.GameWorld;
-import scripts.gameObjects.TriggerGameObject;
-import scripts.gameObjects.BoxTrigger;
-import scripts.gameObjects.Collidable;
-import scripts.gameObjects.CollidableGameObject;
-import scripts.gameObjects.DestructibleWall;
+import scripts.gameObjects.*;
 
 import java.util.List;
 import java.nio.file.Files;
@@ -19,27 +15,28 @@ public class CollisionHandler {
   // Reads file and creates Collidables for indestructible walls.
   public void readMapFile(String fileName, int tileSize) {
     try {
-      Path filePath = Paths.get("src/" + fileName);
+      Path filePath = Paths.get("src/maps/" + fileName);
       List<String> fileLines = Files.readAllLines(filePath);
 
       int row = 0;
 
+      // Reads map and creates horizontal WallCollidables for horizontally adjacent indestructible walls.
       for (String line : fileLines) {
-        CollidableGameObject currentCollidable = null;
+        WallCollidable currentWallCollidable = null;
         for (int column = 0; column < line.length(); column++) {
           int tileInt = line.charAt(column) - '0';
           if (tileInt == 1) {
-            if (currentCollidable == null) {
-              currentCollidable = (CollidableGameObject) GameWorld.instantiate(
-                      new CollidableGameObject(new Vector2(column * tileSize, row * tileSize)));
-              currentCollidable.setTriggerSize(new Vector2(tileSize, tileSize));
+            if (currentWallCollidable == null) {
+              currentWallCollidable = (WallCollidable) GameWorld.instantiate(
+                      new WallCollidable(new Vector2(column * tileSize, row * tileSize)));
+              currentWallCollidable.setBoxTriggerSize(new Vector2(tileSize, tileSize));
             }
             else {
-              currentCollidable.addTriggerSize(new Vector2(tileSize, 0));
+              currentWallCollidable.addBoxTriggerSize(new Vector2(tileSize, 0));
             }
           }
           else {
-            currentCollidable = null;
+            currentWallCollidable = null;
             if (tileInt == 2) {
               GameWorld.instantiate(new DestructibleWall(new Vector2(row * tileSize, column * tileSize)));
             }
@@ -70,7 +67,7 @@ public class CollisionHandler {
 
   public Collidable findOverlappingCollidable(BoxTrigger trigger) {
     for (Collidable c : collidables) {
-      if (((TriggerGameObject) c).isOverlapping(trigger)) {
+      if (((BoxTriggerGameObject) c).isOverlapping(trigger)) {
         return c;
       }
     }

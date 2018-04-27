@@ -18,8 +18,6 @@ public class TankGameApplication
     GamePanel gamePanel = new GamePanel(windowDimension);
     gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
 
-    //gameFrame.pack(); //idk what pack is for
-
     gameFrame.setSize(windowDimension);
     gameFrame.setVisible(true);
   }

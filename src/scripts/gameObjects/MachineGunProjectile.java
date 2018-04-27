@@ -2,19 +2,20 @@ package scripts.gameObjects;
 
 import scripts.GameWorld;
 import scripts.utility.RandomNumberGenerator;
+import scripts.utility.Vector2;
 
 public class MachineGunProjectile extends Projectile {
   int damage = 5;
 
-  public MachineGunProjectile(int lifeTime, GameWorld.Player owner) {
-    super(lifeTime, owner);
+  public MachineGunProjectile(Vector2 position, int lifeTime, GameWorld.Player owner) {
+    super(position, lifeTime, owner);
     moveSpeed = 8;
     setSprite("Shell_light_strip60.png");
   }
 
   @Override
   protected void checkCollidables() {
-    Collidable c = GameWorld.findOverlappingCollidable(trigger);
+    Collidable c = GameWorld.findOverlappingCollidable(boxTrigger);
     if (c != null && (owner == GameWorld.Player.Neutral || ((GameObject) c).getOwner() != owner)) {
       if (c instanceof Damageable) {
         ((Damageable) c).damage(damage);
