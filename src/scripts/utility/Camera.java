@@ -1,5 +1,6 @@
 package scripts.utility;
 
+import scripts.DisplayableElement;
 import scripts.GameWorld;
 
 import java.awt.geom.AffineTransform;

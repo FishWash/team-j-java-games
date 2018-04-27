@@ -1,8 +1,9 @@
 package scripts.utility;
 
+import scripts.DisplayableElement;
 import scripts.GameWorld;
 import scripts.TankBattleWorld;
-import scripts.gameObjects.Damageable;
+import scripts.Damageable;
 import scripts.gameObjects.GameObject;
 import scripts.gameObjects.Tank;
 

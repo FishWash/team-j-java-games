@@ -1,6 +1,7 @@
 package scripts;
 
 import scripts.gameObjects.HealthPad;
+import scripts.gameObjects.TankSpawner;
 import scripts.utility.Camera;
 import scripts.utility.PlayerCamera;
 import scripts.utility.Vector2;
@@ -29,6 +30,9 @@ public class TankBattleWorld extends GameWorld {
 
     playerOneCamera = new PlayerCamera(GameWorld.Player.One);
     playerTwoCamera = new PlayerCamera(GameWorld.Player.Two);
+
+    loadSound("Defense Line.wav");
+    playSoundLooping("Defense Line.wav");
   }
 
   public void displayOnGraphics(Graphics graphics) {

@@ -7,7 +7,7 @@ public class MachineGunWeapon extends Weapon {
 
   public MachineGunWeapon() {
     super();
-    shootDelay = 10;
+    shootDelay = 8;
     recoil = -0.3;
     ammo = 50;
 

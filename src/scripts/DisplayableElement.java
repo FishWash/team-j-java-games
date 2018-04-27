@@ -5,6 +5,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
@@ -22,6 +24,16 @@ public abstract class DisplayableElement {
 
   public Dimension getDimension() {
     return dimension;
+  }
+
+  public static BufferedImage getScaledImage(BufferedImage imageToResize, double scale, int newWidth, int newHeight){
+    BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+    AffineTransform at = new AffineTransform();
+    at.scale(scale, scale);
+    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+    scaledImage = scaleOp.filter(imageToResize, scaledImage);
+
+    return scaledImage;
   }
 
   public BufferedImage loadSprite(String fileName) {

@@ -1,11 +1,15 @@
 package scripts.gameObjects;
 
+import scripts.Damageable;
 import scripts.GameWorld;
 import scripts.utility.TankKeyInput;
 import scripts.utility.ClockListener;
 import scripts.utility.FuzzyTankKeyInput;
 import scripts.utility.MultiSprite;
 import scripts.utility.Vector2;
+import scripts.weapons.MachineGunWeapon;
+import scripts.weapons.ShellWeapon;
+import scripts.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -43,6 +47,8 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
     defaultWeapon = new ShellWeapon();
     equippedWeapon = new MachineGunWeapon();
+
+    GameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
   }
 
   public int getMaxHealth() {
