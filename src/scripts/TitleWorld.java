@@ -1,15 +1,13 @@
 package scripts;
 
 import scripts.gameObjects.TankSpawner;
-import scripts.utility.Camera;
+
 import scripts.utility.Vector2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class TitleWorld extends GameWorld {
-
-  private Camera mainCamera;
 
   protected void initialize() {
     dimension = new Dimension(800, 600);
