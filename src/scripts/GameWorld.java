@@ -86,7 +86,7 @@ public abstract class GameWorld extends DisplayableElement
         for (int column = 0; column < line.length(); column++) {
           int tileInt = line.charAt(column) - '0';
           if (tileInt == 1) {
-            graphics.drawImage(wallImage, row*TILE_SIZE, column*TILE_SIZE, null);
+            graphics.drawImage(wallImage, column*TILE_SIZE, row*TILE_SIZE, null);
           }
         }
         row++;

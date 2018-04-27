@@ -29,7 +29,8 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
     clock = new Clock();
     clock.addClockObserver(this);
     clockThread = new Thread(clock);
-    gameWorld = new TankBattleWorld();
+    gameWorld = new TitleWorld();
+    //gameWorld = new TankBattleWorld();
 
     super.setSize(dimension);
     this.setFocusable(true);
