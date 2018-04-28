@@ -148,7 +148,7 @@ public abstract class GameWorld extends DisplayableElement
       instance.damageables.add((Damageable) gameObject);
     }
     if (gameObject instanceof ClockListener) {
-      Clock.getInstance().addClockObserver((ClockListener) gameObject);
+      Clock.getInstance().addClockListener((ClockListener) gameObject);
     }
 
     return gameObject;
@@ -178,7 +178,7 @@ public abstract class GameWorld extends DisplayableElement
       instance.damageables.remove((Damageable) gameObject);
     }
     if (gameObject instanceof ClockListener) {
-      Clock.getInstance().removeClockObserver((ClockListener) gameObject);
+      Clock.getInstance().removeClockListener((ClockListener) gameObject);
     }
   }
 

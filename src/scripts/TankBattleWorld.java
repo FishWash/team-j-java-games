@@ -2,14 +2,12 @@ package scripts;
 
 import scripts.gameObjects.HealthPad;
 import scripts.gameObjects.TankSpawner;
-import scripts.utility.Camera;
-import scripts.utility.PlayerCamera;
-import scripts.utility.Vector2;
+import scripts.utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TankBattleWorld extends GameWorld {
+public class TankBattleWorld extends GameWorld implements ClockListener {
 
   private PlayerCamera playerOneCamera;
   private PlayerCamera playerTwoCamera;
@@ -18,6 +16,7 @@ public class TankBattleWorld extends GameWorld {
 
   protected void initialize() {
     GameWorld.instance = this;
+    Clock.getInstance().addClockListener(this);
     dimension = new Dimension(1024, 1024);
     collisionHandler.readMapFile("CollisionTestMap.txt", TILE_SIZE);
     drawBackgroundImage("CollisionTestMap.txt", loadSprite("background_tile.png"),
@@ -59,6 +58,22 @@ public class TankBattleWorld extends GameWorld {
 
     } catch (Exception e) {
       System.out.println("ERROR in TankBattleWorld: " + e);
+    }
+  }
+
+  public void update(){
+    if(playerOneSpawner.getLives() == 0 || playerTwoSpawner.getLives() == 0){
+      GamePanel.getInstance().setPlayOnSpace(true);
+      if(playerOneSpawner.getLives() == 0 && playerTwoSpawner.getLives() == 0){
+        playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
+        playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
+      } else if(playerOneSpawner.getLives() == 0){
+        playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Lose);
+        playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Win);
+      } else if(playerTwoSpawner.getLives() == 0){
+        playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Win);
+        playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Lose);
+      }
     }
   }
 

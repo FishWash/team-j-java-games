@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 // GamePanel runs on a thread and updates its display every frame.
 public class GamePanel extends JPanel implements KeyListener, ClockListener
 {
+  private static GamePanel instance;
   private Clock clock;
   private Thread clockThread;
   private GameWorld gameWorld;
@@ -22,15 +23,16 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
   private int pauseKeyCode1 = KeyEvent.VK_SPACE, pauseKeyCode2 = KeyEvent.VK_ESCAPE;
 
   public GamePanel(Dimension dimension) {
+    instance = this;
     this.addKeyListener(this);
     keyInputHandler = new KeyInputHandler();
     this.addKeyListener(keyInputHandler);
 
     clock = new Clock();
-    clock.addClockObserver(this);
+    clock.addClockListener(this);
     clockThread = new Thread(clock);
-    gameWorld = new TitleWorld();
-    //gameWorld = new TankBattleWorld();
+//    gameWorld = new TitleWorld();
+    gameWorld = new TankBattleWorld();
 
     super.setSize(dimension);
     this.setFocusable(true);
@@ -59,7 +61,7 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
     gameWorld = null;
     clock.stop();
     clock = new Clock();
-    clock.addClockObserver(this);
+    clock.addClockListener(this);
     clockThread = new Thread(clock);
     gameWorld = new TankBattleWorld();
     clockThread.start();
@@ -84,6 +86,16 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
       int xPos = ((int)super.getSize().getWidth() - fontMetrics.stringWidth(textToDisplay)) / 2;
       int yPos = ((int)super.getSize().getHeight() + fontMetrics.getHeight()) / 2;
       graphics2D.drawString(textToDisplay, xPos, yPos);
+    }
+  }
+
+  public static GamePanel getInstance() {
+    return instance;
+  }
+
+  public void setPlayOnSpace(boolean playOnSpace){
+    if(playOnSpace){
+      //restart();
     }
   }
 }
