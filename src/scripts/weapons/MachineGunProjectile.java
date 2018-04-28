@@ -29,6 +29,6 @@ public class MachineGunProjectile extends Projectile {
 
   @Override
   public void setRotation(double rotation) {
-    this.rotation = rotation + RandomNumberGenerator.getSpread(5);
+    this.rotation = rotation + RandomNumberGenerator.getSpread(10);
   }
 }

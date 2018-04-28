@@ -1,6 +1,7 @@
 package scripts.gameObjects;
 
 import scripts.Damageable;
+import scripts.gameObjects.pickups.Pickup;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.TankKeyInput;
 import scripts.utility.ClockListener;
@@ -13,6 +14,7 @@ import scripts.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Tank extends BoxCollidableGameObject implements ClockListener, Damageable
 {
@@ -69,6 +71,7 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
       turn();
       move();
       shoot();
+      pickup();
     }
   }
 
@@ -108,6 +111,19 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
         ((FuzzyTankKeyInput) tankKeyInput).addFuzzedMoveInput(recoil);
       }
     }
+  }
+
+  private void pickup() {
+    CopyOnWriteArrayList<Pickup> pickups = GameWorld.getInstance().getPickups();
+    for (Pickup pickup : pickups) {
+      if (pickup.isOverlapping(boxTrigger)) {
+        pickup.activatePickup(this);
+      }
+    }
+  }
+
+  public void equip(Weapon weapon) {
+    equippedWeapon = weapon;
   }
 
   public void damage(int damageAmount) {
