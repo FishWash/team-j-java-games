@@ -4,23 +4,25 @@ import scripts.GamePanel;
 import scripts.TankGameApplication;
 import scripts.gameObjects.HealthPad;
 import scripts.gameObjects.TankSpawner;
-import scripts.gameWorlds.GameWorld;
-import scripts.utility.Camera;
-import scripts.utility.PlayerCamera;
-import scripts.utility.Vector2;
+import scripts.utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TankBattleWorld extends GameWorld {
+public class TankBattleWorld extends GameWorld implements ClockListener {
 
   private PlayerCamera playerOneCamera;
   private PlayerCamera playerTwoCamera;
   private TankSpawner playerOneSpawner;
   private TankSpawner playerTwoSpawner;
+  private boolean gameOver = false;
+  int flashDelay = 48;
+  Timer flashTimer = new Timer(flashDelay);
+  boolean flashOn;
 
   protected void initialize() {
     GameWorld.instance = this;
+    Clock.getInstance().addClockListener(this);
     dimension = new Dimension(1024, 1024);
     collisionHandler.readMapFile("CollisionTestMap.txt", TILE_SIZE);
     drawBackgroundImage("CollisionTestMap.txt", loadSprite("background_tile.png"),
@@ -62,8 +64,38 @@ public class TankBattleWorld extends GameWorld {
       graphics2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(),
                           minimap.getWidth(), minimap.getHeight());
 
+      if(gameOver){
+        if (flashTimer.isDone()) {
+          flashOn = !flashOn;
+          flashTimer.set(flashDelay);
+        }
+
+        if (flashOn) {
+          Font font = new Font("Impact", Font.PLAIN, 30);
+          UI.drawPositionedTextImage(graphics2D, "Press space to restart", Color.WHITE, font,
+                  playerDisplayWidth, playerDisplayHeight, 1, 0.7);
+        }
+        GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+      }
     } catch (Exception e) {
       System.out.println("ERROR in TankBattleWorld: " + e);
+    }
+
+  }
+
+  public void update(){
+    if(playerOneSpawner.getLives() == 0 || playerTwoSpawner.getLives() == 0){
+      gameOver = true;
+      if(playerOneSpawner.getLives() == 0 && playerTwoSpawner.getLives() == 0){
+        playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
+        playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
+      } else if(playerOneSpawner.getLives() == 0){
+        playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Lose);
+        playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Win);
+      } else if(playerTwoSpawner.getLives() == 0){
+        playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Win);
+        playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Lose);
+      }
     }
   }
 

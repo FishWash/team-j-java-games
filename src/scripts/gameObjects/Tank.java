@@ -46,7 +46,8 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     renderingLayer = GameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
-//    equippedWeapon = new MachineGunWeapon();
+    //equippedWeapon = new MachineGunWeapon();
+
 
     GameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
   }

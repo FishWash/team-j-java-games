@@ -41,32 +41,9 @@ public abstract class GameWorld extends DisplayableElement
   }
   protected abstract void initialize();
 
-//  public void initialize() {
-//    collisionHandler.readMapFile("maps/CollisionTestMap.txt", TILE_SIZE);
-//    drawBackgroundImage("maps/CollisionTestMap.txt", loadSprite("background_tile.png"),
-//                        loadSprite("wall_indestructible2.png"));
-//
-//    instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
-//    instantiate( new TankSpawner(new Vector2(896, 896), Player.Two) );
-//
-//    instantiate( new HealthPad(new Vector2(32, 32), Player.One) );
-//    instantiate( new HealthPad(new Vector2(800, 800), Player.Two) );
-//  }
-
   public static GameWorld getInstance() {
     return instance;
   }
-
-//  public void spawnTank(Player player) {
-//    if (player == Player.One) {
-//      p1_tank = (Tank) instantiate(new Tank(new Vector2(128, 128), Player.One ));
-//      playerOneCamera = new PlayerCamera(p1_tank);
-//    }
-//    else if (player == Player.Two) {
-//      p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
-//      playerTwoCamera = new PlayerCamera(p2_tank);
-//    }
-//  }
 
   // drawBackgroundImage draws background tiles and indestructible walls onto backgroundImage.
   protected void drawBackgroundImage(String mapFileName, BufferedImage backgroundTile,
@@ -178,7 +155,7 @@ public abstract class GameWorld extends DisplayableElement
       instance.collisionHandler.removeCollidable((Collidable) gameObject);
     }
     if (gameObject instanceof Damageable) {
-      instance.damageables.remove((Damageable) gameObject);
+      instance.damageables.remove( gameObject);
     }
     if (gameObject instanceof ClockListener) {
       Clock.getInstance().removeClockListener((ClockListener) gameObject);

@@ -20,17 +20,16 @@ public class TankSpawner extends GameObject implements ClockListener {
   }
 
   public void update() {
-    if (!spawnedTank.getAlive()) {
-      if (!spawnTimerStarted) {
-        spawnTimer.set(spawnDelay);
-        spawnTimerStarted = true;
+      if (!spawnedTank.getAlive()) {
+        if (!spawnTimerStarted) {
+          lives--;
+          spawnTimer.set(spawnDelay);
+          spawnTimerStarted = true;
+        } else if (spawnTimer.isDone() && lives > 0) {
+          spawnedTank = spawnTank();
+          spawnTimerStarted = false;
+        }
       }
-      else if (spawnTimer.isDone()){
-        spawnedTank = spawnTank();
-        spawnTimerStarted = false;
-        lives--;
-      }
-    }
   }
 
   public int getLives(){

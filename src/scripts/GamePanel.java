@@ -29,7 +29,6 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
 
   public GamePanel(Dimension dimension) {
     instance = this;
-
     KeyInputHandler keyInputHandler = new KeyInputHandler();
     this.addKeyListener(keyInputHandler);
     this.addKeyListener(this);
@@ -123,7 +122,7 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
                                    BufferedImage.TYPE_INT_ARGB);
     Graphics2D pauseGraphics2D = (Graphics2D) pauseImage.getGraphics();
     Font font = new Font("Impact", Font.PLAIN, 64);
-    UI.drawPositionedTextImage((Graphics2D) pauseGraphics2D, "Paused", Color.WHITE, font,
+    UI.drawPositionedTextImage( pauseGraphics2D, "Paused", Color.WHITE, font,
                                (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
                                0.5, 0.5);
   }

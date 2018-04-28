@@ -16,6 +16,8 @@ public class PlayerCamera extends GameObject {
   protected GameObject playerToFollow;
   private Timer searchTimer = new Timer();
   private int searchDelay = 16;
+  public enum DisplayText {None, Win, Lose, Draw};
+  private DisplayText displayText = DisplayText.None;
 
   public PlayerCamera(){
     super();
@@ -103,6 +105,24 @@ public class PlayerCamera extends GameObject {
 
     addLives(graphics2D, margin + fontMetrics.stringWidth(playerString) + 10, margin - fontMetrics.getHeight(), (int)((fontMetrics.getHeight() + 3) * 0.95));
 
+    font = new Font("Impact", Font.BOLD, 50);
+    graphics2D.setFont(font);
+    fontMetrics = graphics2D.getFontMetrics(font);
+    if(displayText == DisplayText.Win){
+      graphics2D.drawString("You Win!", (screenWidth / 2) - fontMetrics.stringWidth("You Win!") / 2, screenHeight / 2);
+    } else if (displayText == DisplayText.Lose){
+      graphics2D.drawString("You Lose.", (screenWidth / 2) - fontMetrics.stringWidth("You Win!") / 2, screenHeight / 2);
+    } else if(displayText == DisplayText.Draw){
+      graphics2D.setColor(Color.WHITE);
+      graphics2D.drawString("Draw",(screenWidth / 2) - fontMetrics.stringWidth("Draw") / 2, screenHeight / 2);
+    }
+
+//    font = new Font("Impact", Font.BOLD, 25);
+//    graphics2D.setFont(font);
+//    fontMetrics = graphics2D.getFontMetrics(font);
+
+//    graphics2D.drawString("Press space to restart", screenWidth / 2, screenHeight / 2);
+
     return playerDisplay;
   }
 
@@ -114,6 +134,7 @@ public class PlayerCamera extends GameObject {
     if (playerToFollow instanceof Tank) {
       lifeSprite = UI.getScaledImage(((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90), size /(double)playerToFollow.getSprite().getHeight(), size, size);
       //lifeSprite = ((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90);
+
       int lifeSpriteWidth = lifeSprite.getWidth();
 
       if (gameWorld instanceof TankBattleWorld) {
@@ -124,5 +145,9 @@ public class PlayerCamera extends GameObject {
         xPos += lifeSpriteWidth + spriteGap;
       }
     }
+  }
+
+  public void setDisplayText(DisplayText displayText){
+    this.displayText = displayText;
   }
 }
