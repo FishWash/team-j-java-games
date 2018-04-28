@@ -1,6 +1,6 @@
 package scripts.weapons;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
 
 public class ShellProjectile extends Projectile {

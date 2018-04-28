@@ -1,8 +1,12 @@
 package scripts;
 
+import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankBattleWorld;
+import scripts.gameWorlds.TitleWorld;
 import scripts.utility.Clock;
 import scripts.utility.ClockListener;
 import scripts.utility.KeyInputHandler;
+import scripts.utility.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,77 +17,114 @@ import java.awt.image.BufferedImage;
 // GamePanel runs on a thread and updates its display every frame.
 public class GamePanel extends JPanel implements KeyListener, ClockListener
 {
-  private Clock clock;
-  private Thread clockThread;
-  private GameWorld gameWorld;
-  private KeyInputHandler keyInputHandler;
+  public enum SpaceFunction {None, Start, Pause}
+  public enum EscapeFunction {}
+  public enum World {Title, TankBattle}
+
+  private static GamePanel instance;
+  private SpaceFunction spaceFunction;
   private BufferedImage pauseImage;
 
-  private int pauseKeyCode1 = KeyEvent.VK_SPACE, pauseKeyCode2 = KeyEvent.VK_ESCAPE;
+  private int spaceKeyCode = KeyEvent.VK_SPACE, escapeKeyCode = KeyEvent.VK_ESCAPE;
 
   public GamePanel(Dimension dimension) {
-    this.addKeyListener(this);
-    keyInputHandler = new KeyInputHandler();
-    this.addKeyListener(keyInputHandler);
+    instance = this;
 
-    clock = new Clock();
-    clock.addClockObserver(this);
-    clockThread = new Thread(clock);
-    gameWorld = new TitleWorld();
-    //gameWorld = new TankBattleWorld();
+    KeyInputHandler keyInputHandler = new KeyInputHandler();
+    this.addKeyListener(keyInputHandler);
+    this.addKeyListener(this);
+
+    Clock clock = new Clock();
+    Thread clockThread = new Thread(clock);
+    clock.addClockListener(this);
+
+    new TitleWorld();
 
     super.setSize(dimension);
+    drawPauseImage();
     this.setFocusable(true);
     clockThread.start();
+  }
+
+  public static GamePanel getInstance() {
+    return instance;
   }
 
   public void update() {
     repaint();
   }
 
+  @Override
+  public void paintComponent(Graphics graphics) {
+    super.paintComponent(graphics);
+    try {
+      GameWorld.getInstance().displayOnGraphics(graphics);
+      if (Clock.getInstance().getPaused()) {
+        graphics.drawImage(pauseImage, 0, 0, null);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void setSpaceFunction(SpaceFunction spaceFunction) {
+    this.spaceFunction = spaceFunction;
+  }
+
   public void keyPressed(KeyEvent keyEvent) {
     int keyCode = keyEvent.getExtendedKeyCode();
-    if (keyCode == pauseKeyCode1 || keyCode == pauseKeyCode2) {
-      pause();
+    if (keyCode == spaceKeyCode) {
+      switch (spaceFunction) {
+        case Pause:
+          pause();
+          break;
+        case Start:
+          start(World.TankBattle);
+          break;
+      }
     }
   }
   public void keyReleased(KeyEvent keyEvent) {}
   public void keyTyped(KeyEvent keyEvent) {}
 
-  private void pause() {
-    clock.pressPause();
-    repaint();
-  }
+  private void start(World world) {
 
-  private void restart() {
-    gameWorld = null;
-    clock.stop();
-    clock = new Clock();
-    clock.addClockObserver(this);
-    clockThread = new Thread(clock);
-    gameWorld = new TankBattleWorld();
+    GameWorld.getInstance().stopSounds();
+    Clock.getInstance().stop();
+    Clock clock = new Clock();
+    Thread clockThread = new Thread(clock);
+    clock.addClockListener(this);
+
+    switch (world) {
+      case TankBattle:
+        new TankBattleWorld();
+        break;
+      case Title:
+        new TitleWorld();
+        break;
+    }
+
     clockThread.start();
   }
 
-  @Override
-  public void paintComponent(Graphics graphics)
-  {
-    super.paintComponent(graphics);
-    if (gameWorld != null) {
-      gameWorld.displayOnGraphics(graphics);
-    }
-
+  private void pause() {
+    Clock clock = Clock.getInstance();
     if (clock.getPaused()) {
-      Graphics2D graphics2D = (Graphics2D) graphics;
-      graphics2D.setColor(Color.WHITE);
-      Font font = new Font("Impact", Font.PLAIN, 64);
-      graphics2D.setFont(font);
-      FontMetrics fontMetrics = graphics2D.getFontMetrics(font);
-      String textToDisplay = "Paused";
-      graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-      int xPos = ((int)super.getSize().getWidth() - fontMetrics.stringWidth(textToDisplay)) / 2;
-      int yPos = ((int)super.getSize().getHeight() + fontMetrics.getHeight()) / 2;
-      graphics2D.drawString(textToDisplay, xPos, yPos);
+      clock.setPaused(false);
     }
+    else {
+      clock.setPaused(true);
+      repaint();
+    }
+  }
+
+  private void drawPauseImage() {
+    pauseImage = new BufferedImage((int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
+                                   BufferedImage.TYPE_INT_ARGB);
+    Graphics2D pauseGraphics2D = (Graphics2D) pauseImage.getGraphics();
+    Font font = new Font("Impact", Font.PLAIN, 64);
+    UI.drawPositionedTextImage((Graphics2D) pauseGraphics2D, "Paused", Color.WHITE, font,
+                               (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
+                               0.5, 0.5);
   }
 }

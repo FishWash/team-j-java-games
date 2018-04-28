@@ -1,6 +1,6 @@
 package scripts.utility;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 
 import java.awt.event.KeyEvent;
 

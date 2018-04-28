@@ -5,11 +5,12 @@ import java.awt.*;
 
 public class TankGameApplication
 {
+  public static JFrame gameFrame;
   public static final Dimension windowDimension = new Dimension(800, 600);
 
   public static void main (String[] args)
   {
-    JFrame gameFrame = new JFrame("TANKS FOR PLAYING OUR GAME");
+    gameFrame = new JFrame("TANKS FOR PLAYING OUR GAME");
     gameFrame.setSize(windowDimension);
     gameFrame.setResizable(false);
     gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,5 +21,9 @@ public class TankGameApplication
 
     gameFrame.setSize(windowDimension);
     gameFrame.setVisible(true);
+  }
+
+  public static JFrame getGameFrame() {
+    return gameFrame;
   }
 }

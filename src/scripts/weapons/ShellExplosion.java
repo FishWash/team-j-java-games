@@ -1,6 +1,6 @@
 package scripts.weapons;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.CenterBoxTrigger;
 import scripts.utility.MultiSprite;
 import scripts.utility.Vector2;

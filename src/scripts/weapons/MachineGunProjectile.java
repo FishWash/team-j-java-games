@@ -1,6 +1,6 @@
 package scripts.weapons;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.Collidable;
 import scripts.Damageable;
 import scripts.gameObjects.GameObject;

@@ -13,27 +13,19 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public abstract class DisplayableElement {
   protected Dimension dimension = new Dimension(0, 0);
   private HashMap<String, BufferedImage> spriteCache = new HashMap<>();
   private HashMap<String, Clip> soundCache = new HashMap<>();
+  private Clip loopingSound;
 
   public abstract void displayOnGraphics(Graphics graphics);
 
   public Dimension getDimension() {
     return dimension;
-  }
-
-  public static BufferedImage getScaledImage(BufferedImage imageToResize, double scale, int newWidth, int newHeight){
-    BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-    AffineTransform at = new AffineTransform();
-    at.scale(scale, scale);
-    AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-    scaledImage = scaleOp.filter(imageToResize, scaledImage);
-
-    return scaledImage;
   }
 
   public BufferedImage loadSprite(String fileName) {
@@ -73,20 +65,28 @@ public abstract class DisplayableElement {
     }
   }
 
+  // Only one sound can be looping at a time.
   public void playSoundLooping(String fileName) {
-    Clip clip = loadSound(fileName);
-    if (clip != null) {
-      clip.stop();
-      clip.setFramePosition(0);
+    if (loopingSound != null) {
+      loopingSound.stop();
+    }
+    try {
+      InputStream fileStream = getClass().getResourceAsStream("/sounds/" + fileName);
+      Clip clip = AudioSystem.getClip();
+      clip.open(AudioSystem.getAudioInputStream(fileStream));
       clip.loop(Clip.LOOP_CONTINUOUSLY);
-      clip.start();
+      loopingSound = clip;
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
-  public void stopSound(String fileName) {
-    Clip clip = loadSound(fileName);
-    if (clip != null) {
+  public void stopSounds() {
+    for (Map.Entry<String, Clip> entry : soundCache.entrySet()) {
+      Clip clip = entry.getValue();
       clip.stop();
     }
+
+    loopingSound.stop();
   }
 }

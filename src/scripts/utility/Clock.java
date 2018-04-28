@@ -9,8 +9,7 @@ public class Clock implements Runnable
   private int numFramesSinceStart = 0;
   private CopyOnWriteArrayList<ClockListener> clockListeners = new CopyOnWriteArrayList<>();
   private HashMap<ClockListener, Boolean> addedClockObservers = new HashMap<>();
-  private boolean stopped;
-  private boolean paused;
+  private boolean stopped, paused;
 
   private static final long FRAME_LENGTH = 15;
 
@@ -20,6 +19,10 @@ public class Clock implements Runnable
 
   public static Clock getInstance() {
     return instance;
+  }
+
+  public boolean getPaused() {
+    return paused;
   }
 
   public void run() {
@@ -36,14 +39,14 @@ public class Clock implements Runnable
     }
   }
 
-  public void addClockObserver(ClockListener clockListener) {
+  public void addClockListener(ClockListener clockListener) {
     if (!addedClockObservers.containsKey(clockListener)) {
       clockListeners.add(clockListener);
       addedClockObservers.put(clockListener, true);
     }
   }
 
-  public void removeClockObserver(ClockListener clockListener) {
+  public void removeClockListener(ClockListener clockListener) {
     if (addedClockObservers.containsKey(clockListener)) {
       clockListeners.remove(clockListener);
       addedClockObservers.remove(clockListener);
@@ -54,13 +57,10 @@ public class Clock implements Runnable
     stopped = true;
   }
 
-  public void pressPause() {
-    paused = !paused;
+  public void setPaused(boolean paused) {
+    this.paused = paused;
   }
 
-  public boolean getPaused() {
-    return paused;
-  }
   public int getNumFramesSinceStart() {
     return numFramesSinceStart;
   }

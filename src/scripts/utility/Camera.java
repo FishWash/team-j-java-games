@@ -1,10 +1,7 @@
 package scripts.utility;
 
-import scripts.DisplayableElement;
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 public class Camera {
@@ -18,7 +15,7 @@ public class Camera {
     double scale = 0.2;
     int minimapWidth = (int) (GameWorld.getInstance().getDimension().width * scale);
     int minimapHeight = (int) (GameWorld.getInstance().getDimension().width * scale);
-    BufferedImage resizedMap = DisplayableElement.getScaledImage(currentImage, scale, minimapWidth, minimapHeight);
+    BufferedImage resizedMap = UI.getScaledImage(currentImage, scale, minimapWidth, minimapHeight);
 
     return resizedMap;
   }

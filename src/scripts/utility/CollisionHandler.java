@@ -1,7 +1,7 @@
 package scripts.utility;
 
 import scripts.Collidable;
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.*;
 
 import java.util.List;

@@ -1,10 +1,7 @@
 package scripts.weapons;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 public class ShellWeapon extends Weapon
 {

@@ -1,12 +1,10 @@
 package scripts.gameObjects;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.utility.Timer;
 import scripts.utility.ClockListener;
 import scripts.utility.MultiSprite;
 import scripts.utility.Vector2;
-
-import java.awt.*;
 
 public class TankExplosion extends GameObject implements ClockListener {
 

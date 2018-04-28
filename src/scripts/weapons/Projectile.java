@@ -1,6 +1,6 @@
 package scripts.weapons;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.BoxTriggerGameObject;
 import scripts.gameObjects.CenterBoxTrigger;
 import scripts.Collidable;

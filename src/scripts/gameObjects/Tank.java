@@ -1,7 +1,7 @@
 package scripts.gameObjects;
 
 import scripts.Damageable;
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.utility.TankKeyInput;
 import scripts.utility.ClockListener;
 import scripts.utility.FuzzyTankKeyInput;

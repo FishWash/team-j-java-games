@@ -1,11 +1,10 @@
 package scripts.utility;
 
-import scripts.DisplayableElement;
-import scripts.GameWorld;
-import scripts.TankBattleWorld;
-import scripts.Damageable;
+import scripts.*;
 import scripts.gameObjects.GameObject;
 import scripts.gameObjects.Tank;
+import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankBattleWorld;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -113,7 +112,7 @@ public class PlayerCamera extends GameObject {
     int spriteGap = 2;
     BufferedImage lifeSprite;
     if (playerToFollow instanceof Tank) {
-      lifeSprite = DisplayableElement.getScaledImage(((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90), size /(double)playerToFollow.getSprite().getHeight(), size, size);
+      lifeSprite = UI.getScaledImage(((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90), size /(double)playerToFollow.getSprite().getHeight(), size, size);
       //lifeSprite = ((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90);
       int lifeSpriteWidth = lifeSprite.getWidth();
 

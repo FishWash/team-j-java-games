@@ -1,6 +1,6 @@
 package scripts.gameObjects;
 
-import scripts.GameWorld;
+import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
 
 import java.awt.*;

@@ -1,10 +1,7 @@
 package scripts.gameObjects;
 
-import scripts.GameWorld;
-import scripts.gameObjects.GameObject;
-import scripts.gameObjects.Tank;
+import scripts.gameWorlds.GameWorld;
 import scripts.utility.ClockListener;
-import scripts.utility.PlayerCamera;
 import scripts.utility.Timer;
 import scripts.utility.Vector2;
 
