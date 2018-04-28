@@ -4,6 +4,8 @@ import scripts.GamePanel;
 import scripts.TankGameApplication;
 import scripts.gameObjects.HealthPad;
 import scripts.gameObjects.TankSpawner;
+import scripts.gameObjects.pickups.HealthPickup;
+import scripts.gameObjects.pickups.MachineGunPickup;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.Camera;
 import scripts.utility.PlayerCamera;
@@ -30,7 +32,9 @@ public class TankBattleWorld extends GameWorld {
             new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
 
     instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
-    instantiate( new HealthPad(new Vector2(896, 896), Player.Two) );
+    instantiate( new HealthPad(new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
+    instantiate(new MachineGunPickup(new Vector2(dimension.width-128, 128)) );
+    instantiate( new HealthPickup(new Vector2(128, dimension.height-128)) );
 
     playerOneCamera = new PlayerCamera(GameWorld.Player.One);
     playerTwoCamera = new PlayerCamera(GameWorld.Player.Two);

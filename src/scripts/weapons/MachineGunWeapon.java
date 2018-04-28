@@ -7,9 +7,9 @@ public class MachineGunWeapon extends Weapon {
 
   public MachineGunWeapon() {
     super();
-    shootDelay = 8;
-    recoil = -0.2;
-    ammo = 50;
+    shootDelay = 0;
+    recoil = -0.01;
+    ammo = 500;
 
     GameWorld.getInstance().loadSprite("Shell_light_strip60.png");
     GameWorld.getInstance().loadSound("machinegunshot.wav");

@@ -17,10 +17,10 @@ public class PlayerCamera extends GameObject {
   private Timer searchTimer = new Timer();
   private int searchDelay = 16;
 
-  public PlayerCamera(){
+  public PlayerCamera() {
     super();
   }
-  public PlayerCamera(GameWorld.Player owner){
+  public PlayerCamera(GameWorld.Player owner) {
     super();
     this.owner = owner;
   }
@@ -38,7 +38,7 @@ public class PlayerCamera extends GameObject {
     else {
       // search for player with same owner
       if (searchTimer.isDone()) {
-        CopyOnWriteArrayList<GameObject> players = GameWorld.getInstance().getPlayers();
+        CopyOnWriteArrayList<Tank> players = GameWorld.getInstance().getTanks();
         for (GameObject player : players) {
           if (player.getOwner() == this.owner) {
             playerToFollow = player;
@@ -106,7 +106,7 @@ public class PlayerCamera extends GameObject {
     return playerDisplay;
   }
 
-  public void addLives(Graphics currentPlayerImage, int xPos, int yPos, int size){
+  private void addLives(Graphics currentPlayerImage, int xPos, int yPos, int size){
     GameWorld gameWorld = GameWorld.getInstance();
     int lives = 0;
     int spriteGap = 2;

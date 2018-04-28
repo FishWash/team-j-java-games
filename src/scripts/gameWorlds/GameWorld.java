@@ -4,6 +4,7 @@ import scripts.Collidable;
 import scripts.Damageable;
 import scripts.DisplayableElement;
 import scripts.gameObjects.*;
+import scripts.gameObjects.pickups.Pickup;
 import scripts.utility.*;
 
 import java.awt.*;
@@ -25,9 +26,11 @@ public abstract class GameWorld extends DisplayableElement
   protected Dimension dimension;
 
   protected CollisionHandler collisionHandler                    = new CollisionHandler();
+  protected CopyOnWriteArrayList<Tank> tanks                     = new CopyOnWriteArrayList<>();
+  protected CopyOnWriteArrayList<Pickup> pickups                 = new CopyOnWriteArrayList<>();
   protected CopyOnWriteArrayList<Damageable> damageables         = new CopyOnWriteArrayList<>();
 
-  // These are for rendering
+  // for rendering
   private CopyOnWriteArrayList<GameObject> backgroundGameObjects = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> walls                 = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> projectiles           = new CopyOnWriteArrayList<>();
@@ -41,32 +44,9 @@ public abstract class GameWorld extends DisplayableElement
   }
   protected abstract void initialize();
 
-//  public void initialize() {
-//    collisionHandler.readMapFile("maps/CollisionTestMap.txt", TILE_SIZE);
-//    drawBackgroundImage("maps/CollisionTestMap.txt", loadSprite("background_tile.png"),
-//                        loadSprite("wall_indestructible2.png"));
-//
-//    instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
-//    instantiate( new TankSpawner(new Vector2(896, 896), Player.Two) );
-//
-//    instantiate( new HealthPad(new Vector2(32, 32), Player.One) );
-//    instantiate( new HealthPad(new Vector2(800, 800), Player.Two) );
-//  }
-
   public static GameWorld getInstance() {
     return instance;
   }
-
-//  public void spawnTank(Player player) {
-//    if (player == Player.One) {
-//      p1_tank = (Tank) instantiate(new Tank(new Vector2(128, 128), Player.One ));
-//      playerOneCamera = new PlayerCamera(p1_tank);
-//    }
-//    else if (player == Player.Two) {
-//      p2_tank = (Tank) instantiate(new Tank( new Vector2(896, 896), Player.Two ));
-//      playerTwoCamera = new PlayerCamera(p2_tank);
-//    }
-//  }
 
   // drawBackgroundImage draws background tiles and indestructible walls onto backgroundImage.
   protected void drawBackgroundImage(String mapFileName, BufferedImage backgroundTile,
@@ -128,60 +108,74 @@ public abstract class GameWorld extends DisplayableElement
 
   // Takes a GameObject and adds it to the correct instance lists.
   public static GameObject instantiate(GameObject gameObject) {
-    if (gameObject.getRenderingLayer() == RenderingLayer.Walls) {
-      instance.walls.add(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.Projectiles) {
-      instance.projectiles.add(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.Tanks) {
-      instance.players.add(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.ForegroundGameObject) {
-      instance.foregroundGameObjects.add(gameObject);
-    }
-    else {
-      instance.backgroundGameObjects.add(gameObject);
-    }
-
     if (gameObject instanceof Collidable) {
       instance.collisionHandler.addCollidable((Collidable) gameObject);
+    }
+    if (gameObject instanceof ClockListener) {
+      Clock.getInstance().addClockListener((ClockListener) gameObject);
+    }
+    if (gameObject instanceof Tank) {
+      instance.tanks.add((Tank) gameObject);
+    }
+    if (gameObject instanceof Pickup) {
+      instance.pickups.add((Pickup) gameObject);
     }
     if (gameObject instanceof Damageable) {
       instance.damageables.add((Damageable) gameObject);
     }
-    if (gameObject instanceof ClockListener) {
-      Clock.getInstance().addClockListener((ClockListener) gameObject);
+
+    switch(gameObject.getRenderingLayer()) {
+      case Walls:
+        instance.walls.add(gameObject);
+        break;
+      case Projectiles:
+        instance.projectiles.add(gameObject);
+        break;
+      case Tanks:
+        instance.players.add(gameObject);
+        break;
+      case ForegroundGameObject:
+        instance.foregroundGameObjects.add(gameObject);
+        break;
+      default:
+        instance.backgroundGameObjects.add(gameObject);
     }
 
     return gameObject;
   }
   // Removes a previously instantiated GameObject from instance lists.
   public static void destroy(GameObject gameObject) {
-    if (gameObject.getRenderingLayer() == RenderingLayer.Walls) {
-      instance.walls.remove(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.Projectiles) {
-      instance.projectiles.remove(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.Tanks) {
-      instance.players.remove(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.ForegroundGameObject) {
-      instance.foregroundGameObjects.remove(gameObject);
-    }
-    else if (gameObject.getRenderingLayer() == RenderingLayer.BackgroundGameObject){
-      instance.backgroundGameObjects.remove(gameObject);
-    }
-
     if (gameObject instanceof Collidable) {
       instance.collisionHandler.removeCollidable((Collidable) gameObject);
+    }
+    if (gameObject instanceof ClockListener) {
+      Clock.getInstance().removeClockListener((ClockListener) gameObject);
+    }
+    if (gameObject instanceof Tank) {
+      instance.tanks.remove((Tank) gameObject);
+    }
+    if (gameObject instanceof Pickup) {
+      instance.pickups.remove((Pickup) gameObject);
     }
     if (gameObject instanceof Damageable) {
       instance.damageables.remove((Damageable) gameObject);
     }
-    if (gameObject instanceof ClockListener) {
-      Clock.getInstance().removeClockListener((ClockListener) gameObject);
+
+    switch(gameObject.getRenderingLayer()) {
+      case Walls:
+        instance.walls.remove(gameObject);
+        break;
+      case Projectiles:
+        instance.projectiles.remove(gameObject);
+        break;
+      case Tanks:
+        instance.players.remove(gameObject);
+        break;
+      case ForegroundGameObject:
+        instance.foregroundGameObjects.remove(gameObject);
+        break;
+      default:
+        instance.backgroundGameObjects.remove(gameObject);
     }
   }
 
@@ -193,8 +187,12 @@ public abstract class GameWorld extends DisplayableElement
     return instance.collisionHandler.getMoveVectorWithCollision(trigger, moveVector);
   }
 
-  public CopyOnWriteArrayList<GameObject> getPlayers() {
-    return players;
+  public CopyOnWriteArrayList<Tank> getTanks() {
+    return tanks;
+  }
+
+  public CopyOnWriteArrayList<Pickup> getPickups() {
+    return pickups;
   }
 
   public static Collidable findOverlappingCollidable(BoxTrigger boxTrigger) {
