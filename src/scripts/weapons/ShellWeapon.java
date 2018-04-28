@@ -7,8 +7,8 @@ public class ShellWeapon extends Weapon
 {
   public ShellWeapon() {
     super();
-    shootDelay = 30;
-    recoil = -0.4;
+    shootDelay = 50;
+    recoil = -0.5;
     ammo = 1;
 
     GameWorld.getInstance().loadSprite("Shell_light_strip60.png");

@@ -8,7 +8,7 @@ import scripts.utility.RandomNumberGenerator;
 import scripts.utility.Vector2;
 
 public class MachineGunProjectile extends Projectile {
-  int damage = 5;
+  int damage = 6;
 
   public MachineGunProjectile(Vector2 position, int lifeTime, GameWorld.Player owner) {
     super(position, lifeTime, owner);

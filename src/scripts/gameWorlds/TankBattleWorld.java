@@ -26,7 +26,8 @@ public class TankBattleWorld extends GameWorld {
     drawBackgroundImage("CollisionTestMap.txt", loadSprite("background_tile.png"),
                         loadSprite("wall_indestructible2.png"));
     playerOneSpawner = (TankSpawner) instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
-    playerTwoSpawner = (TankSpawner) instantiate( new TankSpawner(new Vector2(896, 896), Player.Two) );
+    playerTwoSpawner = (TankSpawner) instantiate( new TankSpawner(
+            new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
 
     instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
     instantiate( new HealthPad(new Vector2(896, 896), Player.Two) );

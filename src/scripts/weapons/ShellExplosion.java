@@ -10,7 +10,7 @@ public class ShellExplosion extends Explosion {
     super(position, owner);
 
 //    damage = 12;
-    damage = 40;
+    damage = 15;
     multiSprite = new MultiSprite(GameWorld.getInstance().loadSprite("Explosion_small_strip6.png"), 6);
     sprite = multiSprite.getSubSprite(0);
     if (sprite != null) {

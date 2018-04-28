@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class DestructibleWall extends BoxCollidableGameObject implements Damageable
 {
-  private int maxHealth = 15;
+  private int maxHealth = 18;
   private int health = maxHealth;
 
   public DestructibleWall(Vector2 position) {
@@ -32,7 +32,7 @@ public class DestructibleWall extends BoxCollidableGameObject implements Damagea
     if (health <= 0) {
       die();
     }
-    else if (health <= 5) {
+    else {
       sprite = GameWorld.getInstance().loadSprite("wall_destructible2.png");
     }
   }

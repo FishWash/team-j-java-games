@@ -23,8 +23,8 @@ public class TitleWorld extends GameWorld {
     drawBackgroundImage("TitleMap.txt", loadSprite("background_tile.png"),
                         loadSprite("wall_indestructible2.png"));
     drawForegroundImage();
-    instantiate( new TankSpawner(new Vector2(128, 256), Player.One) );
-    instantiate( new TankSpawner(new Vector2(512, 256), Player.Two) );
+    instantiate( new TankSpawner(new Vector2(128, dimension.height-128), Player.One) );
+    instantiate( new TankSpawner(new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
 
     playSoundLooping("Off Limits.wav");
 
@@ -48,7 +48,7 @@ public class TitleWorld extends GameWorld {
     if (flashOn) {
       Font font = new Font("Impact", Font.PLAIN, 48);
       UI.drawPositionedTextImage((Graphics2D)graphics, "Press Space to start", Color.WHITE, font,
-                                 dimension.getWidth(), dimension.getHeight(), 0.5, 0.6);
+                                 dimension.width, dimension.height, 0.5, 0.6);
     }
   }
 
@@ -58,6 +58,6 @@ public class TitleWorld extends GameWorld {
     Graphics foregroundGraphics = foregroundImage.getGraphics();
     Font font = new Font("Impact", Font.PLAIN,  128);
     UI.drawPositionedTextImage((Graphics2D) foregroundGraphics, "TANK GAME", Color.WHITE, font,
-                               dimension.getWidth(), dimension.getHeight(), 0.5, 0.3);
+                               dimension.width, dimension.height, 0.5, 0.3);
   }
 }

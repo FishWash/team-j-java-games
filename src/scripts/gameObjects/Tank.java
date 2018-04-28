@@ -46,7 +46,7 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     renderingLayer = GameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
-    equippedWeapon = new MachineGunWeapon();
+//    equippedWeapon = new MachineGunWeapon();
 
     GameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
   }
@@ -86,22 +86,25 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
   private void shoot() {
     if (tankKeyInput.getShootPressed()) {
       Vector2 offsetPosition = Vector2.newRotationMagnitudeVector(this.rotation, SHOOT_OFFSET);
-      Vector2 bulletPosition = Vector2.addVectors(this.position, offsetPosition);
+      Vector2 projectilePosition = Vector2.addVectors(this.position, offsetPosition);
 
-      Weapon weapon;
+      double recoil = 0;
       if (equippedWeapon != null) {
-        weapon = equippedWeapon;
+        if (equippedWeapon.fire(projectilePosition, rotation, owner)) {
+          recoil = equippedWeapon.getRecoil();
+        }
+        if (equippedWeapon.getAmmo() <= 0) {
+          equippedWeapon = null;
+        }
       }
-      else {
-        weapon = defaultWeapon;
+      else if (defaultWeapon != null) {
+        if (defaultWeapon.fire(projectilePosition, rotation, owner)) {
+          recoil = defaultWeapon.getRecoil();
+        }
       }
 
-      boolean shotFired = weapon.fire(bulletPosition, rotation, owner);
-      if (shotFired && tankKeyInput instanceof FuzzyTankKeyInput) {
-        ((FuzzyTankKeyInput) tankKeyInput).addFuzzedMoveInput(weapon.getRecoil());
-      }
-      if (equippedWeapon != null && equippedWeapon.getAmmo() <= 0) {
-        equippedWeapon = null;
+      if (tankKeyInput instanceof FuzzyTankKeyInput) {
+        ((FuzzyTankKeyInput) tankKeyInput).addFuzzedMoveInput(recoil);
       }
     }
   }
