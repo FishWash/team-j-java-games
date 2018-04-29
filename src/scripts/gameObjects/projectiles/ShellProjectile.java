@@ -1,7 +1,8 @@
-package scripts.weapons;
+package scripts.gameObjects.projectiles;
 
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
+import scripts.gameObjects.explosions.ShellExplosion;
 
 public class ShellProjectile extends Projectile {
 

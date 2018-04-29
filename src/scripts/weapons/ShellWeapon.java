@@ -1,5 +1,7 @@
 package scripts.weapons;
 
+import scripts.gameObjects.projectiles.Projectile;
+import scripts.gameObjects.projectiles.ShellProjectile;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
 

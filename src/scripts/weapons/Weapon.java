@@ -1,5 +1,6 @@
 package scripts.weapons;
 
+import scripts.gameObjects.projectiles.Projectile;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.Timer;
 import scripts.utility.Vector2;

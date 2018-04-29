@@ -3,10 +3,9 @@ package scripts.gameWorlds;
 import scripts.GamePanel;
 import scripts.TankGameApplication;
 import scripts.gameObjects.HealthPad;
+import scripts.gameObjects.PickupSpawner;
 import scripts.gameObjects.TankSpawner;
 import scripts.utility.*;
-import scripts.gameObjects.pickups.HealthPickup;
-import scripts.gameObjects.pickups.MachineGunPickup;
 import scripts.utility.Camera;
 import scripts.utility.PlayerCamera;
 import scripts.utility.Vector2;
@@ -38,8 +37,9 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
 
     instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
     instantiate( new HealthPad(new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
-    instantiate(new MachineGunPickup(new Vector2(dimension.width-128, 128)) );
-    instantiate( new HealthPickup(new Vector2(128, dimension.height-128)) );
+    instantiate(new PickupSpawner(new Vector2(dimension.width-96, 96)) );
+    instantiate( new PickupSpawner(new Vector2(96, dimension.height-96)) );
+    instantiate( new PickupSpawner(new Vector2(512, 512)));
 
     playerOneCamera = new PlayerCamera(GameWorld.Player.One);
     playerTwoCamera = new PlayerCamera(GameWorld.Player.Two);

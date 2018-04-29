@@ -4,18 +4,18 @@ import scripts.gameObjects.Tank;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
 
-public class HealthPickup extends Pickup {
+public class SpeedPickup extends Pickup {
 
-  private int healAmount = 50;
+  private int duration = 256;
 
-  public HealthPickup(Vector2 position) {
-    super(position, 7);
+  public SpeedPickup(Vector2 position) {
+    super(position, 2);
     GameWorld.getInstance().loadSound("pickupget.wav");
   }
 
   @Override
   public void activatePickup(Tank tank) {
-    tank.heal(healAmount);
+    tank.giveSpeedBoost(1024);
     GameWorld.getInstance().playSound("pickupget.wav");
     die();
   }

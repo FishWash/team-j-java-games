@@ -3,14 +3,8 @@ package scripts.gameObjects;
 import scripts.Damageable;
 import scripts.gameObjects.pickups.Pickup;
 import scripts.gameWorlds.GameWorld;
-import scripts.utility.TankKeyInput;
-import scripts.utility.ClockListener;
-import scripts.utility.FuzzyTankKeyInput;
-import scripts.utility.MultiSprite;
-import scripts.utility.Vector2;
-import scripts.weapons.MachineGunWeapon;
-import scripts.weapons.ShellWeapon;
-import scripts.weapons.Weapon;
+import scripts.utility.*;
+import scripts.weapons.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Tank extends BoxCollidableGameObject implements ClockListener, Damageable
 {
   private final double MOVE_SPEED = 3;
-  private final double TURN_SPEED = 3;
+  private final double TURN_SPEED = 4;
   private final double SHOOT_OFFSET = 25;
   private final double COLLIDER_SIZE = 48;
 
@@ -29,6 +23,8 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
   private TankKeyInput tankKeyInput;
 
   private Weapon defaultWeapon, equippedWeapon;
+
+  private Timer speedBoostTimer = new Timer();
 
   public Tank(Vector2 position, GameWorld.Player owner) {
     super(position);
@@ -48,7 +44,7 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     renderingLayer = GameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
-    //equippedWeapon = new MachineGunWeapon();
+    equippedWeapon = new ShotgunWeapon();
 
 
     GameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
@@ -82,6 +78,9 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
   private void move() {
     double newMoveVectorMagnitude = tankKeyInput.getMoveInput()*MOVE_SPEED;
+    if (!speedBoostTimer.isDone()) {
+      newMoveVectorMagnitude *= 1.5;
+    }
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation, newMoveVectorMagnitude);
     moveVector = GameWorld.getMoveVectorWithCollision(boxTrigger, moveVector);
     position = Vector2.addVectors(position, moveVector);
@@ -139,6 +138,10 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     if (health > maxHealth) {
       health = maxHealth;
     }
+  }
+
+  public void giveSpeedBoost(int durationInFrames) {
+    speedBoostTimer.set(durationInFrames);
   }
 
   @Override

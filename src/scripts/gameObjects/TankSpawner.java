@@ -36,7 +36,7 @@ public class TankSpawner extends GameObject implements ClockListener {
     return lives;
   }
 
-  public Tank spawnTank() {
+  private Tank spawnTank() {
     return (Tank) GameWorld.instantiate(new Tank(this.position, this.owner));
   }
 }

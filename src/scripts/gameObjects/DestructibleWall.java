@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class DestructibleWall extends BoxCollidableGameObject implements Damageable
 {
-  private int maxHealth = 18;
+  private int maxHealth = 12;
   private int health = maxHealth;
 
   public DestructibleWall(Vector2 position) {

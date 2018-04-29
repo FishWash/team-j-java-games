@@ -1,4 +1,4 @@
-package scripts.weapons;
+package scripts.gameObjects.projectiles;
 
 import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.BoxTriggerGameObject;
