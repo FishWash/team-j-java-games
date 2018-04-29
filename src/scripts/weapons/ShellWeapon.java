@@ -9,7 +9,7 @@ public class ShellWeapon extends Weapon
     super();
     shootDelay = 50;
     recoil = -0.5;
-    ammo = 1;
+    ammo = -1;
 
     GameWorld.getInstance().loadSprite("Shell_light_strip60.png");
     GameWorld.getInstance().loadSprite("Explosion_small_strip6.png");

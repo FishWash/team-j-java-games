@@ -7,6 +7,7 @@ import scripts.gameWorlds.GameWorld;
 import scripts.gameWorlds.TankBattleWorld;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -117,11 +118,7 @@ public class PlayerCamera extends GameObject {
       graphics2D.drawString("Draw",(screenWidth / 2) - fontMetrics.stringWidth("Draw") / 2, screenHeight / 2);
     }
 
-//    font = new Font("Impact", Font.BOLD, 25);
-//    graphics2D.setFont(font);
-//    fontMetrics = graphics2D.getFontMetrics(font);
-
-//    graphics2D.drawString("Press space to restart", screenWidth / 2, screenHeight / 2);
+    addAmmoCount(graphics2D);
 
     return playerDisplay;
   }
@@ -143,6 +140,18 @@ public class PlayerCamera extends GameObject {
       for (int i = lives; i > 0; i--) {
         currentPlayerImage.drawImage(lifeSprite, xPos, yPos, null);
         xPos += lifeSpriteWidth + spriteGap;
+      }
+    }
+  }
+
+  private void addAmmoCount(Graphics2D graphics){
+    int ammo;
+    if(playerToFollow instanceof Tank){
+      ammo = ((Tank) playerToFollow).getAmmo();
+      Font font = new Font("Impact", Font.BOLD, 30);
+      FontMetrics fontMetrics = graphics.getFontMetrics(font);
+      if(ammo != -1){
+        UI.drawPositionedTextImage(graphics, Integer.toString(ammo), Color.YELLOW, font, 400, 600, 0.5, 0.95);
       }
     }
   }

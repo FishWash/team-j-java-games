@@ -66,6 +66,13 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     return multiSprite;
   }
 
+  public int getAmmo(){
+    if(equippedWeapon != null){
+      return equippedWeapon.getAmmo();
+    }
+    return defaultWeapon.getAmmo();
+  }
+
   public void update() {
     if (alive) {
       turn();
