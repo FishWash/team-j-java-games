@@ -15,7 +15,7 @@ public class ShotgunWeapon extends Weapon {
     super();
     shootDelay = 40;
     recoil = -0.7;
-    ammo = 12;
+    ammo = 8;
 
     GameWorld.getInstance().loadSprite(SPRITE_FILE);
     GameWorld.getInstance().loadSound(SOUND_FILE);
@@ -30,5 +30,10 @@ public class ShotgunWeapon extends Weapon {
     }
     GameWorld.getInstance().playSound(SOUND_FILE);
     return projectile;
+  }
+
+  @Override
+  public String getWeaponName() {
+    return "Shotgun";
   }
 }

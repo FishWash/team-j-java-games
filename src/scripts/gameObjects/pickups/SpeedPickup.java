@@ -6,7 +6,7 @@ import scripts.utility.Vector2;
 
 public class SpeedPickup extends Pickup {
 
-  private int duration = 256;
+  private final int BOOST_DURATION = 512;
 
   public SpeedPickup(Vector2 position) {
     super(position, 2);
@@ -15,7 +15,7 @@ public class SpeedPickup extends Pickup {
 
   @Override
   public void activatePickup(Tank tank) {
-    tank.giveSpeedBoost(1024);
+    tank.giveSpeedBoost(BOOST_DURATION);
     GameWorld.getInstance().playSound("pickupget.wav");
     die();
   }

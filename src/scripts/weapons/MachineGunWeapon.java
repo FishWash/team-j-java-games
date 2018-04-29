@@ -10,7 +10,7 @@ public class MachineGunWeapon extends Weapon {
   public MachineGunWeapon() {
     super();
     shootDelay = 5;
-    recoil = -0.1;
+    recoil = -0.2;
     ammo = 50;
 
     GameWorld.getInstance().loadSprite("Shell_light_strip60.png");
@@ -23,5 +23,10 @@ public class MachineGunWeapon extends Weapon {
     projectile.setRotation(rotation);
     GameWorld.getInstance().playSound("machinegunshot.wav");
     return projectile;
+  }
+
+  @Override
+  public String getWeaponName() {
+    return "Machine Gun";
   }
 }

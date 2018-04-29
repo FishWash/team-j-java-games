@@ -37,4 +37,5 @@ public abstract class Weapon
   public double getRecoil() {
     return recoil;
   }
+  public abstract String getWeaponName();
 }

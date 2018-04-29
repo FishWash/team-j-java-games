@@ -1,6 +1,5 @@
 package scripts.gameObjects;
 
-import scripts.Damageable;
 import scripts.gameObjects.pickups.Pickup;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.*;
@@ -13,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Tank extends BoxCollidableGameObject implements ClockListener, Damageable
 {
   private final double MOVE_SPEED = 3;
-  private final double TURN_SPEED = 4;
+  private final double TURN_SPEED = 3.5;
   private final double SHOOT_OFFSET = 25;
   private final double COLLIDER_SIZE = 48;
 
@@ -44,9 +43,9 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     renderingLayer = GameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
-    equippedWeapon = new ShotgunWeapon();
+//    equippedWeapon = new NukeWeapon();
 
-
+    GameWorld.getInstance().loadSound("tankhit.wav");
     GameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
   }
 
@@ -62,11 +61,11 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
     return multiSprite;
   }
 
-  public int getAmmo(){
+  public Weapon getWeapon() {
     if(equippedWeapon != null){
-      return equippedWeapon.getAmmo();
+      return equippedWeapon;
     }
-    return defaultWeapon.getAmmo();
+    return defaultWeapon;
   }
 
   public void update() {
@@ -80,13 +79,16 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
   private void turn() {
     double rotationalVelocity = tankKeyInput.getTurnInput()*TURN_SPEED;
+    if (!speedBoostTimer.isDone()) {
+      rotationalVelocity *= 1.2;
+    }
     rotation = (rotation+360 - rotationalVelocity) % 360;
   }
 
   private void move() {
     double newMoveVectorMagnitude = tankKeyInput.getMoveInput()*MOVE_SPEED;
     if (!speedBoostTimer.isDone()) {
-      newMoveVectorMagnitude *= 1.5;
+      newMoveVectorMagnitude *= 1.3;
     }
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation, newMoveVectorMagnitude);
     moveVector = GameWorld.getMoveVectorWithCollision(boxTrigger, moveVector);
@@ -134,6 +136,7 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
   public void damage(int damageAmount) {
     health -= damageAmount;
+    GameWorld.getInstance().playSound("tankhit.wav");
     if (health <= 0) {
       health = 0;
       die();

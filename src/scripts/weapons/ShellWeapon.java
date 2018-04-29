@@ -10,7 +10,7 @@ public class ShellWeapon extends Weapon
   public ShellWeapon() {
     super();
     shootDelay = 50;
-    recoil = -0.5;
+    recoil = -0.6;
     ammo = -1;
 
     GameWorld.getInstance().loadSprite("Shell_light_strip60.png");
@@ -37,5 +37,10 @@ public class ShellWeapon extends Weapon
     projectile.setRotation(rotation);
     GameWorld.getInstance().playSound("shellshot.wav");
     return projectile;
+  }
+
+  @Override
+  public String getWeaponName() {
+    return "You shouldn't be seeing this";
   }
 }

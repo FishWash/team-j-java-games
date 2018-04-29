@@ -29,6 +29,7 @@ public class TitleWorld extends GameWorld {
     playSoundLooping("Off Limits.wav");
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+    GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
   }
 
   public void displayOnGraphics(Graphics graphics) {
@@ -50,6 +51,22 @@ public class TitleWorld extends GameWorld {
       UI.drawPositionedTextImage((Graphics2D)graphics, "Press Space to start", Color.WHITE, font,
                                  dimension.width, dimension.height, 0.5, 0.6);
     }
+  }
+
+  @Override
+  protected void drawBackgroundImage(String mapFileName, BufferedImage backgroundTile, BufferedImage wallImage) {
+    super.drawBackgroundImage(mapFileName, backgroundTile, wallImage);
+    Graphics2D backgroundGraphics2D = (Graphics2D) backgroundImage.getGraphics();
+
+    Font font = new Font("Impact", Font.PLAIN,  32);
+    UI.drawPositionedTextImage(backgroundGraphics2D, "WASD to move", Color.WHITE, font,
+                               dimension.width, dimension.height, 0.2, 0.85);
+    UI.drawPositionedTextImage(backgroundGraphics2D, "R to shoot", Color.WHITE, font,
+                               dimension.width, dimension.height, 0.2, 0.9);
+    UI.drawPositionedTextImage(backgroundGraphics2D, "IJKL to move", Color.WHITE, font,
+                               dimension.width, dimension.height, 0.8, 0.85);
+    UI.drawPositionedTextImage(backgroundGraphics2D, "P to shoot", Color.WHITE, font,
+                               dimension.width, dimension.height, 0.8, 0.9);
   }
 
   private void drawForegroundImage() {

@@ -2,7 +2,7 @@ package scripts.gameObjects.explosions;
 
 import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.BoxTriggerGameObject;
-import scripts.Damageable;
+import scripts.gameObjects.Damageable;
 import scripts.utility.*;
 
 import java.util.ArrayList;

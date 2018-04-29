@@ -3,7 +3,7 @@ package scripts.gameObjects.projectiles;
 import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.BoxTriggerGameObject;
 import scripts.gameObjects.CenterBoxTrigger;
-import scripts.Collidable;
+import scripts.gameObjects.Collidable;
 import scripts.gameObjects.GameObject;
 import scripts.utility.*;
 

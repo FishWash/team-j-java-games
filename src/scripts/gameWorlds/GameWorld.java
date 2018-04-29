@@ -1,7 +1,7 @@
 package scripts.gameWorlds;
 
-import scripts.Collidable;
-import scripts.Damageable;
+import scripts.gameObjects.Collidable;
+import scripts.gameObjects.Damageable;
 import scripts.DisplayableElement;
 import scripts.gameObjects.*;
 import scripts.gameObjects.pickups.Pickup;
@@ -31,12 +31,13 @@ public abstract class GameWorld extends DisplayableElement
   protected CopyOnWriteArrayList<Damageable> damageables         = new CopyOnWriteArrayList<>();
 
   // for rendering
-  private CopyOnWriteArrayList<GameObject> backgroundGameObjects = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> walls                 = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<GameObject> backgroundGameObjects = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> projectiles           = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> players               = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<GameObject> foregroundGameObjects = new CopyOnWriteArrayList<>();
-  private BufferedImage backgroundImage;
+
+  protected BufferedImage backgroundImage;
 
   public GameWorld() {
     instance = this;
@@ -87,10 +88,10 @@ public abstract class GameWorld extends DisplayableElement
 
     currentImageGraphics.drawImage(backgroundImage, 0, 0, null);
 
-    for (GameObject go : backgroundGameObjects) {
+    for (GameObject go : walls) {
       go.drawSprite(currentImageGraphics);
     }
-    for (GameObject go : walls) {
+    for (GameObject go : backgroundGameObjects) {
       go.drawSprite(currentImageGraphics);
     }
     for (GameObject go : projectiles) {

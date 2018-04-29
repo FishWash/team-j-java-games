@@ -1,14 +1,14 @@
 package scripts.gameObjects.projectiles;
 
 import scripts.gameWorlds.GameWorld;
-import scripts.Collidable;
-import scripts.Damageable;
+import scripts.gameObjects.Collidable;
+import scripts.gameObjects.Damageable;
 import scripts.gameObjects.GameObject;
 import scripts.utility.RandomNumberGenerator;
 import scripts.utility.Vector2;
 
 public class MachineGunProjectile extends Projectile {
-  int damage = 6;
+  int damage = 5;
 
   public MachineGunProjectile(Vector2 position, int lifeTime, GameWorld.Player owner) {
     super(position, lifeTime, owner);

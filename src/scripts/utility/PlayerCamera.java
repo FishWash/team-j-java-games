@@ -1,13 +1,13 @@
 package scripts.utility;
 
-import scripts.*;
+import scripts.gameObjects.Damageable;
 import scripts.gameObjects.GameObject;
 import scripts.gameObjects.Tank;
 import scripts.gameWorlds.GameWorld;
 import scripts.gameWorlds.TankBattleWorld;
+import scripts.weapons.Weapon;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,9 +20,6 @@ public class PlayerCamera extends GameObject {
   public enum DisplayText {None, Win, Lose, Draw};
   private DisplayText displayText = DisplayText.None;
 
-  public PlayerCamera() {
-    super();
-  }
   public PlayerCamera(GameWorld.Player owner) {
     super();
     this.owner = owner;
@@ -55,6 +52,7 @@ public class PlayerCamera extends GameObject {
     int displayX = (int) Math.max(0, Math.min(gameWidth - screenWidth, position.x - screenWidth / 2));
     int displayY = (int) Math.max(0, Math.min(gameHeight - screenHeight, position.y - screenHeight / 2));
 
+    // Get Player's slice of current game image
     BufferedImage subImage = currentImage.getSubimage(displayX, displayY, screenWidth, screenHeight);
     BufferedImage playerDisplay = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
     Graphics2D graphics2D = playerDisplay.createGraphics();
@@ -63,6 +61,7 @@ public class PlayerCamera extends GameObject {
     graphics2D.setColor(new Color(128,0,0,128));
     graphics2D.fillRect(margin , margin, healthBarWidth, healthBarHeight);
 
+    // display healthbars
     if(playerToFollow instanceof Damageable){
       int health = ((Damageable) playerToFollow).getHealth();
       int maxHealth = ((Damageable) playerToFollow).getMaxHealth();
@@ -70,7 +69,6 @@ public class PlayerCamera extends GameObject {
 
       int red = (int) ( 255*(Math.min(1, 3 - 3*healthProportion)) );
       int green = (int) ( 255*(Math.min(1, 1.5*healthProportion)) );
-//      System.out.println("(PlayerCamera) Red: " + red + " Green: " + green);
       graphics2D.setColor(new Color(red, green, 32));
       graphics2D.fillRect(margin, margin, (int)(healthBarWidth * healthProportion), healthBarHeight);
     }
@@ -79,6 +77,7 @@ public class PlayerCamera extends GameObject {
     graphics2D.setStroke(new BasicStroke(2));
     graphics2D.drawRect(margin, margin, healthBarWidth, healthBarHeight);
 
+    // Display player title
     String playerString;
     if (playerToFollow.getOwner() == GameWorld.Player.One) {
       playerString = "Player 1";
@@ -106,6 +105,7 @@ public class PlayerCamera extends GameObject {
 
     addLives(graphics2D, margin + fontMetrics.stringWidth(playerString) + 10, margin - fontMetrics.getHeight(), (int)((fontMetrics.getHeight() + 3) * 0.95));
 
+    // display win/lose text
     font = new Font("Impact", Font.BOLD, 50);
     graphics2D.setFont(font);
     fontMetrics = graphics2D.getFontMetrics(font);
@@ -145,13 +145,15 @@ public class PlayerCamera extends GameObject {
   }
 
   private void addAmmoCount(Graphics2D graphics){
-    int ammo;
     if(playerToFollow instanceof Tank){
-      ammo = ((Tank) playerToFollow).getAmmo();
+      Weapon weapon = ((Tank) playerToFollow).getWeapon();
+      int ammo = weapon.getAmmo();
       Font font = new Font("Impact", Font.BOLD, 30);
-      FontMetrics fontMetrics = graphics.getFontMetrics(font);
-      if(ammo != -1){
-        UI.drawPositionedTextImage(graphics, Integer.toString(ammo), Color.YELLOW, font, 400, 600, 0.5, 0.95);
+      if(ammo >= 0){
+        UI.drawPositionedTextImage(graphics, weapon.getWeaponName(), Color.WHITE, font,
+                                   400, 600, 0.5, 0.9);
+        UI.drawPositionedTextImage(graphics, Integer.toString(ammo), Color.WHITE, font,
+                                   400, 600, 0.5, 0.95);
       }
     }
   }

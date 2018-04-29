@@ -14,15 +14,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-// GamePanel runs on a thread and updates its display every frame.
+// GamePanel handles pause, play, and exit controls.
 public class GamePanel extends JPanel implements KeyListener, ClockListener
 {
   public enum SpaceFunction {None, Start, Pause}
-  public enum EscapeFunction {}
+  public enum EscapeFunction {None, Pause, Exit}
   public enum World {Title, TankBattle}
 
   private static GamePanel instance;
-  private SpaceFunction spaceFunction;
+  private SpaceFunction spaceFunction = SpaceFunction.None;
+  private EscapeFunction escapeFunction = EscapeFunction.None;
   private BufferedImage pauseImage;
 
   private int spaceKeyCode = KeyEvent.VK_SPACE, escapeKeyCode = KeyEvent.VK_ESCAPE;
@@ -69,6 +70,9 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
   public void setSpaceFunction(SpaceFunction spaceFunction) {
     this.spaceFunction = spaceFunction;
   }
+  public void setEscapeFunction(EscapeFunction escapeFunction) {
+    this.escapeFunction = escapeFunction;
+  }
 
   public void keyPressed(KeyEvent keyEvent) {
     int keyCode = keyEvent.getExtendedKeyCode();
@@ -79,6 +83,16 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
           break;
         case Start:
           start(World.TankBattle);
+          break;
+      }
+    }
+    if (keyCode == escapeKeyCode) {
+      switch (escapeFunction) {
+        case Pause:
+          pause();
+          break;
+        case Exit:
+          System.exit(0);
           break;
       }
     }
@@ -110,10 +124,12 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
     Clock clock = Clock.getInstance();
     if (clock.getPaused()) {
       clock.setPaused(false);
+      escapeFunction = EscapeFunction.Pause;
     }
     else {
       clock.setPaused(true);
       repaint();
+      escapeFunction = EscapeFunction.Exit;
     }
   }
 
@@ -124,6 +140,13 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
     Font font = new Font("Impact", Font.PLAIN, 64);
     UI.drawPositionedTextImage( pauseGraphics2D, "Paused", Color.WHITE, font,
                                (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
-                               0.5, 0.5);
+                               0.5, 0.4);
+    font = new Font("Impact", Font.PLAIN, 32);
+    UI.drawPositionedTextImage( pauseGraphics2D, "(SPACE to resume)", Color.WHITE, font,
+                                (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
+                                0.5, 0.55);
+    UI.drawPositionedTextImage( pauseGraphics2D, "(ESCAPE to exit)", Color.WHITE, font,
+                                (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
+                                0.5, 0.6);
   }
 }

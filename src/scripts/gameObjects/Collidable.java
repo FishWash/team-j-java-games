@@ -1,4 +1,4 @@
-package scripts;
+package scripts.gameObjects;
 
 import scripts.gameObjects.BoxTrigger;
 import scripts.utility.Vector2;

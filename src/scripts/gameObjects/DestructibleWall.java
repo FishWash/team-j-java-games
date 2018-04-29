@@ -1,6 +1,5 @@
 package scripts.gameObjects;
 
-import scripts.Damageable;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.Vector2;
 
@@ -17,6 +16,8 @@ public class DestructibleWall extends BoxCollidableGameObject implements Damagea
     boxTrigger = new CornerBoxTrigger(this,
                                    new Vector2(GameWorld.getInstance().TILE_SIZE, GameWorld.getInstance().TILE_SIZE));
     renderingLayer = GameWorld.RenderingLayer.Walls;
+
+    GameWorld.getInstance().loadSound("wallhit.wav");
   }
 
   public  int getMaxHealth(){
@@ -29,6 +30,7 @@ public class DestructibleWall extends BoxCollidableGameObject implements Damagea
 
   public void damage(int damageAmount) {
     health -= damageAmount;
+    GameWorld.getInstance().playSound("wallhit.wav");
     if (health <= 0) {
       die();
     }

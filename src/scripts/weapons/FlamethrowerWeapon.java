@@ -10,8 +10,8 @@ public class FlamethrowerWeapon extends Weapon {
   public FlamethrowerWeapon() {
     super();
     shootDelay = 4;
-    recoil = -0.05;
-    ammo = 150;
+    recoil = -0.12;
+    ammo = 100;
 
     GameWorld.getInstance().loadSprite("flamethrow.png");
     GameWorld.getInstance().loadSound("flame.wav");
@@ -23,5 +23,10 @@ public class FlamethrowerWeapon extends Weapon {
     projectile.setRotation(rotation);
     GameWorld.getInstance().playSound("flame.wav");
     return projectile;
+  }
+
+  @Override
+  public String getWeaponName() {
+    return "Flamethrower";
   }
 }

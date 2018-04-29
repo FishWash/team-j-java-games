@@ -1,6 +1,6 @@
 package scripts.utility;
 
-import scripts.Collidable;
+import scripts.gameObjects.Collidable;
 import scripts.gameWorlds.GameWorld;
 import scripts.gameObjects.*;
 

@@ -1,6 +1,5 @@
 package scripts.gameObjects;
 
-import scripts.Collidable;
 import scripts.utility.Vector2;
 
 // CollidableGameObject has no sprite. Only for collision.

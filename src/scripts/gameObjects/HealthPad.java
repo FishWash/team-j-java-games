@@ -1,6 +1,5 @@
 package scripts.gameObjects;
 
-import scripts.Damageable;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.ClockListener;
 import scripts.utility.Vector2;

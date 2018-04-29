@@ -21,7 +21,7 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
   private TankSpawner playerTwoSpawner;
   private boolean gameOver = false;
   int flashDelay = 48;
-  Timer flashTimer = new Timer(flashDelay);
+  Timer flashTimer = new Timer();
   boolean flashOn;
 
   protected void initialize() {
@@ -45,8 +45,10 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
     playerTwoCamera = new PlayerCamera(GameWorld.Player.Two);
 
     playSoundLooping("Defense Line.wav");
+    loadSound("kazoocheer.wav");
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
+    GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
   }
 
   public void displayOnGraphics(Graphics graphics) {
@@ -78,9 +80,10 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
         }
 
         if (flashOn) {
-          Font font = new Font("Impact", Font.PLAIN, 30);
-          UI.drawPositionedTextImage(graphics2D, "Press space to restart", Color.WHITE, font,
-                  playerDisplayWidth, playerDisplayHeight, 1, 0.7);
+          Font font = new Font("Impact", Font.PLAIN, 48);
+          UI.drawPositionedTextImage((Graphics2D)graphics, "Press Space to restart", Color.WHITE, font,
+                                     TankGameApplication.windowDimension.width, TankGameApplication.windowDimension.height,
+                                     0.5, 0.6);
         }
         GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
       }
@@ -90,9 +93,10 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
 
   }
 
-  public void update(){
-    if(playerOneSpawner.getLives() == 0 || playerTwoSpawner.getLives() == 0){
+  public void update() {
+    if(!gameOver && (playerOneSpawner.getLives() == 0 || playerTwoSpawner.getLives() == 0)) {
       gameOver = true;
+      playSound("kazoocheer.wav");
       if(playerOneSpawner.getLives() == 0 && playerTwoSpawner.getLives() == 0){
         playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
         playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Draw);

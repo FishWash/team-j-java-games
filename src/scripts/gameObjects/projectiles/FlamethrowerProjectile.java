@@ -1,7 +1,7 @@
 package scripts.gameObjects.projectiles;
 
-import scripts.Collidable;
-import scripts.Damageable;
+import scripts.gameObjects.Collidable;
+import scripts.gameObjects.Damageable;
 import scripts.gameObjects.GameObject;
 import scripts.gameWorlds.GameWorld;
 import scripts.utility.RandomNumberGenerator;
