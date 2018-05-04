@@ -8,7 +8,7 @@ public class GalacticMailPanel extends GamePanel {
 
   public GalacticMailPanel(Dimension dimension) {
     super(dimension);
-    new LevelOne();
+    new GalacticTitleWorld();
     title = "Tanks for playing our game!";
   }
 
