@@ -129,7 +129,7 @@ public class PlayerCamera extends TankGameObject {
     int spriteGap = 2;
     BufferedImage lifeSprite;
     if (playerToFollow instanceof Tank) {
-      lifeSprite = UI.getScaledImage(((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90), size /(double)playerToFollow.getSprite().getHeight(), size, size);
+      lifeSprite = UI.getScaledImage(((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90), size / (double)playerToFollow.getSprite().getWidth(),size /(double)playerToFollow.getSprite().getHeight(), size, size);
       //lifeSprite = ((Tank) playerToFollow).getMultiSprite().getSubSpriteByRotation(90);
 
       int lifeSpriteWidth = lifeSprite.getWidth();

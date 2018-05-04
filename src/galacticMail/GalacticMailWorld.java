@@ -8,6 +8,7 @@ import general.GameWorld;
 import general.gameObjects.GameObject;
 import utility.Clock;
 import utility.ClockListener;
+import utility.UI;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -69,7 +70,18 @@ public abstract class GalacticMailWorld extends GameWorld {
       renderingLayers.get(renderingLayerIndex).add(spaceObject);
     }
 
+    drawBackground(loadSprite("Background.png"));
+
     return gameObject;
+  }
+
+  protected void drawBackground(BufferedImage newBackgroundImage){
+    double backgroundWidth = dimension.getWidth();
+    double backgroundHeight = dimension.getHeight();
+    double xScale = backgroundWidth / newBackgroundImage.getWidth();
+    double yScale = backgroundHeight / newBackgroundImage.getHeight();
+    BufferedImage newScaledBackgroundImage = UI.getScaledImage(newBackgroundImage, xScale, yScale, (int)backgroundWidth, (int)backgroundHeight);
+    this.backgroundImage = newScaledBackgroundImage;
   }
 
   @Override

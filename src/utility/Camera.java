@@ -15,8 +15,10 @@ public class Camera {
     double scale = 0.2;
     int minimapWidth = (int) (TankGameWorld.getInstance().getDimension().width * scale);
     int minimapHeight = (int) (TankGameWorld.getInstance().getDimension().width * scale);
-    BufferedImage resizedMap = UI.getScaledImage(currentImage, scale, minimapWidth, minimapHeight);
+    BufferedImage resizedMap = UI.getScaledImage(currentImage, scale, scale, minimapWidth, minimapHeight);
 
     return resizedMap;
   }
+
+
 }

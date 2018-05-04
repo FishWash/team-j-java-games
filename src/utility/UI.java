@@ -7,10 +7,10 @@ import java.awt.image.BufferedImage;
 
 public class UI {
 
-  public static BufferedImage getScaledImage(BufferedImage imageToResize, double scale, int newWidth, int newHeight) {
+  public static BufferedImage getScaledImage(BufferedImage imageToResize, double xScale, double yScale, int newWidth, int newHeight) {
     BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
     AffineTransform at = new AffineTransform();
-    at.scale(scale, scale);
+    at.scale(xScale, yScale);
     AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
     scaledImage = scaleOp.filter(imageToResize, scaledImage);
 
