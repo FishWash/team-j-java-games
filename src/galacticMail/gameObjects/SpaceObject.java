@@ -1,10 +1,13 @@
 package galacticMail.gameObjects;
 
+import general.GameWorld;
 import general.gameObjects.CircleTrigger;
 import general.gameObjects.GameObject;
 import general.gameObjects.Trigger;
 import utility.ClockListener;
 import utility.Vector2;
+
+import java.awt.*;
 
 public abstract class SpaceObject extends GameObject implements ClockListener {
 
@@ -24,7 +27,11 @@ public abstract class SpaceObject extends GameObject implements ClockListener {
   private void move() {
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation,
                                                             moveSpeed);
-    position = Vector2.addVectors(position, moveVector);
+    Dimension dimension = GameWorld.getInstance().getDimension();
+    // for wrapping GameObjects around the map
+    double xPos = (dimension.width + position.x + moveVector.x) % dimension.width;
+    double yPos = (dimension.height + position.y + moveVector.y) % dimension.height;
+    position = new Vector2(xPos, yPos);
   }
 
   public int getRenderingLayerIndex() {
