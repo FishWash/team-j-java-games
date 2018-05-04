@@ -1,6 +1,6 @@
 package scripts.utility;
 
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 
 // Made this just for fun. Adds drag to the controls to make the tanks feel more realistic.
 public class FuzzyTankKeyInput extends TankKeyInput
@@ -8,7 +8,7 @@ public class FuzzyTankKeyInput extends TankKeyInput
   private double fuzzedMoveInput = 0, fuzzedTurnInput = 0;
   private double moveStep = 0.04, turnStep = 0.05;
 
-  public FuzzyTankKeyInput(GameWorld.Player owner) {
+  public FuzzyTankKeyInput(TankGameWorld.Player owner) {
     super(owner);
   }
 

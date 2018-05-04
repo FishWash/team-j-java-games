@@ -4,7 +4,6 @@ import scripts.utility.Vector2;
 
 public abstract class BoxTrigger extends Trigger
 {
-  private GameObject parentGameObject;
   private Vector2 size;
 
   public BoxTrigger(GameObject parentGameObject, Vector2 size) {

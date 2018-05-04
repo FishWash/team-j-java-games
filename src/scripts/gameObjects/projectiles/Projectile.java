@@ -1,29 +1,28 @@
 package scripts.gameObjects.projectiles;
 
+import scripts.gameObjects.*;
 import scripts.gameWorlds.GameWorld;
-import scripts.gameObjects.BoxTriggerGameObject;
-import scripts.gameObjects.CenterBoxTrigger;
-import scripts.gameObjects.Collidable;
-import scripts.gameObjects.GameObject;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Projectile extends BoxTriggerGameObject implements ClockListener
+public class Projectile extends TriggerGameObject implements ClockListener
 {
   protected double moveSpeed = 1;
   protected MultiSprite multiSprite;
   protected Timer lifeTimer;
+  protected int damage = 0;
 
-  public Projectile(Vector2 position, int lifeTime, GameWorld.Player owner) {
+  public Projectile(Vector2 position, int lifeTime, TankGameWorld.Player owner) {
     super(position);
-    sprite = GameWorld.getInstance().loadSprite("Shell_basic.png");
-    multiSprite = new MultiSprite(GameWorld.getInstance().loadSprite("Shell_basic_strip60.png"), 60);
-    boxTrigger = new CenterBoxTrigger(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
+    sprite = TankGameWorld.getInstance().loadSprite("Shell_basic.png");
+    multiSprite = new MultiSprite(TankGameWorld.getInstance().loadSprite("Shell_basic_strip60.png"), 60);
+    trigger = new CenterBoxTrigger(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
     lifeTimer = new Timer(lifeTime);
     this.owner = owner;
-    renderingLayer = GameWorld.RenderingLayer.Projectiles;
+    renderingLayer = TankGameWorld.RenderingLayer.Projectiles;
   }
 
   public void update() {
@@ -41,16 +40,26 @@ public class Projectile extends BoxTriggerGameObject implements ClockListener
   }
 
   protected void checkCollidables() {
-    Collidable c = GameWorld.findOverlappingCollidable(boxTrigger);
-    if (c != null && (owner == GameWorld.Player.Neutral || ((GameObject) c).getOwner() != owner)) {
-      die();
+    Collidable c = GameWorld.getCollisionHandler().findOverlappingCollidable((BoxTrigger)trigger);
+    if (c != null) {
+      if (c instanceof TankGameObject) {
+        if (owner == TankGameWorld.Player.Neutral || ((TankGameObject)c).getOwner() != owner) {
+          if (c instanceof Damageable) {
+            ((Damageable) c).damage(damage);
+          }
+          die();
+        }
+      }
+      else {
+        die();
+      }
     }
   }
 
   // Sprite stuff
   @Override
   public void setSprite(String fileName) {
-    BufferedImage spriteStrip = GameWorld.getInstance().loadSprite(fileName);
+    BufferedImage spriteStrip = TankGameWorld.getInstance().loadSprite(fileName);
     if (spriteStrip != null) {
       multiSprite.setSpriteStrip(spriteStrip);
     }

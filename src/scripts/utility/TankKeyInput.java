@@ -1,6 +1,6 @@
 package scripts.utility;
 
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 
 import java.awt.event.KeyEvent;
 
@@ -8,15 +8,15 @@ public class TankKeyInput
 {
   private int moveForwardKeyCode, moveBackwardKeyCode, turnLeftKeyCode, turnRightKeyCode, shootKeyCode;
 
-  public TankKeyInput(GameWorld.Player player) {
-    if (player == GameWorld.Player.One) {
+  public TankKeyInput(TankGameWorld.Player player) {
+    if (player == TankGameWorld.Player.One) {
       moveForwardKeyCode = KeyEvent.VK_W;
       moveBackwardKeyCode = KeyEvent.VK_S;
       turnLeftKeyCode = KeyEvent.VK_A;
       turnRightKeyCode = KeyEvent.VK_D;
       shootKeyCode = KeyEvent.VK_R;
     }
-    else if (player == GameWorld.Player.Two) {
+    else if (player == TankGameWorld.Player.Two) {
       moveForwardKeyCode = KeyEvent.VK_I;
       moveBackwardKeyCode = KeyEvent.VK_K;
       turnLeftKeyCode = KeyEvent.VK_J;

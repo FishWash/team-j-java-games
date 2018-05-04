@@ -1,6 +1,6 @@
 package scripts.gameObjects;
 
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Vector2;
 
 import java.awt.*;
@@ -12,12 +12,13 @@ public class DestructibleWall extends BoxCollidableGameObject implements Damagea
 
   public DestructibleWall(Vector2 position) {
     super(position);
-    sprite = GameWorld.getInstance().loadSprite("wall_destructible1.png");
-    boxTrigger = new CornerBoxTrigger(this,
-                                   new Vector2(GameWorld.getInstance().TILE_SIZE, GameWorld.getInstance().TILE_SIZE));
-    renderingLayer = GameWorld.RenderingLayer.Walls;
+    sprite = TankGameWorld.getInstance().loadSprite("wall_destructible1.png");
+    trigger = new CornerBoxTrigger(this,
+                           new Vector2(TankGameWorld.getInstance().TILE_SIZE,
+                                       TankGameWorld.getInstance().TILE_SIZE));
+    renderingLayer = TankGameWorld.RenderingLayer.Walls;
 
-    GameWorld.getInstance().loadSound("wallhit.wav");
+    TankGameWorld.getInstance().loadSound("wallhit.wav");
   }
 
   public  int getMaxHealth(){
@@ -30,12 +31,12 @@ public class DestructibleWall extends BoxCollidableGameObject implements Damagea
 
   public void damage(int damageAmount) {
     health -= damageAmount;
-    GameWorld.getInstance().playSound("wallhit.wav");
+    TankGameWorld.getInstance().playSound("wallhit.wav");
     if (health <= 0) {
       die();
     }
     else {
-      sprite = GameWorld.getInstance().loadSprite("wall_destructible2.png");
+      sprite = TankGameWorld.getInstance().loadSprite("wall_destructible2.png");
     }
   }
 

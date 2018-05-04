@@ -3,7 +3,6 @@ package scripts.gameWorlds;
 import scripts.GamePanel;
 import scripts.gameObjects.TankSpawner;
 
-import scripts.gameWorlds.GameWorld;
 import scripts.utility.Timer;
 import scripts.utility.UI;
 import scripts.utility.Vector2;
@@ -11,7 +10,7 @@ import scripts.utility.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TitleWorld extends GameWorld {
+public class TitleWorld extends TankGameWorld {
   BufferedImage foregroundImage;
   int flashDelay = 48;
   Timer flashTimer = new Timer(flashDelay);
@@ -32,7 +31,7 @@ public class TitleWorld extends GameWorld {
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
   }
 
-  public void displayOnGraphics(Graphics graphics) {
+  public void display(Graphics graphics) {
     BufferedImage currentImage = getCurrentImage();
     try {
       graphics.drawImage(currentImage, 0, 0, null);

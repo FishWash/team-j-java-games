@@ -1,6 +1,7 @@
 package scripts.gameObjects;
 
 import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Vector2;
 
 import java.awt.*;
@@ -12,8 +13,6 @@ public abstract class GameObject
   protected Vector2 position = new Vector2(0, 0);
   protected double rotation = 0;
   protected BufferedImage sprite;
-  protected GameWorld.Player owner = GameWorld.Player.Neutral;
-  protected GameWorld.RenderingLayer renderingLayer = GameWorld.RenderingLayer.BackgroundGameObject;
 
   public GameObject() {
   }
@@ -34,12 +33,6 @@ public abstract class GameObject
   public boolean getAlive() {
     return alive;
   }
-  public GameWorld.Player getOwner() {
-    return owner;
-  }
-  public GameWorld.RenderingLayer getRenderingLayer() {
-    return renderingLayer;
-  }
   public Vector2 getPosition() {
     return position;
   }
@@ -54,28 +47,22 @@ public abstract class GameObject
   public void setAlive(boolean alive) {
     this.alive = alive;
   }
-  public void setOwner(GameWorld.Player owner) {
-    this.owner = owner;
-  }
   public void setPosition(Vector2 position) {
     this.position = position;
-  }
-  public void movePosition(Vector2 moveVector) {
-    this.position = Vector2.addVectors(position, moveVector);
   }
   public void setRotation(double rotation) {
     this.rotation = (rotation+360) % 360;
   }
   public void setSprite(String fileName) {
-    BufferedImage _spriteImg = GameWorld.getInstance().loadSprite(fileName);
-    if (_spriteImg != null) {
-      sprite = _spriteImg;
+    BufferedImage spriteImage = GameWorld.getInstance().loadSprite(fileName);
+    if (spriteImage != null) {
+      sprite = spriteImage;
     }
   }
 
   // Other
   protected void die() {
-    GameWorld.destroy(this);
+    GameWorld.getInstance().destroy(this);
     alive = false;
   }
 }

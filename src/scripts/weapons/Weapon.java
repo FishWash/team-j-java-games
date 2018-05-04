@@ -1,7 +1,7 @@
 package scripts.weapons;
 
 import scripts.gameObjects.projectiles.Projectile;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Timer;
 import scripts.utility.Vector2;
 
@@ -16,7 +16,7 @@ public abstract class Weapon
     shootTimer = new Timer();
   }
 
-  public boolean fire(Vector2 position, double rotation, GameWorld.Player owner) {
+  public boolean fire(Vector2 position, double rotation, TankGameWorld.Player owner) {
     if (shootTimer.isDone() && ammo > 0) {
       Projectile p = instantiateProjectile(position, rotation, owner);
       p.setRotation(rotation);
@@ -29,7 +29,7 @@ public abstract class Weapon
     }
   }
 
-  protected abstract Projectile instantiateProjectile(Vector2 position, double rotation, GameWorld.Player owner);
+  protected abstract Projectile instantiateProjectile(Vector2 position, double rotation, TankGameWorld.Player owner);
 
   public int getAmmo() {
     return ammo;

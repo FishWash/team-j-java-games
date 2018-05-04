@@ -2,6 +2,7 @@ package scripts.utility;
 
 import scripts.gameObjects.Collidable;
 import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.gameObjects.*;
 
 import java.util.List;
@@ -28,18 +29,18 @@ public class CollisionHandler {
           int tileInt = line.charAt(column) - '0';
           if (tileInt == 1) {
             if (currentWallCollidable == null) {
-              currentWallCollidable = (WallCollidable) GameWorld.instantiate(
+              currentWallCollidable = (WallCollidable) GameWorld.getInstance().instantiate(
                       new WallCollidable(new Vector2(column * tileSize, row * tileSize)));
-              currentWallCollidable.setBoxTriggerSize(new Vector2(tileSize, tileSize));
+              currentWallCollidable.setSize(new Vector2(tileSize, tileSize));
             }
             else {
-              currentWallCollidable.addBoxTriggerSize(new Vector2(tileSize, 0));
+              currentWallCollidable.addSize(new Vector2(tileSize, 0));
             }
           }
           else {
             currentWallCollidable = null;
             if (tileInt == 2) {
-              GameWorld.instantiate(new DestructibleWall(new Vector2(row * tileSize, column * tileSize)));
+              TankGameWorld.getInstance().instantiate(new DestructibleWall(new Vector2(row * tileSize, column * tileSize)));
             }
           }
         }
@@ -67,9 +68,9 @@ public class CollisionHandler {
   }
 
   public Collidable findOverlappingCollidable(BoxTrigger trigger) {
-    for (Collidable c : collidables) {
-      if (((BoxTriggerGameObject) c).isOverlapping(trigger)) {
-        return c;
+    for (Collidable collidable : collidables) {
+      if ( ((TriggerGameObject)collidable).getTrigger().isOverlapping(trigger) ) {
+        return collidable;
       }
     }
     return null;

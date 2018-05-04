@@ -2,7 +2,6 @@ package scripts.gameWorlds;
 
 import scripts.GamePanel;
 import scripts.TankGameApplication;
-import scripts.gameObjects.HealthPad;
 import scripts.gameObjects.PickupSpawner;
 import scripts.gameObjects.TankSpawner;
 import scripts.utility.*;
@@ -13,7 +12,7 @@ import scripts.utility.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TankBattleWorld extends GameWorld implements ClockListener {
+public class TankDeathmatch extends TankGameWorld implements ClockListener {
 
   private PlayerCamera playerOneCamera;
   private PlayerCamera playerTwoCamera;
@@ -25,7 +24,7 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
   boolean flashOn;
 
   protected void initialize() {
-    GameWorld.instance = this;
+    TankGameWorld.instance = this;
     Clock.getInstance().addClockListener(this);
     dimension = new Dimension(1024, 1024);
     collisionHandler.readMapFile("CollisionTestMap.txt", TILE_SIZE);
@@ -35,14 +34,14 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
     playerTwoSpawner = (TankSpawner) instantiate( new TankSpawner(
             new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
 
-    instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
-    instantiate( new HealthPad(new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
+//    instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
+//    instantiate( new HealthPad(new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
     instantiate(new PickupSpawner(new Vector2(dimension.width-96, 96)) );
     instantiate( new PickupSpawner(new Vector2(96, dimension.height-96)) );
     instantiate( new PickupSpawner(new Vector2(512, 512)));
 
-    playerOneCamera = new PlayerCamera(GameWorld.Player.One);
-    playerTwoCamera = new PlayerCamera(GameWorld.Player.Two);
+    playerOneCamera = new PlayerCamera(TankGameWorld.Player.One);
+    playerTwoCamera = new PlayerCamera(TankGameWorld.Player.Two);
 
     playSoundLooping("Defense Line.wav");
     loadSound("kazoocheer.wav");
@@ -51,7 +50,7 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
   }
 
-  public void displayOnGraphics(Graphics graphics) {
+  public void display(Graphics graphics) {
     int playerDisplayWidth = (TankGameApplication.windowDimension.width / 2);
     int playerDisplayHeight = TankGameApplication.windowDimension.height;
     BufferedImage currentImage = getCurrentImage();
@@ -88,7 +87,7 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
         GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
       }
     } catch (Exception e) {
-      System.out.println("ERROR in TankBattleWorld: " + e);
+      System.out.println("ERROR in TankDeathmatch: " + e);
     }
 
   }
@@ -110,7 +109,7 @@ public class TankBattleWorld extends GameWorld implements ClockListener {
     }
   }
 
-  public int getLives(GameWorld.Player player){
+  public int getLives(TankGameWorld.Player player){
     if(player == Player.One){
       return playerOneSpawner.getLives();
     }

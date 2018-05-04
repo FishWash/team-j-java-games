@@ -1,7 +1,7 @@
 package scripts.gameObjects;
 
 import scripts.gameObjects.pickups.Pickup;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.*;
 import scripts.weapons.*;
 
@@ -25,28 +25,28 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
   private Timer speedBoostTimer = new Timer();
 
-  public Tank(Vector2 position, GameWorld.Player owner) {
+  public Tank(Vector2 position, TankGameWorld.Player owner) {
     super(position);
-    multiSprite = new MultiSprite(GameWorld.getInstance().loadSprite("Tank_blue_base_strip60.png"), 60);
+    multiSprite = new MultiSprite(TankGameWorld.getInstance().loadSprite("Tank_blue_base_strip60.png"), 60);
     sprite = multiSprite.getSubSprite(0);
-    boxTrigger = new CenterBoxTrigger(this, new Vector2(COLLIDER_SIZE, COLLIDER_SIZE));
+    trigger = new CenterBoxTrigger(this, new Vector2(COLLIDER_SIZE, COLLIDER_SIZE));
     this.owner = owner;
-    if (owner == GameWorld.Player.One) {
+    if (owner == TankGameWorld.Player.One) {
       setSprite("Tank_blue_basic_strip60.png");
     }
-    else if (owner == GameWorld.Player.Two) {
+    else if (owner == TankGameWorld.Player.Two) {
       setSprite("Tank_red_basic_strip60.png");
       rotation = 180;
     }
     tankKeyInput = new FuzzyTankKeyInput(owner);
 
-    renderingLayer = GameWorld.RenderingLayer.Tanks;
+    renderingLayer = TankGameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
 //    equippedWeapon = new NukeWeapon();
 
-    GameWorld.getInstance().loadSound("tankhit.wav");
-    GameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
+    TankGameWorld.getInstance().loadSound("tankhit.wav");
+    TankGameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
   }
 
   public int getMaxHealth() {
@@ -91,7 +91,7 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
       newMoveVectorMagnitude *= 1.3;
     }
     Vector2 moveVector = Vector2.newRotationMagnitudeVector(rotation, newMoveVectorMagnitude);
-    moveVector = GameWorld.getMoveVectorWithCollision(boxTrigger, moveVector);
+    moveVector = TankGameWorld.getInstance().getMoveVectorWithCollision((BoxTrigger)trigger, moveVector);
     position = Vector2.addVectors(position, moveVector);
   }
 
@@ -122,9 +122,9 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
   }
 
   private void pickup() {
-    CopyOnWriteArrayList<Pickup> pickups = GameWorld.getInstance().getPickups();
+    CopyOnWriteArrayList<Pickup> pickups = TankGameWorld.getInstance().getPickups();
     for (Pickup pickup : pickups) {
-      if (pickup.isOverlapping(boxTrigger)) {
+      if (pickup.getTrigger().isOverlapping(trigger)) {
         pickup.activatePickup(this);
       }
     }
@@ -136,7 +136,7 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
   public void damage(int damageAmount) {
     health -= damageAmount;
-    GameWorld.getInstance().playSound("tankhit.wav");
+    TankGameWorld.getInstance().playSound("tankhit.wav");
     if (health <= 0) {
       health = 0;
       die();
@@ -156,14 +156,14 @@ public class Tank extends BoxCollidableGameObject implements ClockListener, Dama
 
   @Override
   public void die() {
-    GameWorld.instantiate(new TankExplosion(position));
+    TankGameWorld.getInstance().instantiate(new TankExplosion(position));
     super.die();
   }
 
   // Sprite stuff
   @Override
   public void setSprite(String fileName) {
-    BufferedImage spriteStrip = GameWorld.getInstance().loadSprite(fileName);
+    BufferedImage spriteStrip = TankGameWorld.getInstance().loadSprite(fileName);
     if (spriteStrip != null) {
       multiSprite.setSpriteStrip(spriteStrip);
     }

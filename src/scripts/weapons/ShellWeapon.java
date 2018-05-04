@@ -2,25 +2,25 @@ package scripts.weapons;
 
 import scripts.gameObjects.projectiles.Projectile;
 import scripts.gameObjects.projectiles.ShellProjectile;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Vector2;
 
-public class ShellWeapon extends Weapon
-{
+public class ShellWeapon extends Weapon {
+
   public ShellWeapon() {
     super();
     shootDelay = 50;
     recoil = -0.6;
     ammo = -1;
 
-    GameWorld.getInstance().loadSprite("Shell_light_strip60.png");
-    GameWorld.getInstance().loadSprite("Explosion_small_strip6.png");
-    GameWorld.getInstance().loadSound("shellshot.wav");
-    GameWorld.getInstance().loadSound("smallexplosion.wav");
+    TankGameWorld.getInstance().loadSprite("Shell_light_strip60.png");
+    TankGameWorld.getInstance().loadSprite("Explosion_small_strip6.png");
+    TankGameWorld.getInstance().loadSound("shellshot.wav");
+    TankGameWorld.getInstance().loadSound("smallexplosion.wav");
   }
 
   @Override
-  public boolean fire(Vector2 position, double rotation, GameWorld.Player owner) {
+  public boolean fire(Vector2 position, double rotation, TankGameWorld.Player owner) {
     if (shootTimer.isDone()) {
       instantiateProjectile(position, rotation, owner);
       shootTimer.set(shootDelay);
@@ -32,15 +32,15 @@ public class ShellWeapon extends Weapon
   }
 
   @Override
-  protected Projectile instantiateProjectile(Vector2 position, double rotation, GameWorld.Player owner) {
-    Projectile projectile = (Projectile) GameWorld.instantiate(new ShellProjectile(position, owner));
+  protected Projectile instantiateProjectile(Vector2 position, double rotation, TankGameWorld.Player owner) {
+    Projectile projectile = (Projectile) TankGameWorld.getInstance().instantiate(new ShellProjectile(position, owner));
     projectile.setRotation(rotation);
-    GameWorld.getInstance().playSound("shellshot.wav");
+    TankGameWorld.getInstance().playSound("shellshot.wav");
     return projectile;
   }
 
   @Override
   public String getWeaponName() {
-    return "You shouldn't be seeing this";
+    return null;
   }
 }

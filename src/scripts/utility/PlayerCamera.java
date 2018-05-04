@@ -3,24 +3,25 @@ package scripts.utility;
 import scripts.gameObjects.Damageable;
 import scripts.gameObjects.GameObject;
 import scripts.gameObjects.Tank;
-import scripts.gameWorlds.GameWorld;
-import scripts.gameWorlds.TankBattleWorld;
+import scripts.gameObjects.TankGameObject;
+import scripts.gameWorlds.TankGameWorld;
+import scripts.gameWorlds.TankDeathmatch;
 import scripts.weapons.Weapon;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PlayerCamera extends GameObject {
+public class PlayerCamera extends TankGameObject {
   protected Vector2 position = new Vector2(0, 0);
-  protected GameWorld.Player owner;
-  protected GameObject playerToFollow;
+  protected TankGameWorld.Player owner;
+  protected TankGameObject playerToFollow;
   private Timer searchTimer = new Timer();
   private int searchDelay = 16;
-  public enum DisplayText {None, Win, Lose, Draw};
+  public enum DisplayText {None, Win, Lose, Draw}
   private DisplayText displayText = DisplayText.None;
 
-  public PlayerCamera(GameWorld.Player owner) {
+  public PlayerCamera(TankGameWorld.Player owner) {
     super();
     this.owner = owner;
   }
@@ -38,8 +39,8 @@ public class PlayerCamera extends GameObject {
     else {
       // search for player with same owner
       if (searchTimer.isDone()) {
-        CopyOnWriteArrayList<Tank> players = GameWorld.getInstance().getTanks();
-        for (GameObject player : players) {
+        CopyOnWriteArrayList<Tank> players = TankGameWorld.getInstance().getTanks();
+        for (TankGameObject player : players) {
           if (player.getOwner() == this.owner) {
             playerToFollow = player;
             break;
@@ -79,11 +80,11 @@ public class PlayerCamera extends GameObject {
 
     // Display player title
     String playerString;
-    if (playerToFollow.getOwner() == GameWorld.Player.One) {
+    if (playerToFollow.getOwner() == TankGameWorld.Player.One) {
       playerString = "Player 1";
       graphics2D.setColor(new Color(0, 0, 255, 128));
     }
-    else if (playerToFollow.getOwner() == GameWorld.Player.Two) {
+    else if (playerToFollow.getOwner() == TankGameWorld.Player.Two) {
       playerString = "Player 2";
       graphics2D.setColor(new Color(255, 0, 0, 128));
     }
@@ -124,7 +125,7 @@ public class PlayerCamera extends GameObject {
   }
 
   private void addLives(Graphics currentPlayerImage, int xPos, int yPos, int size){
-    GameWorld gameWorld = GameWorld.getInstance();
+    TankGameWorld tankGameWorld = TankGameWorld.getInstance();
     int lives = 0;
     int spriteGap = 2;
     BufferedImage lifeSprite;
@@ -134,8 +135,8 @@ public class PlayerCamera extends GameObject {
 
       int lifeSpriteWidth = lifeSprite.getWidth();
 
-      if (gameWorld instanceof TankBattleWorld) {
-        lives = ((TankBattleWorld) gameWorld).getLives(owner);
+      if (tankGameWorld instanceof TankDeathmatch) {
+        lives = ((TankDeathmatch) tankGameWorld).getLives(owner);
       }
       for (int i = lives; i > 0; i--) {
         currentPlayerImage.drawImage(lifeSprite, xPos, yPos, null);

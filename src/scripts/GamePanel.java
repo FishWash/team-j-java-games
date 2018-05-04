@@ -1,7 +1,7 @@
 package scripts;
 
-import scripts.gameWorlds.GameWorld;
-import scripts.gameWorlds.TankBattleWorld;
+import scripts.gameWorlds.TankGameWorld;
+import scripts.gameWorlds.TankDeathmatch;
 import scripts.gameWorlds.TitleWorld;
 import scripts.utility.Clock;
 import scripts.utility.ClockListener;
@@ -58,7 +58,7 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
   public void paintComponent(Graphics graphics) {
     super.paintComponent(graphics);
     try {
-      GameWorld.getInstance().displayOnGraphics(graphics);
+      TankGameWorld.getInstance().display(graphics);
       if (Clock.getInstance().getPaused()) {
         graphics.drawImage(pauseImage, 0, 0, null);
       }
@@ -102,7 +102,7 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
 
   private void start(World world) {
 
-    GameWorld.getInstance().stopSounds();
+    TankGameWorld.getInstance().stopSounds();
     Clock.getInstance().stop();
     Clock clock = new Clock();
     Thread clockThread = new Thread(clock);
@@ -110,7 +110,7 @@ public class GamePanel extends JPanel implements KeyListener, ClockListener
 
     switch (world) {
       case TankBattle:
-        new TankBattleWorld();
+        new TankDeathmatch();
         break;
       case Title:
         new TitleWorld();

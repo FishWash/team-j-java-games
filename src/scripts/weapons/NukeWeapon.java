@@ -2,7 +2,7 @@ package scripts.weapons;
 
 import scripts.gameObjects.projectiles.NukeProjectile;
 import scripts.gameObjects.projectiles.Projectile;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Vector2;
 
 public class NukeWeapon extends Weapon {
@@ -13,17 +13,17 @@ public class NukeWeapon extends Weapon {
     recoil = -1.5;
     ammo = 1;
 
-    GameWorld.getInstance().loadSprite("Shell_nuclear_strip60.png");
-    GameWorld.getInstance().loadSprite("nuke_explosion_strip32.png");
-    GameWorld.getInstance().loadSound("nukeshellshot.wav");
-    GameWorld.getInstance().loadSound("nuke_explosion.wav");
+    TankGameWorld.getInstance().loadSprite("Shell_nuclear_strip60.png");
+    TankGameWorld.getInstance().loadSprite("nuke_explosion_strip32.png");
+    TankGameWorld.getInstance().loadSound("nukeshellshot.wav");
+    TankGameWorld.getInstance().loadSound("nuke_explosion.wav");
   }
 
   @Override
-  protected Projectile instantiateProjectile(Vector2 position, double rotation, GameWorld.Player owner) {
-    Projectile projectile = (Projectile) GameWorld.instantiate(new NukeProjectile(position, owner));
+  protected Projectile instantiateProjectile(Vector2 position, double rotation, TankGameWorld.Player owner) {
+    Projectile projectile = (Projectile) TankGameWorld.getInstance().instantiate(new NukeProjectile(position, owner));
     projectile.setRotation(rotation);
-    GameWorld.getInstance().playSound("nukeshellshot.wav");
+    TankGameWorld.getInstance().playSound("nukeshellshot.wav");
     return projectile;
   }
 

@@ -1,7 +1,7 @@
 package scripts.gameObjects;
 
 import scripts.gameObjects.pickups.*;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.ClockListener;
 import scripts.utility.RandomNumberGenerator;
 import scripts.utility.Timer;
@@ -54,10 +54,10 @@ public class PickupSpawner extends GameObject implements ClockListener {
         default:
           pickup = new HealthPickup(this.position);
       }
-      return (Pickup) GameWorld.instantiate(pickup);
+      return (Pickup) TankGameWorld.getInstance().instantiate(pickup);
     }
     else {
-      return (Pickup) GameWorld.instantiate(new NukePickup(this.position));
+      return (Pickup) TankGameWorld.getInstance().instantiate(new NukePickup(this.position));
     }
   }
 }

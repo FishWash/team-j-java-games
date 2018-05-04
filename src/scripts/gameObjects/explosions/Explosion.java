@@ -1,24 +1,24 @@
 package scripts.gameObjects.explosions;
 
-import scripts.gameWorlds.GameWorld;
-import scripts.gameObjects.BoxTriggerGameObject;
+import scripts.gameObjects.TankGameObject;
+import scripts.gameWorlds.TankGameWorld;
+import scripts.gameObjects.TriggerGameObject;
 import scripts.gameObjects.Damageable;
 import scripts.utility.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Explosion extends BoxTriggerGameObject implements ClockListener
+public abstract class Explosion extends TriggerGameObject implements ClockListener
 {
-  protected MultiSprite multiSprite;
+  protected AnimatedSprite animatedSprite;
   protected int damage = 1;
-  protected int animationIndex = 0;
-  protected Timer animationTimer = new Timer();
-  protected int animationFrameLength = 4;
+  protected Timer lifeTimer = new Timer(32);
 
-  public Explosion (Vector2 position, GameWorld.Player owner) {
+  public Explosion (Vector2 position, TankGameWorld.Player owner) {
     super(position);
     this.owner = owner;
-    renderingLayer = GameWorld.RenderingLayer.ForegroundGameObject;
+    renderingLayer = TankGameWorld.RenderingLayer.ForegroundGameObject;
   }
 
   public void update() {
@@ -26,28 +26,22 @@ public abstract class Explosion extends BoxTriggerGameObject implements ClockLis
       damageDamageables();
       alive = false;
     }
-
-    animate();
-  }
-
-  private void animate()  {
-    if (animationIndex < multiSprite.getNumSubSprites()) {
-      if (animationTimer.isDone()) {
-        sprite = multiSprite.getSubSprite(animationIndex);
-        animationIndex++;
-        animationTimer.set(animationFrameLength);
-      }
-    }
-    else {
-      sprite = null;
-      die();
-    }
   }
 
   private void damageDamageables() {
-    ArrayList<Damageable> damageables = GameWorld.findOverlappingEnemyDamageables(boxTrigger, owner);
+    ArrayList<Damageable> damageables = TankGameWorld.getInstance()
+                                          .findOverlappingDamageables(trigger);
     for (Damageable d : damageables) {
-      d.damage(damage);
+      if (d instanceof TankGameObject
+              && ((TankGameObject)d).getOwner() != owner) {
+        d.damage(damage);
+      }
     }
+  }
+
+  @Override
+  public void drawSprite(Graphics graphics) {
+    sprite = animatedSprite.getCurrentSprite();
+    super.drawSprite(graphics);
   }
 }

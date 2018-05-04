@@ -1,7 +1,7 @@
 package scripts.gameObjects.pickups;
 
 import scripts.gameObjects.Tank;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Vector2;
 
 public class SpeedPickup extends Pickup {
@@ -10,13 +10,13 @@ public class SpeedPickup extends Pickup {
 
   public SpeedPickup(Vector2 position) {
     super(position, 2);
-    GameWorld.getInstance().loadSound("pickupget.wav");
+    TankGameWorld.getInstance().loadSound("pickupget.wav");
   }
 
   @Override
   public void activatePickup(Tank tank) {
     tank.giveSpeedBoost(BOOST_DURATION);
-    GameWorld.getInstance().playSound("pickupget.wav");
+    TankGameWorld.getInstance().playSound("pickupget.wav");
     die();
   }
 }

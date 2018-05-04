@@ -3,19 +3,20 @@ package scripts.gameObjects;
 import scripts.utility.Vector2;
 
 // CollidableGameObject has no sprite. Only for collision.
-public abstract class BoxCollidableGameObject extends BoxTriggerGameObject implements Collidable
+public abstract class BoxCollidableGameObject extends TriggerGameObject implements Collidable
 {
 
   public BoxCollidableGameObject(Vector2 position) {
     super(position);
-    boxTrigger = new CornerBoxTrigger(this);
+    trigger = new CornerBoxTrigger(this);
   }
 
   public Vector2 getMoveVectorWithCollision(BoxTrigger otherBoxTrigger, Vector2 moveVector) {
-    if (boxTrigger.equals(otherBoxTrigger)) {
+    if (trigger.equals(otherBoxTrigger)) {
       return moveVector;
     }
 
+    BoxTrigger boxTrigger = (BoxTrigger) trigger;
     Vector2 nextMinCorner = Vector2.addVectors(otherBoxTrigger.getMinCorner(), moveVector);
     Vector2 nextMaxCorner = Vector2.addVectors(otherBoxTrigger.getMaxCorner(), moveVector);
 

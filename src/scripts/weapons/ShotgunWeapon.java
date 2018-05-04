@@ -2,33 +2,29 @@ package scripts.weapons;
 
 import scripts.gameObjects.projectiles.Projectile;
 import scripts.gameObjects.projectiles.ShotgunProjectile;
-import scripts.gameWorlds.GameWorld;
+import scripts.gameWorlds.TankGameWorld;
 import scripts.utility.Vector2;
 
 public class ShotgunWeapon extends Weapon {
 
-  private final String SPRITE_FILE = "Shell_light_strip60.png";
-  private final String SOUND_FILE = "shotgunshot.wav";
-  private final int NUM_SHOTS = 5;
-
   public ShotgunWeapon() {
     super();
     shootDelay = 40;
-    recoil = -0.7;
+    recoil = -1.2;
     ammo = 8;
 
-    GameWorld.getInstance().loadSprite(SPRITE_FILE);
-    GameWorld.getInstance().loadSound(SOUND_FILE);
+    TankGameWorld.getInstance().loadSprite("Shell_light_strip60.png");
+    TankGameWorld.getInstance().loadSound("shotgunshot.wav");
   }
 
   @Override
-  protected Projectile instantiateProjectile(Vector2 position, double rotation, GameWorld.Player owner) {
+  protected Projectile instantiateProjectile(Vector2 position, double rotation, TankGameWorld.Player owner) {
     Projectile projectile = null;
-    for (int i=0; i<NUM_SHOTS; i++) {
-      projectile = (Projectile) GameWorld.instantiate(new ShotgunProjectile(position, 20, owner));
+    for (int i=0; i<8; i++) {
+      projectile = (Projectile) TankGameWorld.getInstance().instantiate(new ShotgunProjectile(position, 256, owner));
       projectile.setRotation(rotation);
     }
-    GameWorld.getInstance().playSound(SOUND_FILE);
+    TankGameWorld.getInstance().playSound("shotgunshot.wav");
     return projectile;
   }
 
