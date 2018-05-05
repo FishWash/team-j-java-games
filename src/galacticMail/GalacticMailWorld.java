@@ -29,6 +29,7 @@ public abstract class GalacticMailWorld extends GameWorld {
           = new ArrayList<>();
 
   private BufferedImage backgroundImage;
+
   public final int pointsToAdd = 5000;
   public enum GameState{None, Victory, Lost}
   private GameState gameState = GameState.None;
