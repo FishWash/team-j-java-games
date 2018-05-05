@@ -15,7 +15,7 @@ public class Explosion extends SpaceObject {
   public Explosion(Vector2 position, double rotation) {
     super(position, 0);
     setRotation(rotation);
-    moveSpeed = 2;
+    moveSpeed = 1;
     BufferedImage spriteStrip = GameWorld.getInstance()
             .loadSprite("Explosion_space_strip9.png");
     MultiSprite multiSprite = new MultiSprite(spriteStrip, 9);
