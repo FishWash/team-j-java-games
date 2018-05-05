@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 // general.GamePanel handles pause, play, and exit controls.
 public abstract class GamePanel extends JPanel implements KeyListener, ClockListener
 {
-  public enum SpaceFunction {None, Start, Pause}
+  public enum SpaceFunction {None, Start, Pause, Restart, NextLevel}
   public enum EscapeFunction {None, Pause, Exit}
   protected  String title = "";
 

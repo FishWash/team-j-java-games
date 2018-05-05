@@ -1,6 +1,7 @@
 package galacticMail;
 
 import galacticMail.gameObjects.Asteroid;
+import general.GamePanel;
 import utility.RandomNumberGenerator;
 
 import java.awt.*;
@@ -19,12 +20,15 @@ public class GalacticTitleWorld extends GalacticMailWorld{
               RandomNumberGenerator.getRandomDouble(0, 360)
       ));
     }
+
+    GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
   }
 
   protected void drawTitle(BufferedImage currentImage){
     Graphics2D g2D = (Graphics2D) currentImage.getGraphics();
     BufferedImage title = loadSprite("Title.png");
-    g2D.drawImage( title, (int)(dimension.getWidth() / 2) - (title.getWidth() / 2), (int)(dimension.getHeight() / 3) - (title.getHeight() / 2), null);
+    g2D.drawImage( title, (int)(dimension.getWidth()/2) - (title.getWidth()/2),
+        (int)(dimension.getHeight() / 3) - (title.getHeight() / 2), null);
   }
 
   @Override
