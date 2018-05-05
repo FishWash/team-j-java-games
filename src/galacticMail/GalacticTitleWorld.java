@@ -1,5 +1,8 @@
 package galacticMail;
 
+import galacticMail.gameObjects.Asteroid;
+import utility.RandomNumberGenerator;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -8,6 +11,14 @@ public class GalacticTitleWorld extends GalacticMailWorld{
   protected void initialize(){
     dimension = new Dimension(800, 600);
     drawBackground(loadSprite("Background.png"));
+
+    for (int i=0; i<16; i++) {
+      instantiate(new Asteroid(
+              RandomNumberGenerator.getRandomPosition(
+                      0, 0, dimension.width, dimension.height ),
+              RandomNumberGenerator.getRandomDouble(0, 360)
+      ));
+    }
   }
 
   protected void drawTitle(BufferedImage currentImage){

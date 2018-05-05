@@ -124,4 +124,12 @@ public abstract class GalacticMailWorld extends GameWorld {
 
     return currentImage;
   }
+
+  public CopyOnWriteArrayList<Asteroid> getAsteroids() {
+    return asteroids;
+  }
+
+  public CopyOnWriteArrayList<Moon> getMoons() {
+    return moons;
+  }
 }

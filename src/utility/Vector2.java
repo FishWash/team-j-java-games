@@ -54,6 +54,11 @@ public class Vector2
     this.x *= factor;
     this.y *= factor;
   }
+  public void clampMagnitude(double maxMagnitude) {
+    if (getMagnitude() > maxMagnitude) {
+      setMagnitude(maxMagnitude);
+    }
+  }
   public void setRotation(double angle) {
     double newMagnitude = this.getMagnitude();
     this.x = Math.cos(Math.toRadians(angle)) * newMagnitude;

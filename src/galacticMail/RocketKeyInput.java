@@ -1,30 +1,20 @@
-package tankGame;
+package galacticMail;
 
-import tankGame.TankGameWorld;
 import utility.KeyInputHandler;
 
 import java.awt.event.KeyEvent;
 
-public class TankKeyInput
+public class RocketKeyInput
 {
   private int moveForwardKeyCode, moveBackwardKeyCode, turnLeftKeyCode,
           turnRightKeyCode, shootKeyCode;
 
-  public TankKeyInput(TankGameWorld.Player player) {
-    if (player == TankGameWorld.Player.One) {
-      moveForwardKeyCode = KeyEvent.VK_W;
-      moveBackwardKeyCode = KeyEvent.VK_S;
-      turnLeftKeyCode = KeyEvent.VK_A;
-      turnRightKeyCode = KeyEvent.VK_D;
-      shootKeyCode = KeyEvent.VK_R;
-    }
-    else if (player == TankGameWorld.Player.Two) {
-      moveForwardKeyCode = KeyEvent.VK_I;
-      moveBackwardKeyCode = KeyEvent.VK_K;
-      turnLeftKeyCode = KeyEvent.VK_J;
-      turnRightKeyCode = KeyEvent.VK_L;
-      shootKeyCode = KeyEvent.VK_P;
-    }
+  public RocketKeyInput() {
+    moveForwardKeyCode = KeyEvent.VK_W;
+    moveBackwardKeyCode = KeyEvent.VK_S;
+    turnLeftKeyCode = KeyEvent.VK_A;
+    turnRightKeyCode = KeyEvent.VK_D;
+    shootKeyCode = KeyEvent.VK_R;
 
     addUsedKeyCodes(KeyInputHandler.getInstance());
   }

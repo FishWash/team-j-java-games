@@ -19,8 +19,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Tank extends BoxCollidableGameObject implements ClockListener, Damageable
-{
+public class Tank extends BoxCollidableGameObject
+        implements ClockListener, Damageable {
   private final double MOVE_SPEED = 3;
   private final double TURN_SPEED = 3.5;
   private final double SHOOT_OFFSET = 25;
