@@ -28,6 +28,7 @@ public abstract class GalacticMailWorld extends GameWorld {
           = new ArrayList<>();
 
   private BufferedImage backgroundImage;
+  private int pointsToAdd = 100;
 
   public GalacticMailWorld() {
     instance = this;
