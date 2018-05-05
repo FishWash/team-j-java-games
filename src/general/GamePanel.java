@@ -82,6 +82,9 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
         case Start:
           start();
           break;
+        case Restart:
+          restart();
+          break;
       }
     }
     if (keyCode == escapeKeyCode) {

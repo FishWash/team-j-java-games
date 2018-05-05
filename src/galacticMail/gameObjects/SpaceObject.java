@@ -46,4 +46,8 @@ public abstract class SpaceObject extends GameObject implements ClockListener {
     double yPos = (dimension.height + newPosition.y) % dimension.height;
     position = new Vector2(xPos, yPos);
   }
+
+  public void setMoveSpeed(double moveSpeed) {
+    this.moveSpeed = moveSpeed;
+  }
 }

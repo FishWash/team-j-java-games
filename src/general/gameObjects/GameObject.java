@@ -61,7 +61,9 @@ public abstract class GameObject
 
   // Other
   protected void die() {
-    GameWorld.getInstance().destroy(this);
-    alive = false;
+    if (alive) {
+      GameWorld.getInstance().destroy(this);
+      alive = false;
+    }
   }
 }

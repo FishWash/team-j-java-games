@@ -141,6 +141,6 @@ public class Rocket extends SpaceObject {
   @Override
   public void die(){
     super.die();
-    ((GalacticMailWorld) GalacticMailWorld.getInstance()).setGameState(GalacticMailWorld.GameState.Lost);
+    ((GalacticMailWorld) GalacticMailWorld.getInstance()).setGameState(GalacticMailWorld.GameState.Defeat);
   }
 }

@@ -4,9 +4,9 @@ import galacticMail.gameObjects.Asteroid;
 import galacticMail.gameObjects.Moon;
 import galacticMail.gameObjects.Rocket;
 import galacticMail.gameObjects.SpaceObject;
+import general.GamePanel;
 import general.GameWorld;
 import general.gameObjects.GameObject;
-import utility.Camera;
 import utility.Clock;
 import utility.ClockListener;
 import utility.UI;
@@ -19,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class GalacticMailWorld extends GameWorld {
   public enum Team {Player, Enemy}
+  public enum GameState{None, Victory, Defeat}
 
   private Rocket rocket = null;
   private CopyOnWriteArrayList<Asteroid> asteroids
@@ -31,7 +32,6 @@ public abstract class GalacticMailWorld extends GameWorld {
   private BufferedImage backgroundImage;
 
   public final int pointsToAdd = 5000;
-  public enum GameState{None, Victory, Lost}
   protected GameState gameState = GameState.None;
 
   public GalacticMailWorld(int level) {
@@ -50,6 +50,14 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   public void setGameState(GameState gamestate){
     this.gameState = gamestate;
+    switch (gamestate) {
+      case Victory:
+        GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+        break;
+      case Defeat:
+        GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
+        break;
+    }
   }
 
   @Override

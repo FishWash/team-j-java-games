@@ -1,7 +1,6 @@
 package galacticMail;
 
 import galacticMail.gameObjects.Asteroid;
-import galacticMail.gameObjects.EmptyMoon;
 import galacticMail.gameObjects.Moon;
 import galacticMail.gameObjects.Rocket;
 import general.GamePanel;
@@ -20,18 +19,21 @@ public class GalacticLevel extends GalacticMailWorld {
   @Override
   protected void initialize() {
 
-    new PointsHandler();
     new Camera();
 
-    for (int i=0; i<8; i++) {
-      instantiate(new Asteroid(
+    int numAsteroids = 6 + (level*3);
+    double asteroidSpeed = 0.8 + (level*0.2);
+    for (int i=0; i<numAsteroids; i++) {
+      Asteroid asteroid = (Asteroid)instantiate(new Asteroid(
               RandomNumberGenerator.getRandomPosition(
                       0, 0, dimension.width, dimension.height ),
               RandomNumberGenerator.getRandomDouble(0, 360)
       ));
+      asteroid.setMoveSpeed(asteroidSpeed);
     }
 
-    for (int i=0; i<4; i++) {
+    int numMoons = 3 + (level);
+    for (int i=0; i<numMoons; i++) {
       instantiate(new Moon(
               RandomNumberGenerator.getRandomPosition(
                       0, 0, dimension.width, dimension.height ),
@@ -42,6 +44,7 @@ public class GalacticLevel extends GalacticMailWorld {
     instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
+    GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
   }
 
 
@@ -51,7 +54,7 @@ public class GalacticLevel extends GalacticMailWorld {
     graphics.drawImage(getCurrentImage(), 0, 0, null);
     Graphics2D graphics2D = (Graphics2D) graphics;
     Camera.displayPoints(graphics2D, PointsHandler.getInstance().getPoints());
-    if(gameState == GameState.Lost){
+    if(gameState == GameState.Defeat){
       Camera.displayloseScreen(graphics2D);
     }
     if(gameState == GameState.Victory){
