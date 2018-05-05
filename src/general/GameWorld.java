@@ -15,6 +15,7 @@ import java.util.Map;
 
 public abstract class GameWorld {
   public static GameWorld instance;
+  protected int level;
 
   protected Dimension dimension = new Dimension(0, 0);
 
@@ -38,6 +39,10 @@ public abstract class GameWorld {
   public abstract void display(Graphics graphics);
 
   public abstract GameObject instantiate(GameObject gameObject);
+
+  public int getLevel() {
+    return level;
+  }
 
   public abstract void destroy(GameObject gameObject);
 
@@ -109,6 +114,8 @@ public abstract class GameWorld {
       clip.stop();
     }
 
-    loopingSound.stop();
+    if (loopingSound != null) {
+      loopingSound.stop();
+    }
   }
 }

@@ -7,7 +7,11 @@ import utility.RandomNumberGenerator;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GalacticTitleWorld extends GalacticMailWorld{
+public class GalacticTitleWorld extends GalacticMailWorld {
+
+  public GalacticTitleWorld() {
+    super(0);
+  }
 
   protected void initialize(){
     dimension = new Dimension(800, 600);
@@ -20,6 +24,7 @@ public class GalacticTitleWorld extends GalacticMailWorld{
               RandomNumberGenerator.getRandomDouble(0, 360)
       ));
     }
+
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
   }

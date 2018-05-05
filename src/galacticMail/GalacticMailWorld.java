@@ -29,7 +29,7 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   private BufferedImage backgroundImage;
 
-  public GalacticMailWorld() {
+  public GalacticMailWorld(int level) {
     instance = this;
     spritePath = "/galacticMail/sprites/";
     soundPath = "/galacticMail/sounds/";
@@ -38,6 +38,7 @@ public abstract class GalacticMailWorld extends GameWorld {
       renderingLayers.add(new CopyOnWriteArrayList<>());
     }
 
+    this.level = level;
     initialize();
   }
 

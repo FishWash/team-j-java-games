@@ -23,6 +23,8 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
   private EscapeFunction escapeFunction = EscapeFunction.None;
   private BufferedImage pauseImage;
 
+  Thread clockThread;
+
   private int spaceKeyCode = KeyEvent.VK_SPACE,
           escapeKeyCode = KeyEvent.VK_ESCAPE;
 
@@ -33,7 +35,7 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
     this.addKeyListener(this);
 
     Clock clock = new Clock();
-    Thread clockThread = new Thread(clock);
+    clockThread = new Thread(clock);
     clock.addClockListener(this);
 
     super.setSize(dimension);
@@ -97,6 +99,19 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
   public void keyTyped(KeyEvent keyEvent) {}
 
   protected abstract void start();
+  protected abstract void restart();
+
+  protected void resetClock() {
+    GameWorld.getInstance().stopSounds();
+    Clock.getInstance().stop();
+    Clock clock = new Clock();
+    clockThread = new Thread(clock);
+    clock.addClockListener(this);
+  }
+
+  protected void instantiateGameWorld(GameWorld gameWorld) {
+    clockThread.start();
+  }
 
   protected void pause() {
     Clock clock = Clock.getInstance();

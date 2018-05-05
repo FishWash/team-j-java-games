@@ -41,6 +41,13 @@ public class Vector2
   public static Vector2 multiplyVector(Vector2 vector, double multiplier) {
     return new Vector2(vector.x*multiplier, vector.y*multiplier);
   }
+  public static Vector2 getMoveVectorOverTime(Vector2 startVector,
+          Vector2 endVector, int numFrames) {
+    Vector2 moveVector = subtractVectors(endVector, startVector);
+    double moveMagnitude = moveVector.getMagnitude() / (double)numFrames;
+    moveVector.setMagnitude(moveMagnitude);
+    return moveVector;
+  }
 
   public double getMagnitude() {
     return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -50,7 +57,10 @@ public class Vector2
   }
 
   public void setMagnitude(double magnitude) {
-    double factor = magnitude / this.getMagnitude();
+    double factor = 0;
+    if (magnitude != 0) {
+      factor = magnitude / this.getMagnitude();
+    }
     this.x *= factor;
     this.y *= factor;
   }
