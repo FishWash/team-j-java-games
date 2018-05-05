@@ -15,14 +15,12 @@ public class TankGamePanel extends GamePanel {
 
   @Override
   protected void start() {
-    TankGameWorld.getInstance().stopSounds();
-    Clock.getInstance().stop();
-    Clock clock = new Clock();
-    Thread clockThread = new Thread(clock);
-    clock.addClockListener(this);
+    resetClock();
+    instantiateGameWorld(new TankDeathmatch());
+  }
 
-    new TankDeathmatch();
-
-    clockThread.start();
+  @Override
+  protected void restart() {
+    // no restart
   }
 }

@@ -32,9 +32,9 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   public final int pointsToAdd = 5000;
   public enum GameState{None, Victory, Lost}
-  private GameState gameState = GameState.None;
+  protected GameState gameState = GameState.None;
 
-  public GalacticMailWorld() {
+  public GalacticMailWorld(int level) {
     instance = this;
     spritePath = "/galacticMail/sprites/";
     soundPath = "/galacticMail/sounds/";
@@ -42,10 +42,7 @@ public abstract class GalacticMailWorld extends GameWorld {
     for (int i=0; i<5; i++) {
       renderingLayers.add(new CopyOnWriteArrayList<>());
     }
-
-    new PointsHandler();
-    new Camera();
-
+    this.level = level;
     initialize();
   }
 
@@ -58,14 +55,6 @@ public abstract class GalacticMailWorld extends GameWorld {
   @Override
   public void display(Graphics graphics) {
     graphics.drawImage(getCurrentImage(), 0, 0, null);
-    Graphics2D graphics2D = (Graphics2D) graphics;
-    Camera.displayPoints(graphics2D, PointsHandler.getInstance().getPoints());
-    if(gameState == GameState.Lost){
-      Camera.displayloseScreen(graphics2D);
-    }
-    if(gameState == GameState.Victory){
-      Camera.displayWinScreen(graphics2D);
-    }
   }
 
   @Override

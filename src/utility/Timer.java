@@ -18,4 +18,8 @@ public class Timer
   public boolean isDone() {
     return Clock.getInstance().getNumFramesSinceStart() >= endFrame;
   }
+
+  public int getTime() {
+    return Math.max(0, endFrame - Clock.getInstance().getNumFramesSinceStart());
+  }
 }
