@@ -7,7 +7,7 @@ import utility.RandomNumberGenerator;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GalacticTitleWorld extends GalacticMailWorld{
+public class GalacticTitleWorld extends GalacticMailWorld {
 
   protected void initialize(){
     dimension = new Dimension(800, 600);

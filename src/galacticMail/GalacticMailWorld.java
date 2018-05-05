@@ -6,6 +6,7 @@ import galacticMail.gameObjects.Rocket;
 import galacticMail.gameObjects.SpaceObject;
 import general.GameWorld;
 import general.gameObjects.GameObject;
+import utility.Camera;
 import utility.Clock;
 import utility.ClockListener;
 import utility.UI;
@@ -28,7 +29,9 @@ public abstract class GalacticMailWorld extends GameWorld {
           = new ArrayList<>();
 
   private BufferedImage backgroundImage;
-  private int pointsToAdd = 100;
+  public final int pointsToAdd = 5000;
+  public enum GameState{None, Victory, Lost}
+  private GameState gameState = GameState.None;
 
   public GalacticMailWorld() {
     instance = this;
@@ -39,14 +42,29 @@ public abstract class GalacticMailWorld extends GameWorld {
       renderingLayers.add(new CopyOnWriteArrayList<>());
     }
 
+    new PointsHandler();
+    new Camera();
+
     initialize();
   }
 
   protected abstract void initialize();
 
+  public void setGameState(GameState gamestate){
+    this.gameState = gamestate;
+  }
+
   @Override
   public void display(Graphics graphics) {
     graphics.drawImage(getCurrentImage(), 0, 0, null);
+    Graphics2D graphics2D = (Graphics2D) graphics;
+    Camera.displayPoints(graphics2D, PointsHandler.getInstance().getPoints());
+    if(gameState == GameState.Lost){
+      Camera.displayloseScreen(graphics2D);
+    }
+    if(gameState == GameState.Victory){
+      Camera.displayWinScreen(graphics2D);
+    }
   }
 
   @Override

@@ -1,6 +1,7 @@
 package galacticMail.gameObjects;
 
 import galacticMail.GalacticMailWorld;
+import galacticMail.PointsHandler;
 import galacticMail.RocketKeyInput;
 import general.GameWorld;
 import utility.MultiSprite;
@@ -34,6 +35,7 @@ public class Rocket extends SpaceObject {
     move();
     launch();
     checkCollisions();
+    PointsHandler.getInstance().losePoints();
   }
 
   private void turn() {
@@ -90,11 +92,22 @@ public class Rocket extends SpaceObject {
 
   private void dock(Moon moon) {
     dockedMoon = moon;
+    PointsHandler.getInstance().addPoints(((GalacticMailWorld) GalacticMailWorld.getInstance()).pointsToAdd);
+
+    if(((GalacticMailWorld) GalacticMailWorld.getInstance()).getMoons().size() == 1){
+      ((GalacticMailWorld) GalacticMailWorld.getInstance()).setGameState(GalacticMailWorld.GameState.Victory);
+    }
   }
 
   @Override
   public void drawSprite(Graphics graphics) {
     sprite = multiSprite.getSubSpriteByRotation(rotation);
     super.drawSprite(graphics);
+  }
+
+  @Override
+  public void die(){
+    super.die();
+    ((GalacticMailWorld) GalacticMailWorld.getInstance()).setGameState(GalacticMailWorld.GameState.Lost);
   }
 }

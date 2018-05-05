@@ -8,8 +8,8 @@ public class GalacticMailPanel extends GamePanel {
 
   public GalacticMailPanel(Dimension dimension) {
     super(dimension);
-    new GalacticTitleWorld();
-//    new GalacticLevelOne();
+//    new GalacticTitleWorld();
+    new GalacticLevelOne();
     title = "You rock-et!";
   }
 
