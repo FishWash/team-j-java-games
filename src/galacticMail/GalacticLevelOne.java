@@ -1,6 +1,7 @@
 package galacticMail;
 
 import galacticMail.gameObjects.Asteroid;
+import galacticMail.gameObjects.EmptyMoon;
 import galacticMail.gameObjects.Moon;
 import galacticMail.gameObjects.Rocket;
 import utility.RandomNumberGenerator;
@@ -26,6 +27,7 @@ public class GalacticLevelOne extends GalacticMailWorld {
       ));
     }
 
-    instantiate(new Rocket(new Vector2(256, 256)));
+    instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
+    instantiate(new EmptyMoon(new Vector2(dimension.width/2, dimension.height/2)));
   }
 }
