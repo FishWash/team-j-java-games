@@ -37,6 +37,10 @@ public class Rocket extends SpaceObject {
     landedMultiSprite = new MultiSprite(spriteStrip, 72);
     renderingLayerIndex = 3;
 
+    Moon myMoon = (Moon)GameWorld.getInstance()
+            .instantiate(new EmptyMoon(position));
+    dock(myMoon);
+
     GameWorld.getInstance().loadSprite("Explosion_space_strip9.png");
   }
 

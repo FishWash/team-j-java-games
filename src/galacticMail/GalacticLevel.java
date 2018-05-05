@@ -19,8 +19,9 @@ public class GalacticLevel extends GalacticMailWorld {
 
   @Override
   protected void initialize() {
-    instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
-    instantiate(new EmptyMoon(new Vector2(dimension.width/2, dimension.height/2)));
+
+    new PointsHandler();
+    new Camera();
 
     for (int i=0; i<8; i++) {
       instantiate(new Asteroid(
@@ -38,8 +39,8 @@ public class GalacticLevel extends GalacticMailWorld {
       ));
     }
 
-    new PointsHandler();
-    new Camera();
+    instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
+
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
   }
 
