@@ -17,6 +17,9 @@ public class Rocket extends SpaceObject {
   private final double TURN_SPEED = 0.5;
   private final double MAX_VELOCITY = 4;
   private final int LANDING_TIME = 24;
+  private final int INVULNERABILITY_TIME = 24;
+
+  private GalacticMailWorld galacticMailWorld;
 
   private Vector2 velocityVector = new Vector2(0, 0);
   private RocketKeyInput rocketKeyInput;
@@ -25,23 +28,31 @@ public class Rocket extends SpaceObject {
   private Moon dockedMoon = null;
 
   private Timer landingTimer = new Timer();
+  private Timer invulnerabilityTimer = new Timer();
 
   public Rocket(Vector2 position) {
     super(position, 24);
+    setRotation(90);
+    setPosition(Vector2.addVectors(position, new Vector2(0, -16)));
+
     rocketKeyInput = new RocketKeyInput();
+
+    if (GameWorld.getInstance() instanceof GalacticMailWorld) {
+      galacticMailWorld = (GalacticMailWorld)GameWorld.getInstance();
+    }
+
+    Moon myMoon = (Moon)GameWorld.getInstance()
+            .instantiate(new EmptyMoon(position));
+    dock(myMoon);
+
     BufferedImage spriteStrip = GameWorld.getInstance()
             .loadSprite("Flying_strip72.png");
     flyingMultiSprite = new MultiSprite(spriteStrip, 72);
     spriteStrip = GameWorld.getInstance()
             .loadSprite("Landed_strip72.png");
     landedMultiSprite = new MultiSprite(spriteStrip, 72);
-    renderingLayerIndex = 3;
-
-    Moon myMoon = (Moon)GameWorld.getInstance()
-            .instantiate(new EmptyMoon(position));
-    dock(myMoon);
-
     GameWorld.getInstance().loadSprite("Explosion_space_strip9.png");
+    renderingLayerIndex = 3;
   }
 
   @Override
@@ -50,7 +61,7 @@ public class Rocket extends SpaceObject {
     move();
     launch();
     checkCollisions();
-    PointsHandler.getInstance().losePoints();
+    losePoints();
   }
 
   private void turn() {
@@ -82,30 +93,30 @@ public class Rocket extends SpaceObject {
   }
 
   private void launch() {
-    if (rocketKeyInput.getShootPressed() && dockedMoon != null
+    if (rocketKeyInput.getLaunchPressed() && dockedMoon != null
             && landingTimer.isDone()) {
       dockedMoon.destroy();
       dockedMoon = null;
       velocityVector = Vector2.newRotationMagnitudeVector(rotation, MOVE_SPEED*32);
+      invulnerabilityTimer.set(INVULNERABILITY_TIME);
     }
   }
 
   private void checkCollisions() {
     GameWorld gameWorld = GameWorld.getInstance();
-    if (gameWorld instanceof GalacticMailWorld) {
+    if (alive && gameWorld instanceof GalacticMailWorld) {
       GalacticMailWorld galacticMailWorld = (GalacticMailWorld)gameWorld;
 
-      CopyOnWriteArrayList<Moon> moons = galacticMailWorld.getMoons();
-      CopyOnWriteArrayList<Asteroid> asteroids = galacticMailWorld.getAsteroids();
-
       if (dockedMoon == null) {
+        CopyOnWriteArrayList<Moon> moons = galacticMailWorld.getMoons();
         for (Moon moon : moons) {
           if (trigger.isOverlapping(moon.getTrigger())) {
             dock(moon);
           }
         }
       }
-      if (dockedMoon == null) {
+      if (dockedMoon == null && invulnerabilityTimer.isDone()) {
+        CopyOnWriteArrayList<Asteroid> asteroids = galacticMailWorld.getAsteroids();
         for (Asteroid asteroid : asteroids) {
           if (trigger.isOverlapping(asteroid.getTrigger())) {
             GameWorld.getInstance().instantiate(new Explosion(position, rotation));
@@ -113,12 +124,20 @@ public class Rocket extends SpaceObject {
           }
         }
       }
+
+    }
+  }
+
+  // Lose points if rocket is docked, but not if game is over.
+  private void losePoints() {
+    if (dockedMoon != null && !galacticMailWorld.isGameOver()) {
+      PointsHandler.getInstance().losePoints(5);
     }
   }
 
   private void dock(Moon moon) {
     dockedMoon = moon;
-    PointsHandler.getInstance().addPoints(((GalacticMailWorld) GalacticMailWorld.getInstance()).pointsToAdd);
+    PointsHandler.getInstance().addPoints(((GalacticMailWorld)GalacticMailWorld.getInstance()).pointsToAdd);
     landingTimer.set(LANDING_TIME);
 
     // win condition

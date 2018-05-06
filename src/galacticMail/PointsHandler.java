@@ -12,9 +12,9 @@ public class PointsHandler {
     points += pointsToAdd;
   }
 
-  public void losePoints(){
-    if(points > 0){
-      points--;
+  public void losePoints(int pointsToLose) {
+    if (points > 0) {
+      points -= pointsToLose;
     }
   }
 

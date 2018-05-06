@@ -13,7 +13,7 @@ public class Asteroid extends SpaceObject {
   private AnimatedSprite animatedSprite;
 
   public Asteroid(Vector2 position, double rotation) {
-    super(position, 16);
+    super(position, 12);
     setRotation(rotation);
     moveSpeed = 1;
 

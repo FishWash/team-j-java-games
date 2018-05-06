@@ -20,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class GalacticMailWorld extends GameWorld {
   public enum Team {Player, Enemy}
   public enum GameState{None, Victory, Defeat}
+  private boolean gameOver;
 
   private Rocket rocket = null;
   private CopyOnWriteArrayList<Asteroid> asteroids
@@ -49,14 +50,17 @@ public abstract class GalacticMailWorld extends GameWorld {
   protected abstract void initialize();
 
   public void setGameState(GameState gamestate){
-    this.gameState = gamestate;
-    switch (gamestate) {
-      case Victory:
-        GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
-        break;
-      case Defeat:
-        GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
-        break;
+    if (!gameOver) {
+      this.gameState = gamestate;
+      gameOver = true;
+      switch (gamestate) {
+        case Victory:
+          GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+          break;
+        case Defeat:
+          GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
+          break;
+      }
     }
   }
 
@@ -148,5 +152,9 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   public CopyOnWriteArrayList<Moon> getMoons() {
     return moons;
+  }
+
+  public boolean isGameOver() {
+    return gameOver;
   }
 }

@@ -26,7 +26,8 @@ public class GalacticTitleWorld extends GalacticMailWorld {
     }
 
 
-    GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+    GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
+    GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
   }
 
   protected void drawTitle(BufferedImage currentImage){

@@ -21,8 +21,8 @@ public class GalacticLevel extends GalacticMailWorld {
 
     new Camera();
 
-    int numAsteroids = 6 + (level*3);
-    double asteroidSpeed = 0.8 + (level*0.2);
+    int numAsteroids = 10 + (int)Math.pow(level, 1.8);
+    double asteroidSpeed = 0.95 + (level*0.05);
     for (int i=0; i<numAsteroids; i++) {
       Asteroid asteroid = (Asteroid)instantiate(new Asteroid(
               RandomNumberGenerator.getRandomPosition(
@@ -32,7 +32,7 @@ public class GalacticLevel extends GalacticMailWorld {
       asteroid.setMoveSpeed(asteroidSpeed);
     }
 
-    int numMoons = 3 + (level);
+    int numMoons = 2 + 2*(int)Math.pow(level, 0.6);
     for (int i=0; i<numMoons; i++) {
       instantiate(new Moon(
               RandomNumberGenerator.getRandomPosition(
