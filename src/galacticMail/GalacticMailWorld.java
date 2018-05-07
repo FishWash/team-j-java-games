@@ -33,7 +33,6 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   private BufferedImage backgroundImage;
 
-  public final int pointsToAdd = 5000;
   protected GameState gameState = GameState.None;
 
   public GalacticMailWorld(int level) {

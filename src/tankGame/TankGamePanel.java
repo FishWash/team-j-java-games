@@ -16,7 +16,8 @@ public class TankGamePanel extends GamePanel {
   @Override
   protected void start() {
     resetClock();
-    instantiateGameWorld(new TankDeathmatch());
+    new TankDeathmatch();
+    clockThread.start();
   }
 
   @Override

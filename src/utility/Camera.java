@@ -2,6 +2,7 @@ package utility;
 
 import galacticMail.GalacticMailWorld;
 import general.GamePanel;
+import general.GameWorld;
 import tankGame.TankGameWorld;
 
 import java.awt.*;
@@ -23,27 +24,27 @@ public class Camera {
     return resizedMap;
   }
 
-  public static void displayPoints(Graphics2D graphics2D, int points){
-    Font font = new Font("Impact", Font.PLAIN, 25);
-    UI.drawPositionedTextImage(graphics2D, Integer.toString(points), Color.WHITE, font, GamePanel.getInstance().getWidth(),
-                               GamePanel.getInstance().getHeight(), 0.5, 0.97);
+  public static void displayLevel(Graphics2D graphics2D, int levelNum){
+    Font font = new Font("Impact", Font.PLAIN, 32);
+    String level = "Level " + Integer.toString(levelNum);
+    UI.drawPositionedTextImage(graphics2D, level, Color.WHITE, font, GamePanel.getInstance().getWidth(),
+                               GamePanel.getInstance().getHeight(), 0.5, 0.95);
   }
 
-  public static void displayLevel(Graphics2D graphics2D, int levelNum){
-    Font font = new Font("Impact", Font.PLAIN, 25);
-    String level = "level " + Integer.toString(levelNum);
-    UI.drawPositionedTextImage(graphics2D, level, Color.WHITE, font, GamePanel.getInstance().getWidth(),
-                               GamePanel.getInstance().getHeight(), 0.5, 0.02);
+  public static void displayPoints(Graphics2D graphics2D, int points){
+    Font font = new Font("Impact", Font.PLAIN, 32);
+    UI.drawPositionedTextImage(graphics2D, "$" + Integer.toString(points), Color.WHITE, font, GameWorld.getInstance().getDimension().getWidth(),
+                               GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.05);
   }
 
   public static void displayLoseScreen(Graphics2D graphics2D){
-    Font font = new Font("Impact", Font.PLAIN, 50);
-    UI.drawPositionedTextImage(graphics2D, "YOU LOSE", Color.WHITE, font, GalacticMailWorld.getInstance().getDimension().getWidth(),
-            GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.4);
+    Font font = new Font("Impact", Font.PLAIN, 80);
+    UI.drawPositionedTextImage(graphics2D, "DELIVERY FAILED", Color.WHITE, font, GameWorld.getInstance().getDimension().getWidth(),
+            GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.45);
   }
   public static void displayWinScreen(Graphics2D graphics2D){
-    Font font = new Font("Impact", Font.PLAIN, 50);
-    UI.drawPositionedTextImage(graphics2D, "YOU WIN", Color.WHITE, font, GalacticMailWorld.getInstance().getDimension().getWidth(),
-            GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.4);
+    Font font = new Font("Impact", Font.PLAIN, 80);
+    UI.drawPositionedTextImage(graphics2D, "DELIVERY COMPLETED", Color.WHITE, font, GameWorld.getInstance().getDimension().getWidth(),
+            GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.45);
   }
 }
