@@ -23,7 +23,7 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
   private EscapeFunction escapeFunction = EscapeFunction.None;
   private BufferedImage pauseImage;
 
-  Thread clockThread;
+  protected Thread clockThread;
 
   private int spaceKeyCode = KeyEvent.VK_SPACE,
           escapeKeyCode = KeyEvent.VK_ESCAPE;
@@ -110,10 +110,6 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
     Clock clock = new Clock();
     clockThread = new Thread(clock);
     clock.addClockListener(this);
-  }
-
-  protected void instantiateGameWorld(GameWorld gameWorld) {
-    clockThread.start();
   }
 
   protected void pause() {

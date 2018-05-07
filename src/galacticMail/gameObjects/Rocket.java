@@ -33,20 +33,22 @@ public class Rocket extends SpaceObject {
   private Timer invulnerabilityTimer = new Timer();
 
   public Rocket(Vector2 position) {
-    super(position, 24);
+    // Spawn slightly above position
+    super(Vector2.addVectors(position, new Vector2(0, -16)), 24);
     setRotation(90);
-    setPosition(Vector2.addVectors(position, new Vector2(0, -16)));
-
-    rocketKeyInput = new RocketKeyInput();
 
     if (GameWorld.getInstance() instanceof GalacticMailWorld) {
       galacticMailWorld = (GalacticMailWorld)GameWorld.getInstance();
     }
 
+    rocketKeyInput = new RocketKeyInput();
+
+    // Set starting moon
     Moon myMoon = (Moon)GameWorld.getInstance()
             .instantiate(new EmptyMoon(position));
     dock(myMoon);
 
+    // Set sprite stuff
     BufferedImage spriteStrip = GameWorld.getInstance()
             .loadSprite("Flying_strip72.png");
     flyingMultiSprite = new MultiSprite(spriteStrip, 72);
@@ -55,6 +57,12 @@ public class Rocket extends SpaceObject {
     landedMultiSprite = new MultiSprite(spriteStrip, 72);
     GameWorld.getInstance().loadSprite("Explosion_space_strip9.png");
     renderingLayerIndex = 3;
+
+    // Pre-load sounds
+    galacticMailWorld.loadSound("Launch.wav");
+    galacticMailWorld.loadSound("landing.wav");
+    galacticMailWorld.loadSound("Explosion.wav");
+    galacticMailWorld.loadSound("tankhit.wav");
   }
 
   @Override
@@ -101,6 +109,7 @@ public class Rocket extends SpaceObject {
       dockedMoon = null;
       velocityVector = Vector2.newRotationMagnitudeVector(rotation, MOVE_SPEED*32);
       invulnerabilityTimer.set(INVULNERABILITY_TIME);
+      galacticMailWorld.playSound("Launch.wav");
     }
   }
 
@@ -121,7 +130,6 @@ public class Rocket extends SpaceObject {
         CopyOnWriteArrayList<Asteroid> asteroids = galacticMailWorld.getAsteroids();
         for (Asteroid asteroid : asteroids) {
           if (trigger.isOverlapping(asteroid.getTrigger())) {
-            GameWorld.getInstance().instantiate(new Explosion(position, rotation));
             die();
           }
         }
@@ -146,6 +154,10 @@ public class Rocket extends SpaceObject {
     if (galacticMailWorld.getMoons().size() == 1) {
       galacticMailWorld.setGameState(GalacticMailWorld.GameState.Victory);
     }
+
+    if (!(moon instanceof EmptyMoon)) {
+      galacticMailWorld.playSound("landing.wav");
+    }
   }
 
   @Override
@@ -163,5 +175,7 @@ public class Rocket extends SpaceObject {
   public void die(){
     super.die();
     galacticMailWorld.setGameState(GalacticMailWorld.GameState.Defeat);
+    GameWorld.getInstance().instantiate(new Explosion(position, rotation));
+    galacticMailWorld.playSound("Explosion.wav");
   }
 }

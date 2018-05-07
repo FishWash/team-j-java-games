@@ -8,6 +8,7 @@ import tankGame.FuzzyTankKeyInput;
 import tankGame.TankGameWorld;
 import tankGame.TankKeyInput;
 import tankGame.gameObjects.pickups.Pickup;
+import tankGame.weapons.NukeWeapon;
 import tankGame.weapons.ShellWeapon;
 import tankGame.weapons.Weapon;
 import utility.ClockListener;
@@ -53,7 +54,7 @@ public class Tank extends BoxCollidableGameObject
     renderingLayer = TankGameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
-//    equippedWeapon = new NukeWeapon();
+    equippedWeapon = new NukeWeapon();
 
     TankGameWorld.getInstance().loadSound("tankhit.wav");
     TankGameWorld.getInstance().loadSound("BIGEXPLOSION.wav");

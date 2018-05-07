@@ -12,7 +12,7 @@ import utility.Vector2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Projectile extends TriggerGameObject implements ClockListener
+public abstract class Projectile extends TriggerGameObject implements ClockListener
 {
   protected double moveSpeed = 1;
   protected MultiSprite multiSprite;

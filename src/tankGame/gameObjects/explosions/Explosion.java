@@ -25,21 +25,22 @@ public abstract class Explosion extends TriggerGameObject implements ClockListen
   }
 
   public void update() {
-    if (lifeTimer.isDone()) {
-      die();
-    }
     if (alive) {
       damageDamageables();
       alive = false;
     }
+    if (lifeTimer.isDone()) {
+      die();
+    }
   }
 
+  // Deal damage to damageables in trigger area.
   private void damageDamageables() {
     ArrayList<Damageable> damageables = TankGameWorld.getInstance()
                                           .findOverlappingDamageables(trigger);
     for (Damageable d : damageables) {
       if (d instanceof TankGameObject
-              && ((TankGameObject)d).getOwner() != owner) {
+              && (((TankGameObject)d).getOwner() != owner) || (owner == TankGameWorld.Player.Neutral)){
         d.damage(damage);
       }
     }
