@@ -10,9 +10,9 @@ import utility.Vector2;
 
 import java.awt.*;
 
-public class GalacticLevel extends GalacticMailWorld {
+public class GalacticLevelWorld extends GalacticMailWorld {
 
-  public GalacticLevel(int level) {
+  public GalacticLevelWorld(int level) {
     super(level);
   }
 
@@ -21,8 +21,8 @@ public class GalacticLevel extends GalacticMailWorld {
 
     new Camera();
 
-    int numAsteroids = 10 + (int)Math.pow(level, 1.8);
-    double asteroidSpeed = 0.95 + (level*0.05);
+    int numAsteroids = 6 + (int)Math.pow(level+1, 1.1);
+    double asteroidSpeed = 0.6 + (level*0.4);
     for (int i=0; i<numAsteroids; i++) {
       Asteroid asteroid = (Asteroid)instantiate(new Asteroid(
               RandomNumberGenerator.getRandomPosition(
@@ -32,14 +32,21 @@ public class GalacticLevel extends GalacticMailWorld {
       asteroid.setMoveSpeed(asteroidSpeed);
     }
 
-    int numMoons = 2 + 2*(int)Math.pow(level, 0.6);
+    double moonSpeed = 0.7 + (level*0.1);
+    int numMoons = 3 + (int)Math.pow(level, 0.9);
     for (int i=0; i<numMoons; i++) {
-      instantiate(new Moon(
+      Moon moon = (Moon)instantiate(new Moon(
               RandomNumberGenerator.getRandomPosition(
                       0, 0, dimension.width, dimension.height ),
               RandomNumberGenerator.getRandomDouble(0, 360)
       ));
     }
+
+    System.out.println("Level " + level + ":");
+    System.out.println("  " + numAsteroids + " Asteroids");
+    System.out.println("  " + numMoons + " Moons");
+    System.out.println("  Asteroid speed: " + asteroidSpeed);
+    System.out.println("  Moon speed: " + moonSpeed);
 
     instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
 

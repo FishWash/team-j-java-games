@@ -18,6 +18,8 @@ public class Rocket extends SpaceObject {
   private final double MAX_VELOCITY = 4;
   private final int LANDING_TIME = 24;
   private final int INVULNERABILITY_TIME = 24;
+  private final int POINTS_FOR_LANDING = 500;
+  private final int POINTS_LOST_FOR_STAYING = 1;
 
   private GalacticMailWorld galacticMailWorld;
 
@@ -131,18 +133,18 @@ public class Rocket extends SpaceObject {
   // Lose points if rocket is docked, but not if game is over.
   private void losePoints() {
     if (dockedMoon != null && !galacticMailWorld.isGameOver()) {
-      PointsHandler.getInstance().losePoints(5);
+      PointsHandler.getInstance().losePoints(POINTS_LOST_FOR_STAYING);
     }
   }
 
   private void dock(Moon moon) {
     dockedMoon = moon;
-    PointsHandler.getInstance().addPoints(((GalacticMailWorld)GalacticMailWorld.getInstance()).pointsToAdd);
+    PointsHandler.getInstance().addPoints(POINTS_FOR_LANDING);
     landingTimer.set(LANDING_TIME);
 
     // win condition
-    if(((GalacticMailWorld) GalacticMailWorld.getInstance()).getMoons().size() == 1){
-      ((GalacticMailWorld) GalacticMailWorld.getInstance()).setGameState(GalacticMailWorld.GameState.Victory);
+    if (galacticMailWorld.getMoons().size() == 1) {
+      galacticMailWorld.setGameState(GalacticMailWorld.GameState.Victory);
     }
   }
 
@@ -160,6 +162,6 @@ public class Rocket extends SpaceObject {
   @Override
   public void die(){
     super.die();
-    ((GalacticMailWorld) GalacticMailWorld.getInstance()).setGameState(GalacticMailWorld.GameState.Defeat);
+    galacticMailWorld.setGameState(GalacticMailWorld.GameState.Defeat);
   }
 }

@@ -17,13 +17,13 @@ public class GalacticMailPanel extends GamePanel {
   protected void start() {
     resetClock();
     int newLevel = GameWorld.getInstance().getLevel()+1;
-    instantiateGameWorld(new GalacticLevel(newLevel));
+    instantiateGameWorld(new GalacticLevelWorld(newLevel));
   }
 
   @Override
   protected void restart() {
     resetClock();
     new PointsHandler();
-    instantiateGameWorld(new GalacticLevel(1));
+    instantiateGameWorld(new GalacticLevelWorld(1));
   }
 }
