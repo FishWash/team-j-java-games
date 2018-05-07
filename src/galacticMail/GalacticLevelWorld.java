@@ -4,11 +4,7 @@ import galacticMail.gameObjects.Asteroid;
 import galacticMail.gameObjects.Moon;
 import galacticMail.gameObjects.Rocket;
 import general.GamePanel;
-import general.GameWorld;
-import utility.Camera;
-import utility.FlashingText;
-import utility.RandomNumberGenerator;
-import utility.Vector2;
+import utility.*;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -22,6 +18,9 @@ public class GalacticLevelWorld extends GalacticMailWorld {
 
   @Override
   protected void initialize() {
+
+    new Camera();
+
     // Number of Asteroids and Moons and their speeds are determined by an
     // algorithm based on level number.
     int numAsteroids = 6 + (int)Math.pow(level+1, 1.1);
@@ -52,6 +51,10 @@ public class GalacticLevelWorld extends GalacticMailWorld {
 
     instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
 
+    new FlashingText();
+    new Scoreboard();
+    scoreboard = Scoreboard.readScoreboard("src/galacticMail/Scoreboard.txt");
+
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
   }
@@ -64,11 +67,11 @@ public class GalacticLevelWorld extends GalacticMailWorld {
     Camera.displayPoints(graphics2D, PointsHandler.getInstance().getPoints());
     Camera.displayLevel(graphics2D, level);
 
-    if(gameState == GameState.Defeat){
+    if (gameState == GameState.Defeat){
       Camera.displayLoseScreen(graphics2D);
-      FlashingText.drawFlashingText(graphics, "Press Space to Restart", 0.6);
+      FlashingText.drawFlashingText(graphics, "Press Space to Restart", 0.75);
     }
-    if (gameState == GameState.Victory) {
+    if (gameState == GameState.Victory){
       Camera.displayWinScreen(graphics2D);
       FlashingText.drawFlashingText(graphics, "Press Space to Continue", 0.6);
     }

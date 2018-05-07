@@ -1,12 +1,14 @@
 package utility;
 
 import galacticMail.GalacticMailWorld;
+import galacticMail.PointsHandler;
 import general.GamePanel;
 import general.GameWorld;
 import tankGame.TankGameWorld;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Camera {
   protected Vector2 position;
@@ -38,13 +40,31 @@ public class Camera {
   }
 
   public static void displayLoseScreen(Graphics2D graphics2D){
-    Font font = new Font("Impact", Font.PLAIN, 80);
-    UI.drawPositionedTextImage(graphics2D, "DELIVERY FAILED", Color.WHITE, font, GameWorld.getInstance().getDimension().getWidth(),
-            GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.45);
+    ArrayList<String> leaderboard = Scoreboard.readScoreboard("src/galacticMail/Scoreboard.txt");
+    Font font = new Font("Impact", Font.PLAIN, 50);
+    double width = GalacticMailWorld.getInstance().getDimension().getWidth();
+    double height = GalacticMailWorld.getInstance().getDimension().getHeight();
+    UI.drawPositionedTextImage(graphics2D, "DELIVERY FAILED", Color.WHITE, font, width,
+                               height, 0.5, 0.15);
+    font = new Font("Impact", Font.BOLD, 25);
+    UI.drawPositionedTextImage(graphics2D, "SCOREBOARD", Color.WHITE, font, width, height, 0.5, 0.3);
+    double heightProportion = 0.4;
+
+    font = new Font("Impact", Font.PLAIN, 25);
+    for (int i = 0; i < leaderboard.size(); i++){
+      if(leaderboard.get(i).equals(Integer.toString(PointsHandler.getInstance().getPoints()))){
+        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i), Color.YELLOW, font, width,
+                height, 0.5, heightProportion);
+      }else {
+        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i), Color.WHITE, font, width,
+                height, 0.5, heightProportion);
+      }
+      heightProportion += 0.05;
+    }
   }
   public static void displayWinScreen(Graphics2D graphics2D){
-    Font font = new Font("Impact", Font.PLAIN, 80);
-    UI.drawPositionedTextImage(graphics2D, "DELIVERY COMPLETED", Color.WHITE, font, GameWorld.getInstance().getDimension().getWidth(),
-            GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.45);
+    Font font = new Font("Impact", Font.PLAIN, 50);
+    UI.drawPositionedTextImage(graphics2D, "DELIVERY COMPLETED", Color.WHITE, font, GalacticMailWorld.getInstance().getDimension().getWidth(),
+                               GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.4);
   }
 }

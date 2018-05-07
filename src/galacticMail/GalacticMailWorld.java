@@ -7,10 +7,7 @@ import galacticMail.gameObjects.SpaceObject;
 import general.GamePanel;
 import general.GameWorld;
 import general.gameObjects.GameObject;
-import utility.Clock;
-import utility.ClockListener;
-import utility.FlashingText;
-import utility.UI;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,6 +27,7 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   private List<CopyOnWriteArrayList<SpaceObject>> renderingLayers
           = new ArrayList<>();
+  protected ArrayList<String> scoreboard = new ArrayList<>(5);
 
   private BufferedImage backgroundImage;
 
@@ -60,6 +58,7 @@ public abstract class GalacticMailWorld extends GameWorld {
           break;
         case Defeat:
           GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
+          Scoreboard.checkNewScore(PointsHandler.getInstance().getPoints());
           break;
       }
     }
