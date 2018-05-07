@@ -9,6 +9,7 @@ import general.GameWorld;
 import general.gameObjects.GameObject;
 import utility.Clock;
 import utility.ClockListener;
+import utility.FlashingText;
 import utility.UI;
 
 import java.awt.*;
@@ -40,6 +41,7 @@ public abstract class GalacticMailWorld extends GameWorld {
     spritePath = "/galacticMail/sprites/";
     soundPath = "/galacticMail/sounds/";
     dimension = new Dimension(800, 600);
+    new FlashingText();
     for (int i=0; i<5; i++) {
       renderingLayers.add(new CopyOnWriteArrayList<>());
     }

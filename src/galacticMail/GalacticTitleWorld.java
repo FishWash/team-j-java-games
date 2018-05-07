@@ -2,6 +2,7 @@ package galacticMail;
 
 import galacticMail.gameObjects.Asteroid;
 import general.GamePanel;
+import utility.FlashingText;
 import utility.RandomNumberGenerator;
 
 import java.awt.*;
@@ -25,6 +26,7 @@ public class GalacticTitleWorld extends GalacticMailWorld {
       ));
     }
 
+    new FlashingText();
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
@@ -35,6 +37,8 @@ public class GalacticTitleWorld extends GalacticMailWorld {
     BufferedImage title = loadSprite("Title.png");
     g2D.drawImage( title, (int)(dimension.getWidth()/2) - (title.getWidth()/2),
         (int)(dimension.getHeight() / 3) - (title.getHeight() / 2), null);
+
+    FlashingText.drawFlashingText(g2D, "Press Space to Start", 0.7);
   }
 
   @Override

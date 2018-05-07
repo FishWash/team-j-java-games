@@ -2,6 +2,7 @@ package tankGame;
 
 import general.GamePanel;
 import tankGame.gameObjects.TankSpawner;
+import utility.FlashingText;
 import utility.Timer;
 import utility.UI;
 import utility.Vector2;
@@ -26,6 +27,8 @@ public class TitleWorld extends TankGameWorld {
 
     playSoundLooping("Off Limits.wav");
 
+    new FlashingText();
+
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
   }
@@ -39,16 +42,7 @@ public class TitleWorld extends TankGameWorld {
       e.printStackTrace();
     }
 
-    if (flashTimer.isDone()) {
-      flashOn = !flashOn;
-      flashTimer.set(flashDelay);
-    }
-
-    if (flashOn) {
-      Font font = new Font("Impact", Font.PLAIN, 48);
-      UI.drawPositionedTextImage((Graphics2D)graphics, "Press Space to start", Color.WHITE, font,
-                                 dimension.width, dimension.height, 0.5, 0.6);
-    }
+    FlashingText.drawFlashingText(graphics,"Press Space to Start", 0.6);
   }
 
   @Override

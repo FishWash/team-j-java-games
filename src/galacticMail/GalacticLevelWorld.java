@@ -5,6 +5,7 @@ import galacticMail.gameObjects.Moon;
 import galacticMail.gameObjects.Rocket;
 import general.GamePanel;
 import utility.Camera;
+import utility.FlashingText;
 import utility.RandomNumberGenerator;
 import utility.Vector2;
 
@@ -50,6 +51,8 @@ public class GalacticLevelWorld extends GalacticMailWorld {
 
     instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
 
+    new FlashingText();
+
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
   }
@@ -61,11 +64,14 @@ public class GalacticLevelWorld extends GalacticMailWorld {
     graphics.drawImage(getCurrentImage(), 0, 0, null);
     Graphics2D graphics2D = (Graphics2D) graphics;
     Camera.displayPoints(graphics2D, PointsHandler.getInstance().getPoints());
+    Camera.displayLevel(graphics2D, level);
     if(gameState == GameState.Defeat){
-      Camera.displayloseScreen(graphics2D);
+      Camera.displayLoseScreen(graphics2D);
+      FlashingText.drawFlashingText(graphics, "Press Space to Restart", 0.6);
     }
     if(gameState == GameState.Victory){
       Camera.displayWinScreen(graphics2D);
+      FlashingText.drawFlashingText(graphics, "Press Space to Continue", 0.6);
     }
   }
 }

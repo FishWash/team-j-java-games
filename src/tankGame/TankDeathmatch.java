@@ -18,9 +18,6 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
   private TankSpawner playerOneSpawner;
   private TankSpawner playerTwoSpawner;
   private boolean gameOver = false;
-  int flashDelay = 48;
-  Timer flashTimer = new Timer();
-  boolean flashOn;
 
   protected void initialize() {
     GameWorld.instance = this;
@@ -44,6 +41,8 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
 
     playSoundLooping("Defense Line.wav");
     loadSound("kazoocheer.wav");
+
+    new FlashingText();
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
@@ -72,17 +71,7 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
                           minimap.getWidth(), minimap.getHeight());
 
       if(gameOver){
-        if (flashTimer.isDone()) {
-          flashOn = !flashOn;
-          flashTimer.set(flashDelay);
-        }
-
-        if (flashOn) {
-          Font font = new Font("Impact", Font.PLAIN, 48);
-          UI.drawPositionedTextImage((Graphics2D)graphics, "Press Space to restart", Color.WHITE, font,
-                                     TankGameApplication.windowDimension.width, TankGameApplication.windowDimension.height,
-                                     0.5, 0.6);
-        }
+        FlashingText.drawFlashingText(graphics,"Press Space to Start", 0.6);
         GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
       }
     } catch (Exception e) {
