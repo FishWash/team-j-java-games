@@ -27,8 +27,6 @@ public class TitleWorld extends TankGameWorld {
 
     playSoundLooping("Off Limits.wav");
 
-    new FlashingText();
-
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
   }

@@ -2,24 +2,23 @@ package galacticMail;
 
 import general.GamePanel;
 import general.GameWorld;
-import utility.FlashingText;
 
-import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
-import javax.sound.midi.Synthesizer;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.io.InputStream;
 
 public class GalacticMailPanel extends GamePanel {
 
-  private Sequencer loopingMidiSequencer;
+  private Clip loopingSound;
+  private int lives;
 
   public GalacticMailPanel(Dimension dimension) {
     super(dimension);
     new GalacticTitleWorld();
     title = "You rock-et!";
-    new FlashingText();
   }
 
   @Override
@@ -32,40 +31,58 @@ public class GalacticMailPanel extends GamePanel {
 
   @Override
   protected void restart() {
+
     resetClock();
     new PointsHandler();
-    if (loopingMidiSequencer != null) {
-      loopingMidiSequencer.stop();
-    }
     new GalacticLevelWorld(1);
-    loadLoopingMidi("Music.mid");
+    playLoopingSound("Music.wav");
+    lives = 2;
     clockThread.start();
-    loopingMidiSequencer.start();
   }
 
-  // This midi loops outside of GameWorlds.
-  public void loadLoopingMidi(String fileName) {
+//  // This midi loops outside of GameWorlds.
+//  private void loadLoopingMidi(String fileName) {
+//    try {
+//      loopingMidiSequencer = MidiSystem.getSequencer();
+//      loopingMidiSequencer.open();
+//      InputStream soundStream = getClass()
+//              .getResourceAsStream("/galacticMail/sounds/" + fileName);
+//      loopingMidiSequencer.setSequence(soundStream);
+//      loopingMidiSequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//  }
+
+  public void stopLoopingSound() {
+    if (loopingSound != null) {
+      loopingSound.stop();
+    }
+  }
+
+  private void playLoopingSound(String fileName) {
+    if (loopingSound != null) {
+      loopingSound.stop();
+    }
     try {
-      loopingMidiSequencer = MidiSystem.getSequencer();
-      loopingMidiSequencer.open();
-      InputStream soundStream = getClass()
+      InputStream fileStream = getClass()
               .getResourceAsStream("/galacticMail/sounds/" + fileName);
-      loopingMidiSequencer.setSequence(soundStream);
-      loopingMidiSequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-
-      // Lower midi volume
-      if (loopingMidiSequencer instanceof Synthesizer) {
-        Synthesizer synthesizer = (Synthesizer) loopingMidiSequencer;
-        MidiChannel[] channels = synthesizer.getChannels();
-
-        // gain is a value between 0 and 1 (loudest)
-        double gain = 0.1D;
-        for (int i = 0; i < channels.length; i++) {
-          channels[i].controlChange(7, (int) (gain * 127.0));
-        }
-      }
+      Clip clip = AudioSystem.getClip();
+      clip.open(AudioSystem.getAudioInputStream(fileStream));
+      clip.loop(Clip.LOOP_CONTINUOUSLY);
+      loopingSound = clip;
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public int getLives() {
+    return lives;
+  }
+  public void addLife() {
+    lives++;
+  }
+  public void loseLife() {
+    lives--;
   }
 }

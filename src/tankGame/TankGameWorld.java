@@ -40,6 +40,7 @@ public abstract class TankGameWorld extends GameWorld {
     instance = this;
     spritePath = "/tankGame/sprites/";
     soundPath = "/tankGame/sounds/";
+    new FlashingText();
     initialize();
   }
   protected abstract void initialize();
@@ -185,10 +186,6 @@ public abstract class TankGameWorld extends GameWorld {
     }
 
     this.backgroundImage = newBackgroundImage;
-  }
-
-  public Dimension getDimension() {
-    return dimension;
   }
 
   public Vector2 getMoveVectorWithCollision(BoxTrigger trigger, Vector2 moveVector) {

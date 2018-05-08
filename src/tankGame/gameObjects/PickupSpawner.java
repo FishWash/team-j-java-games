@@ -22,7 +22,7 @@ public class PickupSpawner extends GameObject implements ClockListener {
   }
 
   public void update() {
-    if (!spawnedPickup.getAlive()) {
+    if (!spawnedPickup.isAlive()) {
       if (!spawnTimerStarted) {
         spawnTimer.set(spawnDelay);
         spawnTimerStarted = true;

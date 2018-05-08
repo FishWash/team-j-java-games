@@ -29,7 +29,7 @@ public abstract class GameObject
   }
 
   // Getters
-  public boolean getAlive() {
+  public boolean isAlive() {
     return alive;
   }
   public Vector2 getPosition() {
@@ -43,9 +43,6 @@ public abstract class GameObject
   }
 
   // Setters
-  public void setAlive(boolean alive) {
-    this.alive = alive;
-  }
   public void setPosition(Vector2 position) {
     this.position = position;
   }

@@ -8,12 +8,10 @@ import utility.Vector2;
 import java.awt.image.BufferedImage;
 
 public class Moon extends SpaceObject {
-  private boolean visited;
 
   public Moon(Vector2 position, double rotation) {
     super(position, 32);
     setRotation(rotation);
-    moveSpeed = 0.8;
     renderingLayerIndex = 1;
 
     BufferedImage spriteStrip = GameWorld.getInstance()

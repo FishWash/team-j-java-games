@@ -1,9 +1,6 @@
 package galacticMail;
 
-import galacticMail.gameObjects.Asteroid;
-import galacticMail.gameObjects.Moon;
-import galacticMail.gameObjects.Rocket;
-import galacticMail.gameObjects.SpaceObject;
+import galacticMail.gameObjects.*;
 import general.GamePanel;
 import general.GameWorld;
 import general.gameObjects.GameObject;
@@ -16,7 +13,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class GalacticMailWorld extends GameWorld {
-  public enum Team {Player, Enemy}
   public enum GameState{None, Victory, Defeat}
   private boolean gameOver;
 
@@ -24,6 +20,7 @@ public abstract class GalacticMailWorld extends GameWorld {
   private CopyOnWriteArrayList<Asteroid> asteroids
           = new CopyOnWriteArrayList<>();
   private CopyOnWriteArrayList<Moon> moons = new CopyOnWriteArrayList<>();
+  private CopyOnWriteArrayList<Planet> planets = new CopyOnWriteArrayList<>();
 
   private List<CopyOnWriteArrayList<SpaceObject>> renderingLayers
           = new ArrayList<>();
@@ -48,20 +45,48 @@ public abstract class GalacticMailWorld extends GameWorld {
 
   protected abstract void initialize();
 
+  public boolean isGameOver() {
+    return gameOver;
+  }
+
+  public CopyOnWriteArrayList<Asteroid> getAsteroids() {
+    return asteroids;
+  }
+
+  public CopyOnWriteArrayList<Moon> getMoons() {
+    return moons;
+  }
+
+  public CopyOnWriteArrayList<Planet> getPlanets() {
+    return planets;
+  }
+
   public void setGameState(GameState gamestate){
     if (!gameOver) {
       this.gameState = gamestate;
       gameOver = true;
+
+      GalacticMailPanel galacticMailPanel = (GalacticMailPanel) GamePanel.getInstance();
       switch (gamestate) {
         case Victory:
-          GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+          galacticMailPanel.setSpaceFunction(GamePanel.SpaceFunction.Start);
           break;
         case Defeat:
-          GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
           Scoreboard.checkNewScore(PointsHandler.getInstance().getPoints());
+          galacticMailPanel.setSpaceFunction(GamePanel.SpaceFunction.Restart);
+          galacticMailPanel.stopLoopingSound();
           break;
       }
     }
+  }
+
+  protected void drawBackground(BufferedImage newBackgroundImage){
+    double backgroundWidth = dimension.getWidth();
+    double backgroundHeight = dimension.getHeight();
+    double xScale = backgroundWidth / newBackgroundImage.getWidth();
+    double yScale = backgroundHeight / newBackgroundImage.getHeight();
+    BufferedImage newScaledBackgroundImage = UI.getScaledImage(newBackgroundImage, xScale, yScale, (int)backgroundWidth, (int)backgroundHeight);
+    this.backgroundImage = newScaledBackgroundImage;
   }
 
   @Override
@@ -80,6 +105,9 @@ public abstract class GalacticMailWorld extends GameWorld {
     else if (gameObject instanceof Asteroid) {
       asteroids.add((Asteroid)gameObject);
     }
+    else if (gameObject instanceof Planet) {
+      planets.add((Planet)gameObject);
+    }
 
     if (gameObject instanceof ClockListener) {
       Clock.getInstance().addClockListener((ClockListener)gameObject);
@@ -91,18 +119,7 @@ public abstract class GalacticMailWorld extends GameWorld {
       renderingLayers.get(renderingLayerIndex).add(spaceObject);
     }
 
-    drawBackground(loadSprite("Background.png"));
-
     return gameObject;
-  }
-
-  protected void drawBackground(BufferedImage newBackgroundImage){
-    double backgroundWidth = dimension.getWidth();
-    double backgroundHeight = dimension.getHeight();
-    double xScale = backgroundWidth / newBackgroundImage.getWidth();
-    double yScale = backgroundHeight / newBackgroundImage.getHeight();
-    BufferedImage newScaledBackgroundImage = UI.getScaledImage(newBackgroundImage, xScale, yScale, (int)backgroundWidth, (int)backgroundHeight);
-    this.backgroundImage = newScaledBackgroundImage;
   }
 
   @Override
@@ -117,6 +134,9 @@ public abstract class GalacticMailWorld extends GameWorld {
     }
     else if (gameObject instanceof Asteroid) {
       asteroids.remove(gameObject);
+    }
+    else if (gameObject instanceof Planet) {
+      planets.add((Planet)gameObject);
     }
 
     if (gameObject instanceof ClockListener) {
@@ -144,17 +164,5 @@ public abstract class GalacticMailWorld extends GameWorld {
     }
 
     return currentImage;
-  }
-
-  public CopyOnWriteArrayList<Asteroid> getAsteroids() {
-    return asteroids;
-  }
-
-  public CopyOnWriteArrayList<Moon> getMoons() {
-    return moons;
-  }
-
-  public boolean isGameOver() {
-    return gameOver;
   }
 }

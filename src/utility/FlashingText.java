@@ -13,6 +13,8 @@ public class FlashingText {
 
   public FlashingText(){
     instance = this;
+    flashTimer = new Timer();
+    flashOn = false;
   }
 
   public static void drawFlashingText(Graphics graphics, String textToDisplay, double heightProportion){

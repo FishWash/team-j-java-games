@@ -8,10 +8,10 @@ import utility.Vector2;
 public class TankSpawner extends TankGameObject implements ClockListener {
 
   private Tank spawnedTank;
-  private boolean spawnTimerStarted = false;
+  private int lives = 3;
   private Timer spawnTimer = new Timer();
   private int spawnDelay = 128;
-  private int lives = 3;
+  private boolean spawnTimerStarted = false;
 
   public TankSpawner(Vector2 position, TankGameWorld.Player owner) {
     this.position = position;
@@ -20,7 +20,7 @@ public class TankSpawner extends TankGameObject implements ClockListener {
   }
 
   public void update() {
-      if (!spawnedTank.getAlive()) {
+      if (!spawnedTank.isAlive()) {
         if (!spawnTimerStarted) {
           lives--;
           spawnTimer.set(spawnDelay);

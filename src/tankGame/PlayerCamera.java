@@ -33,7 +33,7 @@ public class PlayerCamera extends TankGameObject {
     int healthBarHeight = 25;
     int healthBarWidth = screenWidth - margin * 2;
 
-    if (playerToFollow != null && playerToFollow.getAlive()) {
+    if (playerToFollow != null && playerToFollow.isAlive()) {
       position = playerToFollow.getPosition();
     }
     else {
