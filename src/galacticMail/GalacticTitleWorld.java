@@ -16,7 +16,7 @@ public class GalacticTitleWorld extends GalacticMailWorld {
 
   protected void initialize(){
     dimension = new Dimension(800, 600);
-    drawBackground(loadSprite("Background.png"));
+    drawBackground(loadSprite("Background1.png"));
 
     for (int i=0; i<16; i++) {
       instantiate(new Asteroid(
@@ -28,6 +28,8 @@ public class GalacticTitleWorld extends GalacticMailWorld {
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
+
+    playSoundLooping("Pulse Loop.wav");
   }
 
   protected void drawTitle(BufferedImage currentImage) {

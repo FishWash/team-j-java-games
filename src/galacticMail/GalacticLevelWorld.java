@@ -96,7 +96,7 @@ public class GalacticLevelWorld extends GalacticMailWorld {
   private void spawnMoons() {
     // Number of moons and their speed are based on level number.
     // Position and rotation are randomized.
-    int numMoons = 3 + (int)Math.pow(level, 0.9);
+    int numMoons = 3 + (int)Math.pow(level, 0.7);
     double moonSpeed = 0.7 + (level*0.1);
 
     for (int i=0; i<numMoons; i++) {
