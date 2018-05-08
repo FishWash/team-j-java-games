@@ -1,5 +1,7 @@
 package galacticMail.gameObjects;
 
+import galacticMail.GalacticMailPanel;
+import galacticMail.GalacticMailWorld;
 import general.GameWorld;
 import utility.MultiSprite;
 import utility.RandomNumberGenerator;
@@ -20,6 +22,14 @@ public class Planet extends SpaceObject {
     int randomInt = RandomNumberGenerator.getRandomInt(1,
             multiSprite.getNumSubSprites() - 1);
     sprite = multiSprite.getSubSprite(randomInt);
+  }
+
+  @Override
+  public void update() {
+    super.update();
+    if (alive && ((GalacticMailWorld)GameWorld.getInstance()).isGameOver()) {
+      die();
+    }
   }
 
   public void destroy() {

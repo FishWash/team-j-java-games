@@ -115,7 +115,7 @@ public class GalacticLevelWorld extends GalacticMailWorld {
               0, 0, dimension.width, dimension.height );
       double randomRotation = RandomNumberGenerator.getRandomDouble(0, 360);
       Planet planet = (Planet)instantiate(new Planet(randomPosition, randomRotation));
-      double planetSpeed = 1.7 + (level*0.3);
+      double planetSpeed = 1.7 + (level*0.2);
       planet.setMoveSpeed(planetSpeed);
     }
   }
