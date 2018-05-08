@@ -26,13 +26,11 @@ public class GalacticTitleWorld extends GalacticMailWorld {
       ));
     }
 
-    new FlashingText();
-
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
   }
 
-  protected void drawTitle(BufferedImage currentImage){
+  protected void drawTitle(BufferedImage currentImage) {
     Graphics2D g2D = (Graphics2D) currentImage.getGraphics();
     BufferedImage title = loadSprite("Title.png");
     g2D.drawImage( title, (int)(dimension.getWidth()/2) - (title.getWidth()/2),

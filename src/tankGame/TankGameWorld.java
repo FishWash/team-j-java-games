@@ -40,6 +40,7 @@ public abstract class TankGameWorld extends GameWorld {
     instance = this;
     spritePath = "/tankGame/sprites/";
     soundPath = "/tankGame/sounds/";
+    new FlashingText();
     initialize();
   }
   protected abstract void initialize();

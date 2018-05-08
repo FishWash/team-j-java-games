@@ -22,6 +22,22 @@ public class GalacticLevelWorld extends GalacticMailWorld {
 
   @Override
   protected void initialize() {
+    // Draw Background based on level number.
+    switch(level % 4) {
+      case 0:
+        drawBackground(loadSprite("Background4.png"));
+        break;
+      case 1:
+        drawBackground(loadSprite("Background1.png"));
+        break;
+      case 2:
+        drawBackground(loadSprite("Background2.png"));
+        break;
+      case 3:
+        drawBackground(loadSprite("Background3.png"));
+        break;
+    }
+
     // Number of Asteroids and Moons and their speeds are determined by an
     // algorithm based on level number.
     int numAsteroids = 6 + (int)Math.pow(level+1, 1.1);
@@ -50,7 +66,8 @@ public class GalacticLevelWorld extends GalacticMailWorld {
     System.out.println("  Asteroid speed: " + asteroidSpeed);
     System.out.println("  Moon speed: " + moonSpeed);
 
-    instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
+//    instantiate(new Rocket(new Vector2(dimension.width/2, dimension.height/2)));
+    new RocketSpawner( new Vector2(dimension.width/2, dimension.height/2) );
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);

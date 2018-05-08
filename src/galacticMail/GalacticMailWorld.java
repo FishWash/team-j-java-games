@@ -92,8 +92,6 @@ public abstract class GalacticMailWorld extends GameWorld {
       renderingLayers.get(renderingLayerIndex).add(spaceObject);
     }
 
-    drawBackground(loadSprite("Background.png"));
-
     return gameObject;
   }
 

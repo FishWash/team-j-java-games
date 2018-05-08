@@ -42,8 +42,6 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
     playSoundLooping("Defense Line.wav");
     loadSound("kazoocheer.wav");
 
-    new FlashingText();
-
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
   }

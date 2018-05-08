@@ -174,7 +174,6 @@ public class Rocket extends SpaceObject {
   @Override
   public void die(){
     super.die();
-    galacticMailWorld.setGameState(GalacticMailWorld.GameState.Defeat);
     GameWorld.getInstance().instantiate(new Explosion(position, rotation));
     galacticMailWorld.playSound("Explosion.wav");
   }
