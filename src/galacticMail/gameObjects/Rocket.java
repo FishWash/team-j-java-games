@@ -16,11 +16,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Rocket extends SpaceObject {
   private final double MOVE_SPEED = 0.07;
-  private final double TURN_SPEED = 0.5;
+  private final double TURN_SPEED = 1;
   private final double MAX_VELOCITY = 4.5;
   private final int LANDING_TIME = 24;
   private final int INVULNERABILITY_TIME = 24;
-  private final int POINTS_FOR_LANDING = 300;
+  private final int POINTS_FOR_LANDING = 500;
   private final int POINTS_LOST_FOR_STAYING = 1;
 
   private GalacticMailWorld galacticMailWorld;
@@ -80,7 +80,7 @@ public class Rocket extends SpaceObject {
   private void turn() {
     double rotationalVelocity = rocketKeyInput.getTurnInput()*TURN_SPEED;
     if (dockedMoon != null) {
-      rotationalVelocity *= 8;
+      rotationalVelocity *= 6;
     }
     setRotation(rotation - rotationalVelocity);
   }

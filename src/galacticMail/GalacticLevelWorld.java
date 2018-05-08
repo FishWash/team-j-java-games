@@ -79,8 +79,8 @@ public class GalacticLevelWorld extends GalacticMailWorld {
   private void spawnAsteroids() {
     // Number of asteroids and their speed based on level number.
     // Position and rotation are randomized.
-    int numAsteroids = 6 + (int)Math.pow(level+1, 1.1);
-    double asteroidSpeed = 0.6 + (level*0.4);
+    int numAsteroids = 6 + (int)Math.pow(level+1, 0.8);
+    double asteroidSpeed = 0.6 + (level*0.3);
 
     for (int i=0; i<numAsteroids; i++) {
       Vector2 randomPosition = RandomNumberGenerator.getRandomPosition(
@@ -96,7 +96,7 @@ public class GalacticLevelWorld extends GalacticMailWorld {
   private void spawnMoons() {
     // Number of moons and their speed are based on level number.
     // Position and rotation are randomized.
-    int numMoons = 3 + (int)Math.pow(level, 0.7);
+    int numMoons = 3 + (int)Math.pow(level, 0.5);
     double moonSpeed = 0.7 + (level*0.1);
 
     for (int i=0; i<numMoons; i++) {
@@ -115,7 +115,8 @@ public class GalacticLevelWorld extends GalacticMailWorld {
               0, 0, dimension.width, dimension.height );
       double randomRotation = RandomNumberGenerator.getRandomDouble(0, 360);
       Planet planet = (Planet)instantiate(new Planet(randomPosition, randomRotation));
-      planet.setMoveSpeed(2);
+      double planetSpeed = 1.7 + (level*0.3);
+      planet.setMoveSpeed(planetSpeed);
     }
   }
 }
