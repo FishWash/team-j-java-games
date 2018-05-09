@@ -1,6 +1,5 @@
 package galacticMail.gameObjects;
 
-import galacticMail.GalacticMailPanel;
 import galacticMail.GalacticMailWorld;
 import general.GameWorld;
 import utility.MultiSprite;
@@ -15,12 +14,15 @@ public class Planet extends SpaceObject {
     super(position, 24);
     setRotation(rotation);
     renderingLayerIndex = 1;
+    setRandomSprite();
+  }
 
+  private void setRandomSprite() {
     BufferedImage spriteStrip = GameWorld.getInstance()
             .loadSprite("Planetoid_lives_strip8.png");
     MultiSprite multiSprite = new MultiSprite(spriteStrip, 8);
     int randomInt = RandomNumberGenerator.getRandomInt(1,
-            multiSprite.getNumSubSprites() - 1);
+                                                       multiSprite.getNumSubSprites() - 1);
     sprite = multiSprite.getSubSprite(randomInt);
   }
 

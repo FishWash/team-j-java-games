@@ -50,13 +50,13 @@ public class TitleWorld extends TankGameWorld {
 
     Font font = new Font("Impact", Font.PLAIN,  32);
     UI.drawPositionedTextImage(backgroundGraphics2D, "WASD to move", Color.WHITE, font,
-                               dimension.width, dimension.height, 0.2, 0.85);
+                               dimension, 0.2, 0.85);
     UI.drawPositionedTextImage(backgroundGraphics2D, "R to shoot", Color.WHITE, font,
-                               dimension.width, dimension.height, 0.2, 0.9);
+                               dimension, 0.2, 0.9);
     UI.drawPositionedTextImage(backgroundGraphics2D, "IJKL to move", Color.WHITE, font,
-                               dimension.width, dimension.height, 0.8, 0.85);
+                               dimension, 0.8, 0.85);
     UI.drawPositionedTextImage(backgroundGraphics2D, "P to shoot", Color.WHITE, font,
-                               dimension.width, dimension.height, 0.8, 0.9);
+                               dimension, 0.8, 0.9);
   }
 
   private void drawForegroundImage() {
@@ -65,6 +65,6 @@ public class TitleWorld extends TankGameWorld {
     Graphics foregroundGraphics = foregroundImage.getGraphics();
     Font font = new Font("Impact", Font.PLAIN,  128);
     UI.drawPositionedTextImage((Graphics2D) foregroundGraphics, "TANK GAME", Color.WHITE, font,
-                               dimension.width, dimension.height, 0.5, 0.3);
+                               dimension, 0.5, 0.3);
   }
 }

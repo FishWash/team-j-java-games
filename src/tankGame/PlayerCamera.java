@@ -151,9 +151,9 @@ public class PlayerCamera extends TankGameObject {
       Font font = new Font("Impact", Font.BOLD, 30);
       if(ammo >= 0){
         UI.drawPositionedTextImage(graphics, weapon.getWeaponName(), Color.WHITE, font,
-                                   400, 600, 0.5, 0.9);
+                                   new Dimension(400, 600), 0.5, 0.9);
         UI.drawPositionedTextImage(graphics, Integer.toString(ammo), Color.WHITE, font,
-                                   400, 600, 0.5, 0.95);
+                                   new Dimension(400, 600), 0.5, 0.95);
       }
     }
   }

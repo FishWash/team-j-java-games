@@ -29,42 +29,45 @@ public class Camera {
   public static void displayLevel(Graphics2D graphics2D, int levelNum){
     Font font = new Font("Impact", Font.PLAIN, 32);
     String level = "Level " + Integer.toString(levelNum);
-    UI.drawPositionedTextImage(graphics2D, level, Color.WHITE, font, GamePanel.getInstance().getWidth(),
-                               GamePanel.getInstance().getHeight(), 0.5, 0.95);
+    Dimension panelDimension = GamePanel.getInstance().getSize();
+    UI.drawPositionedTextImage(graphics2D, level, Color.WHITE, font,
+                               panelDimension, 0.5, 0.95);
   }
 
   public static void displayPoints(Graphics2D graphics2D, int points){
     Font font = new Font("Impact", Font.PLAIN, 32);
-    UI.drawPositionedTextImage(graphics2D, "$" + Integer.toString(points), Color.WHITE, font, GameWorld.getInstance().getDimension().getWidth(),
-                               GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.05);
+    Dimension panelDimension = GamePanel.getInstance().getSize();
+    UI.drawPositionedTextImage(graphics2D, "$" + Integer.toString(points),
+                               Color.WHITE, font, panelDimension, 0.5, 0.05);
   }
 
   public static void displayLoseScreen(Graphics2D graphics2D){
     ArrayList<String> leaderboard = Scoreboard.readScoreboard("src/galacticMail/Scoreboard.txt");
     Font font = new Font("Impact", Font.PLAIN, 64);
-    double width = GalacticMailWorld.getInstance().getDimension().getWidth();
-    double height = GalacticMailWorld.getInstance().getDimension().getHeight();
-    UI.drawPositionedTextImage(graphics2D, "DELIVERY FAILED", Color.WHITE, font, width,
-                               height, 0.5, 0.20);
+    Dimension panelDimension = GamePanel.getInstance().getSize();
+    UI.drawPositionedTextImage(graphics2D, "DELIVERY FAILED",
+                               Color.WHITE, font, panelDimension, 0.5, 0.20);
     font = new Font("Impact", Font.BOLD, 32);
-    UI.drawPositionedTextImage(graphics2D, "SCOREBOARD", Color.WHITE, font, width, height, 0.5, 0.35);
+    UI.drawPositionedTextImage(graphics2D, "SCOREBOARD",
+                               Color.WHITE, font, panelDimension, 0.5, 0.35);
     double heightProportion = 0.42;
 
     font = new Font("Impact", Font.PLAIN, 25);
     for (int i = 0; i < leaderboard.size(); i++){
       if(leaderboard.get(i).equals(Integer.toString(PointsHandler.getInstance().getPoints()))){
-        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i), Color.YELLOW, font, width,
-                height, 0.5, heightProportion);
+        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i),
+                                   Color.YELLOW, font, panelDimension, 0.5, heightProportion);
       }else {
-        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i), Color.WHITE, font, width,
-                height, 0.5, heightProportion);
+        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i), Color.WHITE,
+                                   font, panelDimension, 0.5, heightProportion);
       }
       heightProportion += 0.05;
     }
   }
   public static void displayWinScreen(Graphics2D graphics2D){
     Font font = new Font("Impact", Font.PLAIN, 64);
-    UI.drawPositionedTextImage(graphics2D, "DELIVERY COMPLETED", Color.WHITE, font, GalacticMailWorld.getInstance().getDimension().getWidth(),
-                               GalacticMailWorld.getInstance().getDimension().getHeight(), 0.5, 0.4);
+    Dimension panelDimension = GamePanel.getInstance().getSize();
+    UI.drawPositionedTextImage(graphics2D, "DELIVERY COMPLETED",
+                               Color.WHITE, font, panelDimension, 0.5, 0.4);
   }
 }

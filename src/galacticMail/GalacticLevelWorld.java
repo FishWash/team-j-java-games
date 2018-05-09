@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class GalacticLevelWorld extends GalacticMailWorld {
 
-  RocketSpawner rocketSpawner;
+  private RocketSpawner rocketSpawner;
 
   public GalacticLevelWorld(int level) {
     super(level);

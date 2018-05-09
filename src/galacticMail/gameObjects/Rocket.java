@@ -44,13 +44,20 @@ public class Rocket extends SpaceObject {
     }
 
     rocketKeyInput = new RocketKeyInput();
+    initializeSpawnMoon();
+    initializeSprites();
+    preloadSounds();
+  }
 
-    // Set starting moon
+  private void initializeSpawnMoon() {
     Moon myMoon = (Moon)GameWorld.getInstance()
             .instantiate(new SpawnMoon(position));
     dock(myMoon);
 
-    // Set sprite stuff
+    initializeSprites();
+  }
+
+  private void initializeSprites() {
     BufferedImage spriteStrip = GameWorld.getInstance()
             .loadSprite("Flying_strip72.png");
     flyingMultiSprite = new MultiSprite(spriteStrip, 72);
@@ -59,13 +66,13 @@ public class Rocket extends SpaceObject {
     landedMultiSprite = new MultiSprite(spriteStrip, 72);
     GameWorld.getInstance().loadSprite("Explosion_space_strip9.png");
     renderingLayerIndex = 3;
+  }
 
-    // Pre-load sounds
+  private void preloadSounds() {
     galacticMailWorld.loadSound("Launch.wav");
     galacticMailWorld.loadSound("landing.wav");
     galacticMailWorld.loadSound("Explosion.wav");
     galacticMailWorld.loadSound("LifeGet.wav");
-
   }
 
   @Override

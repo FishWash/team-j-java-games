@@ -125,21 +125,23 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
     }
   }
 
-  protected void drawPauseImage() {
+  private void drawPauseImage() {
     pauseImage = new BufferedImage((int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
                                    BufferedImage.TYPE_INT_ARGB);
     Graphics2D pauseGraphics2D = (Graphics2D) pauseImage.getGraphics();
     Font font = new Font("Impact", Font.PLAIN, 64);
-    UI.drawPositionedTextImage( pauseGraphics2D, "Paused", Color.WHITE, font,
-                               (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
-                               0.5, 0.4);
+    Dimension dimension = super.getSize();
+
+    UI.drawPositionedTextImage( pauseGraphics2D, "Paused",
+                                Color.WHITE, font,
+                                dimension, 0.5, 0.4);
     font = new Font("Impact", Font.PLAIN, 32);
-    UI.drawPositionedTextImage( pauseGraphics2D, "(SPACE to resume)", Color.WHITE, font,
-                                (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
-                                0.5, 0.55);
-    UI.drawPositionedTextImage( pauseGraphics2D, "(ESCAPE to exit)", Color.WHITE, font,
-                                (int)super.getSize().getWidth(), (int)super.getSize().getHeight(),
-                                0.5, 0.6);
+    UI.drawPositionedTextImage( pauseGraphics2D, "(SPACE to resume)",
+                                Color.WHITE, font,
+                                dimension, 0.5, 0.55);
+    UI.drawPositionedTextImage( pauseGraphics2D, "(ESCAPE to exit)",
+                                Color.WHITE, font,
+                                dimension, 0.5, 0.6);
   }
 
   protected String getTitle() {

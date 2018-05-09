@@ -26,7 +26,7 @@ public class FlashingText {
     if (flashOn) {
       Font font = new Font("Impact", Font.PLAIN, 48);
       UI.drawPositionedTextImage((Graphics2D)graphics, textToDisplay, Color.WHITE, font,
-              GamePanel.getInstance().getWidth(), GamePanel.getInstance().getHeight(), 0.5, heightProportion);
+              GamePanel.getInstance().getSize(), 0.5, heightProportion);
     }
   }
 
