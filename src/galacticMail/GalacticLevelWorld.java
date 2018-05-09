@@ -14,6 +14,7 @@ import java.awt.*;
 public class GalacticLevelWorld extends GalacticMailWorld {
 
   private RocketSpawner rocketSpawner;
+  private Switch flashSwitch = new Switch(48);
 
   public GalacticLevelWorld(int level) {
     super(level);
@@ -30,7 +31,6 @@ public class GalacticLevelWorld extends GalacticMailWorld {
                                                    dimension.height/2) );
 
     new Camera();
-    new FlashingText();
     new Scoreboard();
     scoreboard = Scoreboard.readScoreboard("src/galacticMail/Scoreboard.txt");
 
@@ -41,20 +41,33 @@ public class GalacticLevelWorld extends GalacticMailWorld {
   @Override
   public void display(Graphics graphics) {
     graphics.drawImage(getCurrentImage(), 0, 0, null);
-    Graphics2D graphics2D = (Graphics2D) graphics;
-
     rocketSpawner.drawLives(graphics);
 
+    Graphics2D graphics2D = (Graphics2D) graphics;
+    graphics.setColor(Color.WHITE);
     Camera.displayPoints(graphics2D, PointsHandler.getInstance().getPoints());
     Camera.displayLevel(graphics2D, level);
 
-    if (gameState == GameState.Defeat){
-      Camera.displayLoseScreen(graphics2D);
-      FlashingText.drawFlashingText(graphics, "Press Space to Restart", 0.75);
-    }
-    if (gameState == GameState.Victory){
-      Camera.displayWinScreen(graphics2D);
-      FlashingText.drawFlashingText(graphics, "Press Space to Continue", 0.6);
+    if (gameOver) {
+      String gameStateText = "";
+      double heightProportion = 0;
+      Font font = new Font("Impact", Font.PLAIN, 48);
+
+      if (gameState == GameState.Defeat) {
+        Camera.displayLoseScreen(graphics2D);
+        gameStateText = "Press Space to Restart";
+        heightProportion = 0.75;
+      }
+      else if (gameState == GameState.Victory) {
+        Camera.displayWinScreen(graphics2D);
+        gameStateText = "Press Space to Continue";
+        heightProportion = 0.6;
+      }
+
+      if (flashSwitch.isOn()) {
+        UI.drawPositionedText(graphics, gameStateText, font,
+                              0.5, heightProportion);
+      }
     }
   }
 
@@ -62,16 +75,16 @@ public class GalacticLevelWorld extends GalacticMailWorld {
     // Draw a different background based on level number.
     switch(level % 4) {
       case 0:
-        drawBackground(loadSprite("Background4.png"));
+        drawBackground(SpriteHandler.getInstance().loadSprite("Background4.png"));
         break;
       case 1:
-        drawBackground(loadSprite("Background1.png"));
+        drawBackground(SpriteHandler.getInstance().loadSprite("Background1.png"));
         break;
       case 2:
-        drawBackground(loadSprite("Background2.png"));
+        drawBackground(SpriteHandler.getInstance().loadSprite("Background2.png"));
         break;
       case 3:
-        drawBackground(loadSprite("Background3.png"));
+        drawBackground(SpriteHandler.getInstance().loadSprite("Background3.png"));
         break;
     }
   }

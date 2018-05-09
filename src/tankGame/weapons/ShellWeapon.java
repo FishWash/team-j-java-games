@@ -3,6 +3,8 @@ package tankGame.weapons;
 import tankGame.TankGameWorld;
 import tankGame.gameObjects.projectiles.Projectile;
 import tankGame.gameObjects.projectiles.ShellProjectile;
+import utility.SoundHandler;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 public class ShellWeapon extends Weapon {
@@ -13,10 +15,10 @@ public class ShellWeapon extends Weapon {
     recoil = -0.6;
     ammo = -1;
 
-    TankGameWorld.getInstance().loadSprite("Shell_light_strip60.png");
-    TankGameWorld.getInstance().loadSprite("Explosion_small_strip6.png");
-    TankGameWorld.getInstance().loadSound("shellshot.wav");
-    TankGameWorld.getInstance().loadSound("smallexplosion.wav");
+    SpriteHandler.getInstance().loadSprite("Shell_light_strip60.png");
+    SpriteHandler.getInstance().loadSprite("Explosion_small_strip6.png");
+    SoundHandler.getInstance().loadSound("shellshot.wav");
+    SoundHandler.getInstance().loadSound("smallexplosion.wav");
   }
 
   @Override
@@ -35,7 +37,7 @@ public class ShellWeapon extends Weapon {
   protected Projectile instantiateProjectile(Vector2 position, double rotation, TankGameWorld.Player owner) {
     Projectile projectile = (Projectile) TankGameWorld.getInstance().instantiate(new ShellProjectile(position, owner));
     projectile.setRotation(rotation);
-    TankGameWorld.getInstance().playSound("shellshot.wav");
+    SoundHandler.getInstance().playSound("shellshot.wav");
     return projectile;
   }
 

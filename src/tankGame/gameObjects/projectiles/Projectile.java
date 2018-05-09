@@ -4,10 +4,7 @@ import general.GameWorld;
 import general.gameObjects.*;
 import tankGame.TankGameWorld;
 import tankGame.gameObjects.TankGameObject;
-import utility.ClockListener;
-import utility.MultiSprite;
-import utility.Timer;
-import utility.Vector2;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,8 +18,8 @@ public abstract class Projectile extends TriggerGameObject implements ClockListe
 
   public Projectile(Vector2 position, int lifeTime, TankGameWorld.Player owner) {
     super(position);
-    sprite = TankGameWorld.getInstance().loadSprite("Shell_basic.png");
-    multiSprite = new MultiSprite(TankGameWorld.getInstance().loadSprite("Shell_basic_strip60.png"), 60);
+    sprite = SpriteHandler.getInstance().loadSprite("Shell_basic.png");
+    multiSprite = new MultiSprite(SpriteHandler.getInstance().loadSprite("Shell_basic_strip60.png"), 60);
     trigger = new CenterBoxTrigger(this, new Vector2(sprite.getWidth(), sprite.getHeight()));
     lifeTimer = new Timer(lifeTime);
     this.owner = owner;
@@ -44,7 +41,7 @@ public abstract class Projectile extends TriggerGameObject implements ClockListe
   }
 
   protected void checkCollidables() {
-    Collidable c = GameWorld.getCollisionHandler().findOverlappingCollidable((BoxTrigger)trigger);
+    Collidable c = CollisionHandler.getInstance().findOverlappingCollidable((BoxTrigger)trigger);
     if (c != null) {
       if (c instanceof TankGameObject) {
         if (owner == TankGameWorld.Player.Neutral || ((TankGameObject) c).getOwner() != owner) {
@@ -63,7 +60,7 @@ public abstract class Projectile extends TriggerGameObject implements ClockListe
   // Sprite stuff
   @Override
   public void setSprite(String fileName) {
-    BufferedImage spriteStrip = TankGameWorld.getInstance().loadSprite(fileName);
+    BufferedImage spriteStrip = SpriteHandler.getInstance().loadSprite(fileName);
     if (spriteStrip != null) {
       multiSprite.setSpriteStrip(spriteStrip);
     }

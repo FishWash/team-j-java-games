@@ -7,6 +7,7 @@ public class Switch implements ClockListener {
 
   public Switch(int switchTime) {
     this.switchTime = switchTime;
+    Clock.getInstance().addClockListener(this);
   }
 
   public void update() {

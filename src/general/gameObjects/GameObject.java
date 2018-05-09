@@ -1,6 +1,7 @@
 package general.gameObjects;
 
 import general.GameWorld;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 import java.awt.*;
@@ -50,7 +51,7 @@ public abstract class GameObject
     this.rotation = (rotation+360) % 360;
   }
   public void setSprite(String fileName) {
-    BufferedImage spriteImage = GameWorld.getInstance().loadSprite(fileName);
+    BufferedImage spriteImage = SpriteHandler.getInstance().loadSprite(fileName);
     if (spriteImage != null) {
       sprite = spriteImage;
     }

@@ -3,6 +3,8 @@ package tankGame.weapons;
 import tankGame.TankGameWorld;
 import tankGame.gameObjects.projectiles.Projectile;
 import tankGame.gameObjects.projectiles.ShotgunProjectile;
+import utility.SoundHandler;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 public class ShotgunWeapon extends Weapon {
@@ -13,8 +15,8 @@ public class ShotgunWeapon extends Weapon {
     recoil = -1.2;
     ammo = 8;
 
-    TankGameWorld.getInstance().loadSprite("Shell_light_strip60.png");
-    TankGameWorld.getInstance().loadSound("shotgunshot.wav");
+    SpriteHandler.getInstance().loadSprite("Shell_light_strip60.png");
+    SoundHandler.getInstance().loadSound("shotgunshot.wav");
   }
 
   @Override
@@ -24,7 +26,7 @@ public class ShotgunWeapon extends Weapon {
       projectile = (Projectile) TankGameWorld.getInstance().instantiate(new ShotgunProjectile(position, 256, owner));
       projectile.setRotation(rotation);
     }
-    TankGameWorld.getInstance().playSound("shotgunshot.wav");
+    SoundHandler.getInstance().playSound("shotgunshot.wav");
     return projectile;
   }
 

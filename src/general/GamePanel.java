@@ -1,9 +1,6 @@
 package general;
 
-import utility.Clock;
-import utility.ClockListener;
-import utility.KeyInputHandler;
-import utility.UI;
+import utility.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +11,7 @@ import java.awt.image.BufferedImage;
 // general.GamePanel handles pause, play, and exit controls.
 public abstract class GamePanel extends JPanel implements KeyListener, ClockListener
 {
-  public enum SpaceFunction {None, Start, Pause, Restart, NextLevel}
+  public enum SpaceFunction {None, Start, Pause, Restart}
   public enum EscapeFunction {None, Pause, Exit}
   protected  String title = "";
 
@@ -30,17 +27,19 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
 
   public GamePanel(Dimension dimension) {
     instance = this;
+
+    resetClock();
+    new SpriteHandler();
+    new SoundHandler();
+
     KeyInputHandler keyInputHandler = new KeyInputHandler();
     this.addKeyListener(keyInputHandler);
     this.addKeyListener(this);
 
-    Clock clock = new Clock();
-    clockThread = new Thread(clock);
-    clock.addClockListener(this);
-
     super.setSize(dimension);
-    drawPauseImage();
     this.setFocusable(true);
+    drawPauseImage();
+
     clockThread.start();
   }
 
@@ -105,8 +104,9 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
   protected abstract void restart();
 
   protected void resetClock() {
-    GameWorld.getInstance().stopSounds();
-    Clock.getInstance().stop();
+    if (Clock.getInstance() != null) {
+      Clock.getInstance().stop();
+    }
     Clock clock = new Clock();
     clockThread = new Thread(clock);
     clock.addClockListener(this);
@@ -130,18 +130,11 @@ public abstract class GamePanel extends JPanel implements KeyListener, ClockList
                                    BufferedImage.TYPE_INT_ARGB);
     Graphics2D pauseGraphics2D = (Graphics2D) pauseImage.getGraphics();
     Font font = new Font("Impact", Font.PLAIN, 64);
-    Dimension dimension = super.getSize();
 
-    UI.drawPositionedTextImage( pauseGraphics2D, "Paused",
-                                Color.WHITE, font,
-                                dimension, 0.5, 0.4);
+    UI.drawPositionedText(pauseGraphics2D, "Paused", font, 0.5, 0.4);
     font = new Font("Impact", Font.PLAIN, 32);
-    UI.drawPositionedTextImage( pauseGraphics2D, "(SPACE to resume)",
-                                Color.WHITE, font,
-                                dimension, 0.5, 0.55);
-    UI.drawPositionedTextImage( pauseGraphics2D, "(ESCAPE to exit)",
-                                Color.WHITE, font,
-                                dimension, 0.5, 0.6);
+    UI.drawPositionedText(pauseGraphics2D, "(SPACE to resume)", font, 0.5, 0.55);
+    UI.drawPositionedText(pauseGraphics2D, "(ESCAPE to exit)", font, 0.5, 0.6);
   }
 
   protected String getTitle() {

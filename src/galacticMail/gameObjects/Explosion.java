@@ -1,9 +1,8 @@
 package galacticMail.gameObjects;
 
-import general.GameWorld;
-import general.gameObjects.GameObject;
 import utility.AnimatedSprite;
 import utility.MultiSprite;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 import java.awt.*;
@@ -16,7 +15,7 @@ public class Explosion extends SpaceObject {
     super(position, 0);
     setRotation(rotation);
     moveSpeed = 1;
-    BufferedImage spriteStrip = GameWorld.getInstance()
+    BufferedImage spriteStrip = SpriteHandler.getInstance()
             .loadSprite("Explosion_space_strip9.png");
     MultiSprite multiSprite = new MultiSprite(spriteStrip, 9);
     animatedSprite = new AnimatedSprite(multiSprite, 5);

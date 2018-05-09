@@ -14,10 +14,16 @@ import java.nio.file.Paths;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CollisionHandler {
+  private static CollisionHandler instance;
   private CopyOnWriteArrayList<Collidable> collidables = new CopyOnWriteArrayList<>();
+
+  public static CollisionHandler getInstance() {
+    return instance;
+  }
 
   // Reads file and creates Collidables for indestructible walls.
   public void readMapFile(String fileName, int tileSize) {
+    collidables = new CopyOnWriteArrayList<>();
     try {
       Path filePath = Paths.get("src/tankGame/maps/" + fileName);
       List<String> fileLines = Files.readAllLines(filePath);

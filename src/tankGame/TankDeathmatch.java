@@ -13,25 +13,22 @@ import java.awt.image.BufferedImage;
 
 public class TankDeathmatch extends TankGameWorld implements ClockListener {
 
-  private PlayerCamera playerOneCamera;
-  private PlayerCamera playerTwoCamera;
-  private TankSpawner playerOneSpawner;
-  private TankSpawner playerTwoSpawner;
-  private boolean gameOver = false;
+  private PlayerCamera playerOneCamera, playerTwoCamera;
+  private TankSpawner playerOneSpawner, playerTwoSpawner;
+  private Switch flashSwitch = new Switch(48);
 
   protected void initialize() {
     GameWorld.instance = this;
     Clock.getInstance().addClockListener(this);
     dimension = new Dimension(1024, 1024);
-    collisionHandler.readMapFile("CollisionTestMap.txt", TILE_SIZE);
-    drawBackgroundImage("CollisionTestMap.txt", loadSprite("background_tile.png"),
-                        loadSprite("wall_indestructible2.png"));
+    CollisionHandler.getInstance().readMapFile("CollisionTestMap.txt", TILE_SIZE);
+    drawBackgroundImage("CollisionTestMap.txt",
+                        SpriteHandler.getInstance().loadSprite("background_tile.png"),
+                        SpriteHandler.getInstance().loadSprite("wall_indestructible2.png"));
     playerOneSpawner = (TankSpawner) instantiate( new TankSpawner(new Vector2(128, 128), Player.One) );
     playerTwoSpawner = (TankSpawner) instantiate( new TankSpawner(
             new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
 
-//    instantiate( new HealthPad(new Vector2(128, 128), Player.One) );
-//    instantiate( new HealthPad(new Vector2(dimension.width-128, dimension.height-128), Player.Two) );
     instantiate(new PickupSpawner(new Vector2(dimension.width-96, 96)) );
     instantiate( new PickupSpawner(new Vector2(96, dimension.height-96)) );
     instantiate( new PickupSpawner(new Vector2(512, 512)));
@@ -39,8 +36,8 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
     playerOneCamera = new PlayerCamera(TankGameWorld.Player.One);
     playerTwoCamera = new PlayerCamera(TankGameWorld.Player.Two);
 
-    playSoundLooping("Defense Line.wav");
-    loadSound("kazoocheer.wav");
+    SoundHandler.getInstance().playSoundLooping("Defense Line.wav");
+    SoundHandler.getInstance().loadSound("kazoocheer.wav");
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Pause);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Pause);
@@ -68,9 +65,11 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
       graphics2D.drawRect(playerDisplayWidth - minimap.getWidth() / 2, playerDisplayHeight - minimap.getHeight(),
                           minimap.getWidth(), minimap.getHeight());
 
-      if(gameOver){
-        FlashingText.drawFlashingText(graphics,"Press Space to Start", 0.6);
-        GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+      if (gameOver && flashSwitch.isOn()) {
+        Font font = new Font("Impact", Font.PLAIN, 48);
+        graphics.setColor(Color.WHITE);
+        UI.drawPositionedText(graphics, "Press Space to Start", font,
+                              0.5, 0.6);
       }
     } catch (Exception e) {
       System.out.println("ERROR in TankDeathmatch: " + e);
@@ -81,8 +80,9 @@ public class TankDeathmatch extends TankGameWorld implements ClockListener {
   public void update() {
     if(!gameOver && (playerOneSpawner.getLives() == 0 || playerTwoSpawner.getLives() == 0)) {
       gameOver = true;
-      playSound("kazoocheer.wav");
-      if(playerOneSpawner.getLives() == 0 && playerTwoSpawner.getLives() == 0){
+      GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Start);
+      SoundHandler.getInstance().playSound("kazoocheer.wav");
+      if (playerOneSpawner.getLives() == 0 && playerTwoSpawner.getLives() == 0) {
         playerOneCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
         playerTwoCamera.setDisplayText(PlayerCamera.DisplayText.Draw);
       } else if(playerOneSpawner.getLives() == 0){

@@ -40,7 +40,6 @@ public abstract class TankGameWorld extends GameWorld {
     instance = this;
     spritePath = "/tankGame/sprites/";
     soundPath = "/tankGame/sounds/";
-    new FlashingText();
     initialize();
   }
   protected abstract void initialize();
@@ -79,7 +78,7 @@ public abstract class TankGameWorld extends GameWorld {
   @Override
   public GameObject instantiate(GameObject gameObject) {
     if (gameObject instanceof Collidable) {
-      collisionHandler.addCollidable((Collidable) gameObject);
+      CollisionHandler.getInstance().addCollidable((Collidable) gameObject);
     }
     if (gameObject instanceof ClockListener) {
       Clock.getInstance().addClockListener((ClockListener) gameObject);
@@ -123,7 +122,7 @@ public abstract class TankGameWorld extends GameWorld {
       Clock.getInstance().removeClockListener((ClockListener) gameObject);
     }
     if (gameObject instanceof Collidable) {
-      collisionHandler.removeCollidable((Collidable) gameObject);
+      CollisionHandler.getInstance().removeCollidable((Collidable) gameObject);
     }
     if (gameObject instanceof Damageable) {
       damageables.remove(gameObject);
@@ -189,7 +188,7 @@ public abstract class TankGameWorld extends GameWorld {
   }
 
   public Vector2 getMoveVectorWithCollision(BoxTrigger trigger, Vector2 moveVector) {
-    return collisionHandler.getMoveVectorWithCollision(trigger, moveVector);
+    return CollisionHandler.getInstance().getMoveVectorWithCollision(trigger, moveVector);
   }
 
   public CopyOnWriteArrayList<Tank> getTanks() {
@@ -201,7 +200,7 @@ public abstract class TankGameWorld extends GameWorld {
   }
 
   public Collidable findOverlappingCollidable(BoxTrigger boxTrigger) {
-    return collisionHandler.findOverlappingCollidable(boxTrigger);
+    return CollisionHandler.getInstance().findOverlappingCollidable(boxTrigger);
   }
 
   public ArrayList<Damageable> findOverlappingDamageables(Trigger trigger) {

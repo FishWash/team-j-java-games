@@ -2,6 +2,7 @@ package tankGame.gameObjects.projectiles;
 
 import tankGame.TankGameWorld;
 import utility.RandomNumberGenerator;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 import java.awt.*;
@@ -12,7 +13,7 @@ public class FlamethrowerProjectile extends Projectile {
     super(position, lifeTime, owner);
     moveSpeed = 5;
     damage = 4;
-    sprite = TankGameWorld.getInstance().loadSprite("flamethrow.png");
+    sprite = SpriteHandler.getInstance().loadSprite("flamethrow.png");
   }
 
   @Override

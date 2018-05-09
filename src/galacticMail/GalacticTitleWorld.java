@@ -2,8 +2,7 @@ package galacticMail;
 
 import galacticMail.gameObjects.Asteroid;
 import general.GamePanel;
-import utility.FlashingText;
-import utility.RandomNumberGenerator;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,31 +13,36 @@ public class GalacticTitleWorld extends GalacticMailWorld {
     super(0);
   }
 
-  protected void initialize(){
+  private Switch flashSwitch = new Switch(48);
+
+  protected void initialize() {
     dimension = new Dimension(800, 600);
-    drawBackground(loadSprite("Background1.png"));
+    drawBackground(SpriteHandler.getInstance().loadSprite("Background1.png"));
 
     for (int i=0; i<16; i++) {
-      instantiate(new Asteroid(
-              RandomNumberGenerator.getRandomPosition(
-                      0, 0, dimension.width, dimension.height ),
-              RandomNumberGenerator.getRandomDouble(0, 360)
-      ));
+      Vector2 randomPosition = RandomNumberGenerator.getRandomPosition(
+              0, 0, dimension.width, dimension.height );
+      double randomRotation = RandomNumberGenerator.getRandomDouble(0, 360);
+      instantiate(new Asteroid(randomPosition, randomRotation));
     }
 
     GamePanel.getInstance().setSpaceFunction(GamePanel.SpaceFunction.Restart);
     GamePanel.getInstance().setEscapeFunction(GamePanel.EscapeFunction.Exit);
 
-    playSoundLooping("Pulse Loop.wav");
+    SoundHandler.getInstance().playSoundLooping("Pulse Loop.wav");
   }
 
   protected void drawTitle(BufferedImage currentImage) {
     Graphics2D g2D = (Graphics2D) currentImage.getGraphics();
-    BufferedImage title = loadSprite("Title.png");
+    BufferedImage title = SpriteHandler.getInstance().loadSprite("Title.png");
     g2D.drawImage( title, (int)(dimension.getWidth()/2) - (title.getWidth()/2),
-        (int)(dimension.getHeight() / 3) - (title.getHeight() / 2), null);
+        (int)(dimension.getHeight() * 0.4) - (title.getHeight() / 2), null);
 
-    FlashingText.drawFlashingText(g2D, "Press Space to Start", 0.7);
+    if (flashSwitch.isOn()) {
+      g2D.setColor(Color.WHITE);
+      Font font = new Font("Impact", Font.PLAIN,  48);
+      UI.drawPositionedText(g2D, "Press Space to start", font, 0.5, 0.75);
+    }
   }
 
   @Override

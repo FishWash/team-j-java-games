@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class GalacticMailWorld extends GameWorld {
   public enum GameState{None, Victory, Defeat}
-  private boolean gameOver;
+  protected boolean gameOver;
 
   private Rocket rocket = null;
   private CopyOnWriteArrayList<Asteroid> asteroids
@@ -35,7 +35,6 @@ public abstract class GalacticMailWorld extends GameWorld {
     spritePath = "/galacticMail/sprites/";
     soundPath = "/galacticMail/sounds/";
     dimension = new Dimension(800, 600);
-    new FlashingText();
     for (int i=0; i<5; i++) {
       renderingLayers.add(new CopyOnWriteArrayList<>());
     }
@@ -74,7 +73,7 @@ public abstract class GalacticMailWorld extends GameWorld {
         case Defeat:
           Scoreboard.checkNewScore(PointsHandler.getInstance().getPoints());
           galacticMailPanel.setSpaceFunction(GamePanel.SpaceFunction.Restart);
-          galacticMailPanel.stopLoopingSound();
+          SoundHandler.getInstance().stopLoopingSound();
           break;
       }
     }

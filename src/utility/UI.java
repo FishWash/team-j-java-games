@@ -1,5 +1,7 @@
 package utility;
 
+import general.GamePanel;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -19,19 +21,19 @@ public class UI {
     return scaledImage;
   }
 
-  public static void drawPositionedTextImage(
-          Graphics2D graphics2D, String textToDisplay,
-          Color textColor, Font font, Dimension dimension,
+  public static void drawPositionedText(
+          Graphics graphics, String textToDisplay, Font font,
           double dimensionWidthProportion, double dimensionHeightProportion
   ) {
-    graphics2D.setColor(textColor);
-    graphics2D.setFont(font);
-    FontMetrics fontMetrics = graphics2D.getFontMetrics(font);
+    Graphics2D graphics2D = (Graphics2D) graphics;
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                 RenderingHints.VALUE_ANTIALIAS_ON);
-    int xPos = (int) (dimension.getWidth()*dimensionWidthProportion
+    graphics2D.setFont(font);
+    FontMetrics fontMetrics = graphics2D.getFontMetrics(font);
+    Dimension panelDimension = GamePanel.getInstance().getSize();
+    int xPos = (int) (panelDimension.getWidth()*dimensionWidthProportion
             - fontMetrics.stringWidth(textToDisplay)/2);
-    int yPos = (int) (dimension.getHeight()*dimensionHeightProportion)
+    int yPos = (int) (panelDimension.getHeight()*dimensionHeightProportion)
             + fontMetrics.getHeight()/2;
     graphics2D.drawString(textToDisplay, xPos, yPos);
   }

@@ -1,9 +1,6 @@
 package utility;
 
-import galacticMail.GalacticMailWorld;
 import galacticMail.PointsHandler;
-import general.GamePanel;
-import general.GameWorld;
 import tankGame.TankGameWorld;
 
 import java.awt.*;
@@ -29,45 +26,36 @@ public class Camera {
   public static void displayLevel(Graphics2D graphics2D, int levelNum){
     Font font = new Font("Impact", Font.PLAIN, 32);
     String level = "Level " + Integer.toString(levelNum);
-    Dimension panelDimension = GamePanel.getInstance().getSize();
-    UI.drawPositionedTextImage(graphics2D, level, Color.WHITE, font,
-                               panelDimension, 0.5, 0.95);
+    UI.drawPositionedText(graphics2D, level, font, 0.5, 0.95);
   }
 
   public static void displayPoints(Graphics2D graphics2D, int points){
     Font font = new Font("Impact", Font.PLAIN, 32);
-    Dimension panelDimension = GamePanel.getInstance().getSize();
-    UI.drawPositionedTextImage(graphics2D, "$" + Integer.toString(points),
-                               Color.WHITE, font, panelDimension, 0.5, 0.05);
+    UI.drawPositionedText(graphics2D, "$" + Integer.toString(points), font, 0.5, 0.05);
   }
 
   public static void displayLoseScreen(Graphics2D graphics2D){
     ArrayList<String> leaderboard = Scoreboard.readScoreboard("src/galacticMail/Scoreboard.txt");
     Font font = new Font("Impact", Font.PLAIN, 64);
-    Dimension panelDimension = GamePanel.getInstance().getSize();
-    UI.drawPositionedTextImage(graphics2D, "DELIVERY FAILED",
-                               Color.WHITE, font, panelDimension, 0.5, 0.20);
+    UI.drawPositionedText(graphics2D, "DELIVERY FAILED", font, 0.5, 0.20);
     font = new Font("Impact", Font.BOLD, 32);
-    UI.drawPositionedTextImage(graphics2D, "SCOREBOARD",
-                               Color.WHITE, font, panelDimension, 0.5, 0.35);
+    UI.drawPositionedText(graphics2D, "SCOREBOARD", font, 0.5, 0.35);
     double heightProportion = 0.42;
 
     font = new Font("Impact", Font.PLAIN, 25);
     for (int i = 0; i < leaderboard.size(); i++){
       if(leaderboard.get(i).equals(Integer.toString(PointsHandler.getInstance().getPoints()))){
-        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i),
-                                   Color.YELLOW, font, panelDimension, 0.5, heightProportion);
-      }else {
-        UI.drawPositionedTextImage(graphics2D, leaderboard.get(i), Color.WHITE,
-                                   font, panelDimension, 0.5, heightProportion);
+        UI.drawPositionedText(graphics2D, leaderboard.get(i), font,
+                              0.5, heightProportion);
+      } else {
+        UI.drawPositionedText(graphics2D, leaderboard.get(i),
+                              font, 0.5, heightProportion);
       }
       heightProportion += 0.05;
     }
   }
-  public static void displayWinScreen(Graphics2D graphics2D){
+  public static void displayWinScreen(Graphics2D graphics2D) {
     Font font = new Font("Impact", Font.PLAIN, 64);
-    Dimension panelDimension = GamePanel.getInstance().getSize();
-    UI.drawPositionedTextImage(graphics2D, "DELIVERY COMPLETED",
-                               Color.WHITE, font, panelDimension, 0.5, 0.4);
+    UI.drawPositionedText(graphics2D, "DELIVERY COMPLETED", font, 0.5, 0.4);
   }
 }

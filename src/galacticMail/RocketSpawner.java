@@ -3,10 +3,7 @@ package galacticMail;
 import galacticMail.gameObjects.Rocket;
 import general.GamePanel;
 import general.GameWorld;
-import utility.Clock;
-import utility.ClockListener;
-import utility.Timer;
-import utility.Vector2;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,7 +25,7 @@ public class RocketSpawner implements ClockListener {
     GalacticMailWorld galacticMailWorld = (GalacticMailWorld) GameWorld.getInstance();
     spawnedRocket = (Rocket) galacticMailWorld.instantiate(new Rocket(spawnPosition));
 
-    lifeSprite = galacticMailWorld.loadSprite("Extra_rocket.png");
+    lifeSprite = SpriteHandler.getInstance().loadSprite("Extra_rocket.png");
   }
 
   @Override

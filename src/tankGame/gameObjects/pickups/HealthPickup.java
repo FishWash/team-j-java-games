@@ -2,6 +2,7 @@ package tankGame.gameObjects.pickups;
 
 import tankGame.TankGameWorld;
 import tankGame.gameObjects.Tank;
+import utility.SoundHandler;
 import utility.Vector2;
 
 public class HealthPickup extends Pickup {
@@ -10,13 +11,13 @@ public class HealthPickup extends Pickup {
 
   public HealthPickup(Vector2 position) {
     super(position, 7);
-    TankGameWorld.getInstance().loadSound("pickupget.wav");
+    SoundHandler.getInstance().loadSound("pickupget.wav");
   }
 
   @Override
   public void activatePickup(Tank tank) {
     tank.heal(healAmount);
-    TankGameWorld.getInstance().playSound("pickupget.wav");
+    SoundHandler.getInstance().playSound("pickupget.wav");
     die();
   }
 }

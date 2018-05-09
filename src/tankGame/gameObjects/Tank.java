@@ -11,10 +11,7 @@ import tankGame.gameObjects.pickups.Pickup;
 import tankGame.weapons.NukeWeapon;
 import tankGame.weapons.ShellWeapon;
 import tankGame.weapons.Weapon;
-import utility.ClockListener;
-import utility.MultiSprite;
-import utility.Timer;
-import utility.Vector2;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,7 +35,7 @@ public class Tank extends BoxCollidableGameObject
 
   public Tank(Vector2 position, TankGameWorld.Player owner) {
     super(position);
-    multiSprite = new MultiSprite(TankGameWorld.getInstance().loadSprite("Tank_blue_base_strip60.png"), 60);
+    multiSprite = new MultiSprite(SpriteHandler.getInstance().loadSprite("Tank_blue_base_strip60.png"), 60);
     sprite = multiSprite.getSubSprite(0);
     trigger = new CenterBoxTrigger(this, new Vector2(COLLIDER_SIZE, COLLIDER_SIZE));
     this.owner = owner;
@@ -56,8 +53,8 @@ public class Tank extends BoxCollidableGameObject
     defaultWeapon = new ShellWeapon();
     equippedWeapon = new NukeWeapon();
 
-    TankGameWorld.getInstance().loadSound("tankhit.wav");
-    TankGameWorld.getInstance().loadSound("BIGEXPLOSION.wav");
+    SoundHandler.getInstance().loadSound("tankhit.wav");
+    SoundHandler.getInstance().loadSound("BIGEXPLOSION.wav");
   }
 
   public int getMaxHealth() {
@@ -147,7 +144,7 @@ public class Tank extends BoxCollidableGameObject
 
   public void damage(int damageAmount) {
     health -= damageAmount;
-    TankGameWorld.getInstance().playSound("tankhit.wav");
+    SoundHandler.getInstance().playSound("tankhit.wav");
     if (health <= 0) {
       health = 0;
       die();
@@ -174,7 +171,7 @@ public class Tank extends BoxCollidableGameObject
   // Sprite stuff
   @Override
   public void setSprite(String fileName) {
-    BufferedImage spriteStrip = TankGameWorld.getInstance().loadSprite(fileName);
+    BufferedImage spriteStrip = SpriteHandler.getInstance().loadSprite(fileName);
     if (spriteStrip != null) {
       multiSprite.setSpriteStrip(spriteStrip);
     }

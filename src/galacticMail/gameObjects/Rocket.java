@@ -6,9 +6,7 @@ import galacticMail.PointsHandler;
 import galacticMail.RocketKeyInput;
 import general.GamePanel;
 import general.GameWorld;
-import utility.MultiSprite;
-import utility.Timer;
-import utility.Vector2;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -58,21 +56,21 @@ public class Rocket extends SpaceObject {
   }
 
   private void initializeSprites() {
-    BufferedImage spriteStrip = GameWorld.getInstance()
+    BufferedImage spriteStrip = SpriteHandler.getInstance()
             .loadSprite("Flying_strip72.png");
     flyingMultiSprite = new MultiSprite(spriteStrip, 72);
-    spriteStrip = GameWorld.getInstance()
+    spriteStrip = SpriteHandler.getInstance()
             .loadSprite("Landed_strip72.png");
     landedMultiSprite = new MultiSprite(spriteStrip, 72);
-    GameWorld.getInstance().loadSprite("Explosion_space_strip9.png");
+    SpriteHandler.getInstance().loadSprite("Explosion_space_strip9.png");
     renderingLayerIndex = 3;
   }
 
   private void preloadSounds() {
-    galacticMailWorld.loadSound("Launch.wav");
-    galacticMailWorld.loadSound("landing.wav");
-    galacticMailWorld.loadSound("Explosion.wav");
-    galacticMailWorld.loadSound("LifeGet.wav");
+    SoundHandler.getInstance().loadSound("Launch.wav");
+    SoundHandler.getInstance().loadSound("landing.wav");
+    SoundHandler.getInstance().loadSound("Explosion.wav");
+    SoundHandler.getInstance().loadSound("LifeGet.wav");
   }
 
   @Override
@@ -119,7 +117,7 @@ public class Rocket extends SpaceObject {
       dockedMoon = null;
       velocityVector = Vector2.newRotationMagnitudeVector(rotation, MOVE_SPEED*32);
       invulnerabilityTimer.set(INVULNERABILITY_TIME);
-      galacticMailWorld.playSound("Launch.wav");
+      SoundHandler.getInstance().playSound("Launch.wav");
     }
   }
 
@@ -149,7 +147,7 @@ public class Rocket extends SpaceObject {
         if (trigger.isOverlapping(planet.getTrigger()) && planet.isAlive()) {
           planet.destroy();
           ((GalacticMailPanel) GamePanel.getInstance()).addLife();
-          galacticMailWorld.playSound("LifeGet.wav");
+          SoundHandler.getInstance().playSound("LifeGet.wav");
         }
       }
     }
@@ -168,7 +166,7 @@ public class Rocket extends SpaceObject {
 
     if (!(moon instanceof SpawnMoon)) {
       PointsHandler.getInstance().addPoints(POINTS_FOR_LANDING);
-      galacticMailWorld.playSound("landing.wav");
+      SoundHandler.getInstance().playSound("landing.wav");
     }
 
     // win condition
@@ -192,6 +190,6 @@ public class Rocket extends SpaceObject {
   public void die(){
     super.die();
     GameWorld.getInstance().instantiate(new Explosion(position, rotation));
-    galacticMailWorld.playSound("Explosion.wav");
+    SoundHandler.getInstance().playSound("Explosion.wav");
   }
 }

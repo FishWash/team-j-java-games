@@ -2,6 +2,8 @@ package general;
 
 import general.gameObjects.GameObject;
 import utility.CollisionHandler;
+import utility.SoundHandler;
+import utility.SpriteHandler;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
@@ -15,15 +17,9 @@ import java.util.Map;
 
 public abstract class GameWorld {
   public static GameWorld instance;
-  protected int level;
-
   protected Dimension dimension = new Dimension(0, 0);
-
-  protected CollisionHandler collisionHandler = new CollisionHandler();
-
-  private HashMap<String, BufferedImage> spriteCache = new HashMap<>();
-  private HashMap<String, Clip> soundCache = new HashMap<>();
-  private Clip loopingSound;
+  protected int level = 0;
+  protected boolean gameOver = false;
 
   protected String spritePath = "sprites/";
   protected String soundPath = "sounds/";
@@ -31,91 +27,26 @@ public abstract class GameWorld {
   public static GameWorld getInstance() {
     return instance;
   }
-
-  public static CollisionHandler getCollisionHandler() {
-    return instance.collisionHandler;
+  public Dimension getDimension() {
+    return dimension;
+  }
+  public int getLevel() {
+    return level;
+  }
+  public boolean isGameOver() {
+    return gameOver;
+  }
+  protected abstract BufferedImage getCurrentImage();
+  public String getSpritePath() {
+    return spritePath;
+  }
+  public String getSoundPath() {
+    return soundPath;
   }
 
   public abstract void display(Graphics graphics);
 
   public abstract GameObject instantiate(GameObject gameObject);
 
-  public int getLevel() {
-    return level;
-  }
-
   public abstract void destroy(GameObject gameObject);
-
-  protected abstract BufferedImage getCurrentImage();
-
-  public Dimension getDimension() {
-    return dimension;
-  }
-
-  public BufferedImage loadSprite(String fileName) {
-    BufferedImage image = spriteCache.get(fileName);
-    if (image == null) {
-      try {
-        image = ImageIO.read(getClass()
-                .getResourceAsStream(spritePath + fileName));
-        spriteCache.put(fileName, image);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    return image;
-  }
-
-  public Clip loadSound(String fileName) {
-    Clip clip = soundCache.get(fileName);
-    if (clip == null) {
-      try {
-        InputStream fileStream = getClass()
-                .getResourceAsStream(soundPath + fileName);
-        clip = AudioSystem.getClip();
-        clip.open(AudioSystem.getAudioInputStream(fileStream));
-        soundCache.put(fileName, clip);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    return clip;
-  }
-
-  public void playSound(String fileName) {
-    Clip clip = loadSound(fileName);
-    if (clip != null) {
-      clip.stop();
-      clip.setFramePosition(0);
-      clip.start();
-    }
-  }
-
-  // Only one sound can be looping at a time.
-  public void playSoundLooping(String fileName) {
-    if (loopingSound != null) {
-      loopingSound.stop();
-    }
-    try {
-      InputStream fileStream = getClass()
-              .getResourceAsStream(soundPath + fileName);
-      Clip clip = AudioSystem.getClip();
-      clip.open(AudioSystem.getAudioInputStream(fileStream));
-      clip.loop(Clip.LOOP_CONTINUOUSLY);
-      loopingSound = clip;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void stopSounds() {
-    for (Map.Entry<String, Clip> entry : soundCache.entrySet()) {
-      Clip clip = entry.getValue();
-      clip.stop();
-    }
-
-    if (loopingSound != null) {
-      loopingSound.stop();
-    }
-  }
 }

@@ -15,12 +15,12 @@ public class TankExplosion extends TankGameObject implements ClockListener {
 
   public TankExplosion (Vector2 position) {
     super(position);
-    MultiSprite multiSprite = new MultiSprite(GameWorld.getInstance().loadSprite(
+    MultiSprite multiSprite = new MultiSprite(SpriteHandler.getInstance().loadSprite(
                       "Tank_explosion_strip19.png"), 19);
     animatedSprite = new AnimatedSprite(multiSprite, 5);
 //    this.position = Vector2.subtractVectors(position, new Vector2(0, 48));
     renderingLayer = TankGameWorld.RenderingLayer.ForegroundGameObject;
-    TankGameWorld.getInstance().playSound("BIGEXPLOSION.wav");
+    SoundHandler.getInstance().playSound("BIGEXPLOSION.wav");
   }
 
   public void update() {

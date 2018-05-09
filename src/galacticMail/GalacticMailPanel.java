@@ -2,6 +2,7 @@ package galacticMail;
 
 import general.GamePanel;
 import general.GameWorld;
+import utility.SoundHandler;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
@@ -35,45 +36,10 @@ public class GalacticMailPanel extends GamePanel {
     resetClock();
     new PointsHandler();
     new GalacticLevelWorld(1);
-    playLoopingSound("Music.wav");
+
+    SoundHandler.getInstance().playSoundLooping("Music.wav");
     lives = 2;
     clockThread.start();
-  }
-
-//  // This midi loops outside of GameWorlds.
-//  private void loadLoopingMidi(String fileName) {
-//    try {
-//      loopingMidiSequencer = MidiSystem.getSequencer();
-//      loopingMidiSequencer.open();
-//      InputStream soundStream = getClass()
-//              .getResourceAsStream("/galacticMail/sounds/" + fileName);
-//      loopingMidiSequencer.setSequence(soundStream);
-//      loopingMidiSequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//  }
-
-  public void stopLoopingSound() {
-    if (loopingSound != null) {
-      loopingSound.stop();
-    }
-  }
-
-  private void playLoopingSound(String fileName) {
-    if (loopingSound != null) {
-      loopingSound.stop();
-    }
-    try {
-      InputStream fileStream = getClass()
-              .getResourceAsStream("/galacticMail/sounds/" + fileName);
-      Clip clip = AudioSystem.getClip();
-      clip.open(AudioSystem.getAudioInputStream(fileStream));
-      clip.loop(Clip.LOOP_CONTINUOUSLY);
-      loopingSound = clip;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   public int getLives() {

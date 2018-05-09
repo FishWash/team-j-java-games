@@ -3,6 +3,7 @@ package galacticMail.gameObjects;
 import general.GameWorld;
 import utility.MultiSprite;
 import utility.RandomNumberGenerator;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 import java.awt.image.BufferedImage;
@@ -14,7 +15,7 @@ public class Moon extends SpaceObject {
     setRotation(rotation);
     renderingLayerIndex = 1;
 
-    BufferedImage spriteStrip = GameWorld.getInstance()
+    BufferedImage spriteStrip = SpriteHandler.getInstance()
             .loadSprite("Bases_strip8.png");
     MultiSprite multiSprite = new MultiSprite(spriteStrip, 8);
     int randomInt = RandomNumberGenerator.getRandomInt(0,

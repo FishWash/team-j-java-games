@@ -1,10 +1,7 @@
 package galacticMail.gameObjects;
 
 import general.GameWorld;
-import utility.AnimatedSprite;
-import utility.MultiSprite;
-import utility.RandomNumberGenerator;
-import utility.Vector2;
+import utility.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +14,7 @@ public class Asteroid extends SpaceObject {
     setRotation(rotation);
     moveSpeed = 1;
 
-    BufferedImage spriteStrip = GameWorld.getInstance()
+    BufferedImage spriteStrip = SpriteHandler.getInstance()
             .loadSprite("Asteroid_strip180.png");
     MultiSprite multiSprite = new MultiSprite(spriteStrip, 180);
     int animationFrameLength = RandomNumberGenerator.getRandomInt(1, 10);

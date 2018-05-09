@@ -4,6 +4,7 @@ import galacticMail.GalacticMailWorld;
 import general.GameWorld;
 import utility.MultiSprite;
 import utility.RandomNumberGenerator;
+import utility.SpriteHandler;
 import utility.Vector2;
 
 import java.awt.image.BufferedImage;
@@ -18,7 +19,7 @@ public class Planet extends SpaceObject {
   }
 
   private void setRandomSprite() {
-    BufferedImage spriteStrip = GameWorld.getInstance()
+    BufferedImage spriteStrip = SpriteHandler.getInstance()
             .loadSprite("Planetoid_lives_strip8.png");
     MultiSprite multiSprite = new MultiSprite(spriteStrip, 8);
     int randomInt = RandomNumberGenerator.getRandomInt(1,

@@ -148,12 +148,12 @@ public class PlayerCamera extends TankGameObject {
     if(playerToFollow instanceof Tank){
       Weapon weapon = ((Tank) playerToFollow).getWeapon();
       int ammo = weapon.getAmmo();
+      graphics.setColor(Color.WHITE);
       Font font = new Font("Impact", Font.BOLD, 30);
+
       if(ammo >= 0){
-        UI.drawPositionedTextImage(graphics, weapon.getWeaponName(), Color.WHITE, font,
-                                   new Dimension(400, 600), 0.5, 0.9);
-        UI.drawPositionedTextImage(graphics, Integer.toString(ammo), Color.WHITE, font,
-                                   new Dimension(400, 600), 0.5, 0.95);
+        UI.drawPositionedText(graphics, weapon.getWeaponName(), font, 0.25, 0.9);
+        UI.drawPositionedText(graphics, Integer.toString(ammo), font, 0.25, 0.95);
       }
     }
   }
