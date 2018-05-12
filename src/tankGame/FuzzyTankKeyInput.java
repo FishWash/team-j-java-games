@@ -4,7 +4,7 @@ package tankGame;
 public class FuzzyTankKeyInput extends TankKeyInput
 {
   private double fuzzedMoveInput = 0, fuzzedTurnInput = 0;
-  private double moveStep = 0.04, turnStep = 0.05;
+  private double moveStep = 0.04, turnStep = 0.1;
 
   public FuzzyTankKeyInput(TankGameWorld.Player owner) {
     super(owner);

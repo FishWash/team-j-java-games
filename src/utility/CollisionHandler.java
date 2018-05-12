@@ -17,6 +17,10 @@ public class CollisionHandler {
   private static CollisionHandler instance;
   private CopyOnWriteArrayList<Collidable> collidables = new CopyOnWriteArrayList<>();
 
+  public CollisionHandler() {
+    instance = this;
+  }
+
   public static CollisionHandler getInstance() {
     return instance;
   }

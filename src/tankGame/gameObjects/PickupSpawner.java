@@ -8,13 +8,14 @@ import utility.RandomNumberGenerator;
 import utility.Timer;
 import utility.Vector2;
 
+import java.util.Random;
+
 public class PickupSpawner extends GameObject implements ClockListener {
 
   private Pickup spawnedPickup;
   private boolean spawnTimerStarted = false;
   private Timer spawnTimer = new Timer();
-  private int spawnDelay = 1024;
-//  private int spawnDelay = 128;
+  private int spawnDelay = 800;
 
   public PickupSpawner(Vector2 position) {
     this.position = position;
@@ -35,11 +36,11 @@ public class PickupSpawner extends GameObject implements ClockListener {
 
   private Pickup spawnPickup() {
     Pickup pickup;
-    int n = RandomNumberGenerator.getRandomInt(1, 24);
-    boolean noSurprise = (n != 24);
+    int n = RandomNumberGenerator.getRandomInt(0, 16);
+    boolean noSurprise = (n != 0);
 
     if (noSurprise) {
-      switch(RandomNumberGenerator.getRandomInt(1, 4)) {
+      switch(RandomNumberGenerator.getRandomInt(0, 3)) {
         case 1:
           pickup = new MachineGunPickup(this.position);
           break;
@@ -47,18 +48,20 @@ public class PickupSpawner extends GameObject implements ClockListener {
           pickup = new FlamethrowerPickup(this.position);
           break;
         case 3:
-          pickup = new SpeedPickup(this.position);
-          break;
-        case 4:
           pickup = new ShotgunPickup(this.position);
           break;
         default:
-          pickup = new HealthPickup(this.position);
+          if (RandomNumberGenerator.getRandomBoolean()) {
+            pickup = new HealthPickup(this.position);
+          }
+          else {
+            pickup = new SpeedPickup(this.position);
+          }
       }
-      return (Pickup) TankGameWorld.getInstance().instantiate(pickup);
+      return (Pickup)TankGameWorld.getInstance().instantiate(pickup);
     }
     else {
-      return (Pickup) TankGameWorld.getInstance().instantiate(new NukePickup(this.position));
+      return (Pickup)TankGameWorld.getInstance().instantiate(new NukePickup(this.position));
     }
   }
 }

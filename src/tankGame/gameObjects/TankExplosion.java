@@ -1,6 +1,5 @@
 package tankGame.gameObjects;
 
-import general.GameWorld;
 import tankGame.TankGameWorld;
 import utility.*;
 
@@ -10,15 +9,13 @@ public class TankExplosion extends TankGameObject implements ClockListener {
 
   private AnimatedSprite animatedSprite;
 
-  private Timer lifeTimer = new Timer();
-  private int lifeTime = 64;
+  private Timer lifeTimer = new Timer(128);
 
   public TankExplosion (Vector2 position) {
-    super(position);
+    super(Vector2.addVectors(position, new Vector2(0, -32)));
     MultiSprite multiSprite = new MultiSprite(SpriteHandler.getInstance().loadSprite(
                       "Tank_explosion_strip19.png"), 19);
     animatedSprite = new AnimatedSprite(multiSprite, 5);
-//    this.position = Vector2.subtractVectors(position, new Vector2(0, 48));
     renderingLayer = TankGameWorld.RenderingLayer.ForegroundGameObject;
     SoundHandler.getInstance().playSound("BIGEXPLOSION.wav");
   }

@@ -8,7 +8,6 @@ import tankGame.FuzzyTankKeyInput;
 import tankGame.TankGameWorld;
 import tankGame.TankKeyInput;
 import tankGame.gameObjects.pickups.Pickup;
-import tankGame.weapons.NukeWeapon;
 import tankGame.weapons.ShellWeapon;
 import tankGame.weapons.Weapon;
 import utility.*;
@@ -20,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Tank extends BoxCollidableGameObject
         implements ClockListener, Damageable {
   private final double MOVE_SPEED = 3;
-  private final double TURN_SPEED = 3.5;
+  private final double TURN_SPEED = 3;
   private final double SHOOT_OFFSET = 25;
   private final double COLLIDER_SIZE = 48;
 
@@ -51,7 +50,7 @@ public class Tank extends BoxCollidableGameObject
     renderingLayer = TankGameWorld.RenderingLayer.Tanks;
 
     defaultWeapon = new ShellWeapon();
-    equippedWeapon = new NukeWeapon();
+//    equippedWeapon = new NukeWeapon();
 
     SoundHandler.getInstance().loadSound("tankhit.wav");
     SoundHandler.getInstance().loadSound("BIGEXPLOSION.wav");

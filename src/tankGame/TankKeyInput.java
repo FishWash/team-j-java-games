@@ -1,6 +1,5 @@
 package tankGame;
 
-import tankGame.TankGameWorld;
 import utility.KeyInputHandler;
 
 import java.awt.event.KeyEvent;

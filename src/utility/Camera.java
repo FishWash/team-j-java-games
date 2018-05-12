@@ -45,12 +45,12 @@ public class Camera {
     font = new Font("Impact", Font.PLAIN, 25);
     for (int i = 0; i < leaderboard.size(); i++){
       if(leaderboard.get(i).equals(Integer.toString(PointsHandler.getInstance().getPoints()))){
-        UI.drawPositionedText(graphics2D, leaderboard.get(i), font,
-                              0.5, heightProportion);
+        graphics2D.setColor(Color.YELLOW);
       } else {
-        UI.drawPositionedText(graphics2D, leaderboard.get(i),
-                              font, 0.5, heightProportion);
+        graphics2D.setColor(Color.WHITE);
       }
+      UI.drawPositionedText(graphics2D, "$" + leaderboard.get(i), font,
+                            0.5, heightProportion);
       heightProportion += 0.05;
     }
   }
