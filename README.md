@@ -1,4 +1,4 @@
-#Term Project: Team J
+# Term Project: Team J
 Jonathan Fox & Johnathan Lee
 
 Compilation Instructions(Start in term-project-team-j):
