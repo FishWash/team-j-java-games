@@ -2,9 +2,9 @@
 Made by Jonathan Fox & Johnathan Lee
 
 ## Demos
-[Tank Game Gameplay](https://youtu.be/e80yERqnzsY)
+[Tank Game Gameplay](https://youtu.be/C16IQBU7it4)
 
-[Galactic Mail Gameplay](https://youtu.be/nUd_WH966tU)
+[Galactic Mail Gameplay](https://youtu.be/uIgtczAg4bg)
 
 ## Overview
 Tank Game and Galactic Mail in Java using the Swing framework.
