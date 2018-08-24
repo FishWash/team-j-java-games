@@ -7,9 +7,11 @@ Made by Jonathan Fox & Johnathan Lee
 [Galactic Mail Gameplay](https://youtu.be/nUd_WH966tU)
 
 ## Overview
-These games were built in Java using the Swing framework. Classes that applied to both games were written abstractly to allow for shared use. This allowed us to reuse elements like object movement, collision detection, vector logic, game clock, screen-drawing logic, controls, and others. 
+Tank Game and Galactic Mail in Java using the Swing framework.
 
-We built these games as a practice in writing object-oriented code, designing classes in a way that kept them organized, encapsulated, and reusable. However, we also wanted these to be standalone games that had well-implemented mechanics that made them fun to play. We play-tested them and added elements that we felt added to the games' experiences.
+We built these games as practice in writing object-oriented code, designing classes in a way that kept them organized, encapsulated, and reusable. This allowed us to code efficiently and reuse elements like object movement, collision detection, vector logic, game clock, screen-drawing logic, controls, and others.
+
+Additionally, we wanted these to be standalone games that would be fun to play, so we took care to give them clear visuals, responsive controls, and interesting game play.
 
 Tank Game is a 2-player tank shooter, where two people can play against each other via local multiplayer. Destroy your opponent's tank by damaging it with weapons, and deplete all of your opponent's lives to win the game. Collect weapons and powerups to help you win!
 
