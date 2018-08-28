@@ -12,7 +12,7 @@ Tank Game is a 2-player tank shooter, where two people can play against each oth
 - java -cp src tankGame.TankGameApplication
 
 ## Controls
-- Player 1: WASD to move, R to shoot
-- Player 2: IJKL to move, P to shoot
-- Space to start/resume
-- Esc to pause/exit
+- Player 1: WS to move front and back, AD to turn left and right, R to shoot
+- Player 2: IK to move front and back, JL to turn left and right, P to shoot
+- Space to start/resume game
+- Esc to pause/exit game

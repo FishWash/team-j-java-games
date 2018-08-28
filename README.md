@@ -31,12 +31,12 @@ Galactic Mail is a 1-player game. Earn points by launching your rocket and landi
 ## Controls
 
 - Tank Game:
-  - Player 1: WASD to move, R to shoot
-  - Player 2: IJKL to move, P to shoot
+  - Player 1: WS to move front and back, AD to turn left and right, R to shoot
+  - Player 2: IK to move front and back, JL to turn left and right, P to shoot
 
 - Galactic Mail:
-  - AD to turn, R to launch
+  - AD to turn left and right, R to launch rocket
 
 - Both Games:
-  - Space to start/resume
-  - Esc to pause/exit
+  - Space to start/resume game
+  - Esc to pause/exit game

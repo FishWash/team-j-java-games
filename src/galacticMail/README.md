@@ -1,4 +1,4 @@
-# Team J Java Games: Tank Game & Galactic Mail
+# Team J Java Games: Galactic Mail
 Made by Jonathan Fox & Johnathan Lee
 
 ## Overview
@@ -12,6 +12,6 @@ Galactic Mail is a 1-player game. Earn points by launching your rocket and landi
 - java -cp src galacticMail.GalacticMailApplication
 
 ## Controls
-- AD to turn, R to launch
-- Space to start/resume
-- Esc to pause/exit
+- AD to turn left and right, R to launch rocket
+- Space to start/resume game
+- Esc to pause/exit game
