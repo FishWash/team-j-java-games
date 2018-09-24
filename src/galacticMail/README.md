@@ -1,5 +1,5 @@
 # Team J Java Games: Galactic Mail
-Made by Jonathan Fox & Johnathan Lee
+Made by Jonathan Fox & Johnathan Lee in Spring 2018.
 
 ## Overview
 [Galactic Mail Gameplay Video](https://youtu.be/uIgtczAg4bg)
