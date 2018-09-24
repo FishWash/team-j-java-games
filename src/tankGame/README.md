@@ -1,5 +1,5 @@
 # Team J Java Games: Tank Game
-Made by Jonathan Fox & Johnathan Lee
+Made by Jonathan Fox & Johnathan Lee in Spring 2018.
 
 ## Overview
 [Tank Game Gameplay Video](https://youtu.be/C16IQBU7it4)
