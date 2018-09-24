@@ -1,5 +1,5 @@
 # Team J Java Games: Tank Game & Galactic Mail
-Made by Jonathan Fox & Johnathan Lee
+Made by Jonathan Fox & Johnathan Lee in Spring 2018.
 
 ## Demos
 [Tank Game Gameplay Video](https://youtu.be/C16IQBU7it4)
